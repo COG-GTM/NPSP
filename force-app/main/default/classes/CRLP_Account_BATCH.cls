@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Account Hard Credit Rollup Batch Job
 */
-public inherited sharing class CRLP_Account_BATCH extends CRLP_Batch_Base_NonSkew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
+public without sharing class CRLP_Account_BATCH extends CRLP_Batch_Base_NonSkew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
 
     /*******************************************************************************************************
      * @description The CRLP_RollupProcessingOptions.RollupType of this class.

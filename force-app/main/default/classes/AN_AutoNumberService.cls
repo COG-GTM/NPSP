@@ -39,7 +39,7 @@
 * increment based on the last used number for the active Display Format, rather than
 * using a global number sequence for all new records for the object.
 */
-public with sharing class AN_AutoNumberService {
+public inherited sharing class AN_AutoNumberService {
     SObjectType sObjType;
     List<SObject> recordsToBeAutoNumbered;
     public with sharing class AutoNumberException extends Exception {}
