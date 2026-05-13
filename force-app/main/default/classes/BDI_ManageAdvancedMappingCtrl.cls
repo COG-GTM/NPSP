@@ -167,6 +167,8 @@ public class BDI_ManageAdvancedMappingCtrl {
             }
 
             return new AdvancedMappingObjectData(getObjectMappings(), getObjectOptions());
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }

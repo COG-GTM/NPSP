@@ -104,6 +104,8 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
             dataImportModel.batchTotalRowAmount = getBatchTotalRowAmount(dataImportModel.dataImportRows);
             checkBatchGiftEntryFieldPermissions (batchId);
             return JSON.serialize(dataImportModel);
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }

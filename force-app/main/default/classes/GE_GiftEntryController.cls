@@ -384,6 +384,8 @@ public with sharing class GE_GiftEntryController {
             if (editedGift.requiresReauthorizationBeforeChange()) { 
                 throw new AuraHandledException(Label.geErrorBatchGiftEntryReauthRequired);
             }
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }

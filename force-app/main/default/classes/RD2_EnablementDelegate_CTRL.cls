@@ -213,6 +213,8 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
 
             state.isConfirmed = true;
             saveEnablementState(state);
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
@@ -366,6 +368,8 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
             if (!Test.isRunningTest()) {
                 UTIL_OrgTelemetry_SVC.asyncProcessNpspSettingsTelemetry();
             }
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }

@@ -102,6 +102,8 @@ public with sharing class RD2_VisualizeScheduleController {
             sanitizeInstallments(dataTable);
 
             return new Map<String, Object>{ 'dataTable' => dataTable };
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
@@ -161,6 +163,8 @@ public with sharing class RD2_VisualizeScheduleController {
             sanitizeSchedules(dataTable);
 
             return new Map<String, Object>{ 'dataTable' => dataTable };
+        } catch (AuraHandledException ahe) {
+            throw ahe;
         } catch (Exception ex) {
             throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
