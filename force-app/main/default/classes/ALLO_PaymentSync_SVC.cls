@@ -161,10 +161,12 @@ public class ALLO_PaymentSync_SVC {
         }
 
         //unfortunately, we need to first gather the opportunity IDs of all payment allocations changes in order to query for all child payments
+        Set<Id> oppKeySet = paymentsByOpportunityId.keySet();
         List<npe01__OppPayment__c> paymentsWithOppIds = [
             SELECT Id, npe01__Opportunity__c
             FROM npe01__OppPayment__c
-            WHERE Id IN :paymentIds OR npe01__Opportunity__c IN :paymentsByOpportunityId.keySet()
+            WHERE Id IN :paymentIds OR npe01__Opportunity__c IN :oppKeySet
+            WITH SYSTEM_MODE
         ];
 
         for (npe01__OppPayment__c payment : paymentsWithOppIds) {
@@ -317,7 +319,11 @@ public class ALLO_PaymentSync_SVC {
                                         'npe01__Opportunity__c IN : opportunityIds';
 
         Map<Id, npe01__OppPayment__c> pmts = new Map<Id, npe01__OppPayment__c>();
-        List<SObject> sobjs = Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{
+            'paymentIds' => paymentIds,
+            'opportunityIds' => opportunityIds
+        };
+        List<SObject> sobjs = Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
 
         for (SObject sobj :sobjs) {
             pmts.put (sobj.Id, (npe01__OppPayment__c)sobj);
@@ -350,7 +356,8 @@ public class ALLO_PaymentSync_SVC {
                              'WHERE     Id IN :opportunityIds';
 
         Map<Id, Opportunity> opps = new Map<Id, Opportunity>();
-        List<SObject> sobjs = Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{ 'opportunityIds' => opportunityIds };
+        List<SObject> sobjs = Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
 
         for (SObject sobj :sobjs) {
             opps.put(sobj.Id, (Opportunity)sobj);

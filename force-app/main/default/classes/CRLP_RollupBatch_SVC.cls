@@ -98,13 +98,14 @@ public class CRLP_RollupBatch_SVC {
         if (jobType != CRLP_RollupProcessingOptions.RollupType.GAU &&
             jobType != CRLP_RollupProcessingOptions.RollupType.RecurringDonations)
         {
-            String objName = recordId.getSobjectType().getDescribe().getName();
-            String soql = 'SELECT Id FROM ' + objName + ' WHERE Id = :recordID ';
+            String objName = String.escapeSingleQuotes(recordId.getSobjectType().getDescribe().getName());
+            String soql = 'SELECT Id FROM ' + objName + ' WHERE Id = :recordId ';
             String filter = getSkewWhereClause(jobType, CRLP_RollupProcessingOptions.BatchJobMode.SkewMode);
             if (!String.isEmpty(filter)) {
                 soql += ' AND ' + filter;
             }
-            List<SObject> rollupSummaryObjects = database.query(soql);
+            Map<String, Object> bindVars = new Map<String, Object>{ 'recordId' => recordId };
+            List<SObject> rollupSummaryObjects = Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
             return rollupSummaryObjects.size() == 1;
         }
         return true;
@@ -252,7 +253,7 @@ public class CRLP_RollupBatch_SVC {
                 }
             }
         } catch (Exception ex) {
-            // ignore null pointer exception errors because a default will be returned
+            UTIL_Debug.debug('Batch size config error, using default: ' + ex.getMessage());
         }
 
         // Legacy Batch Job Sizes are limited to 200 (this is hardcoded in UTIL_AbstractRollup_BATCH)

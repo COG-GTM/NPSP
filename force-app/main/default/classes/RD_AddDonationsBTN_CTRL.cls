@@ -77,10 +77,12 @@ public with sharing class RD_AddDonationsBTN_CTRL {
 
         Savepoint sp = Database.setSavepoint();
         try {
+            Id rdId = sc.getId();
             String soql = RD_RecurringDonations.strQueryRDNoWhere()
-                + ' WHERE Id = \'' + sc.getId() + '\'';
+                + ' WHERE Id = :rdId';
 
-            npe03__Recurring_Donation__c rd = (npe03__Recurring_Donation__c) Database.query(soql);
+            Map<String, Object> bindVars = new Map<String, Object>{ 'rdId' => rdId };
+            npe03__Recurring_Donation__c rd = (npe03__Recurring_Donation__c) Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
 
             // This recalculates Rollups only in Legacy mode.
             RD_RecurringDonations.evaluateRecurringDonationsForNewOppInsert(new List<npe03__Recurring_Donation__c>{ rd });
@@ -104,7 +106,7 @@ public with sharing class RD_AddDonationsBTN_CTRL {
     public PageReference redirectToRecurringDonationsPage() {
 
         if (sc.getId() == null) {
-            Schema.DescribeSObjectResult describeResult = npe03__Recurring_Donation__c.SObjectType.getDescribe();
+            Schema.DescribeSObjectResult describeResult = Schema.SObjectType.npe03__Recurring_Donation__c;
             return new PageReference('/' + describeResult.getKeyPrefix());
         }
 

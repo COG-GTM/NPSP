@@ -96,8 +96,9 @@ public class ALLO_Multicurrency_TDTM extends TDTM_Runnable {
         string alloQuery = 'SELECT Id, Amount__c, Payment__c, Opportunity__c, Campaign__c, Recurring_Donation__c, CurrencyIsoCode FROM Allocation__c '+
             'WHERE Payment__c IN :parentIds OR Opportunity__c IN :parentIds OR Campaign__c IN :parentIds OR Recurring_Donation__c IN :parentIds';
         
+        Map<String, Object> bindVars = new Map<String, Object>{ 'parentIds' => parentIds };
         //query all allocations associated with the parents, update their ISO code and their amount if needed 
-        for (Allocation__c allo : database.query(alloQuery)) {
+        for (Allocation__c allo : Database.queryWithBinds(alloQuery, bindVars, AccessLevel.SYSTEM_MODE)) {
             string parentCurrency = mapIdToISO.get(ALLO_Allocations_TDTM.getParentId(allo));
             
             /*Not updating allocation amounts, as Salesforce only updates the currency and does not convert the amount

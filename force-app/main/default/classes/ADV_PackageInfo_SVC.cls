@@ -79,12 +79,13 @@ public with sharing class ADV_PackageInfo_SVC {
         Integer i=0;
         while (!found && i < settingsObjs.size()) {
             try { // With Namespace
-                Schema.DescribeSObjectResult[] descResult = Schema.describeSObjects(new String[]{orgSetting.Advancement_Namespace__c + '__' + settingsObjs[i]});
+                String managedObjName = orgSetting.Advancement_Namespace__c + '__' + settingsObjs[i];
+                Schema.getGlobalDescribe().get(managedObjName).getDescribe();
                 isManaged = true;
                 found = true;
             } catch (Exception e) {
                 try { // Without Namespace
-                    Schema.DescribeSObjectResult[] descResult = Schema.describeSObjects(new String[]{settingsObjs[i]});
+                    Schema.getGlobalDescribe().get(settingsObjs[i]).getDescribe();
                     found = true;
                 } catch (Exception ex) {
                     i++;
@@ -108,7 +109,10 @@ public with sharing class ADV_PackageInfo_SVC {
         String useAdvStr = nsPrefixOrBlank + useGEMField;
         String apiNpspClassStr = nsPrefixOrBlank + 'API_NPSP_Class__c';
 
-        String advSettingQuery = 'select ' + useAdvStr + ', ' + apiNpspClassStr + ' from ' + nsPrefixOrBlank + gemAPISettingsObj;
+        String safeGemObj = String.escapeSingleQuotes(nsPrefixOrBlank + gemAPISettingsObj);
+        String safeUseAdvStr = String.escapeSingleQuotes(useAdvStr);
+        String safeApiNpspClassStr = String.escapeSingleQuotes(apiNpspClassStr);
+        String advSettingQuery = 'select ' + safeUseAdvStr + ', ' + safeApiNpspClassStr + ' from ' + safeGemObj;
 
         List<SObject> advSettings = Database.query(advSettingQuery);
         if (advSettings != null && advSettings.size() > 0) {

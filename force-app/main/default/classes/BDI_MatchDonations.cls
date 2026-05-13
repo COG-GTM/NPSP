@@ -489,7 +489,12 @@ public with sharing class BDI_MatchDonations implements BDI_IMatchDonations {
 
         // now query for all Open Opportunities from these Contacts or Accounts
         String strSoql = buildMatchQuery(setOppFields, setPmtFields, setOppId, setAccId, setConId);
-        List<Opportunity> listOpp = Database.query(strSoql);
+        Map<String, Object> bindVars = new Map<String, Object>{
+            'setOppId' => setOppId,
+            'setAccId' => setAccId,
+            'setConId' => setConId
+        };
+        List<Opportunity> listOpp = Database.queryWithBinds(strSoql, bindVars, AccessLevel.SYSTEM_MODE);
         perfLog.stop();
         return listOpp;           
     }
