@@ -1,0 +1,148 @@
+name: LWC Tests & Lint
+
+on:
+  pull_request:
+    paths:
+      - 'force-app/main/default/lwc/**'
+      - 'tests/__mocks__/**'
+      - 'jest.config.js'
+      - 'jest.setup.js'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.eslintrc.json'
+
+jobs:
+  lwc-jest:
+    name: Jest Tests & Coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node20-${{ hashFiles('package.json', 'yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Jest with coverage
+        run: npx lwc-jest --skipApiVersionCheck --coverage --coverageReporters=json-summary --coverageReporters=text 2>&1 | tee jest-output.txt
+
+      - name: Post coverage comment on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let summary = '';
+            try {
+              const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+              const total = coverage.total;
+              summary = [
+                '## LWC Test Coverage Report',
+                '',
+                '| Metric | Coverage |',
+                '|--------|----------|',
+                `| Statements | ${total.statements.pct}% (${total.statements.covered}/${total.statements.total}) |`,
+                `| Branches | ${total.branches.pct}% (${total.branches.covered}/${total.branches.total}) |`,
+                `| Functions | ${total.functions.pct}% (${total.functions.covered}/${total.functions.total}) |`,
+                `| Lines | ${total.lines.pct}% (${total.lines.covered}/${total.lines.total}) |`,
+              ].join('\n');
+            } catch (e) {
+              summary = '## LWC Test Coverage Report\n\n⚠️ Could not parse coverage data.';
+            }
+
+            // Read test results from output
+            let testResult = '';
+            try {
+              const output = fs.readFileSync('jest-output.txt', 'utf8');
+              const suiteMatch = output.match(/Test Suites:\s+(.+)/);
+              const testMatch = output.match(/Tests:\s+(.+)/);
+              if (suiteMatch && testMatch) {
+                testResult = [
+                  '',
+                  '### Test Results',
+                  `- **Suites:** ${suiteMatch[1]}`,
+                  `- **Tests:** ${testMatch[1]}`,
+                ].join('\n');
+              }
+            } catch (e) {
+              // ignore
+            }
+
+            const body = summary + testResult;
+
+            // Find existing comment to update
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const marker = '## LWC Test Coverage Report';
+            const existing = comments.find(c => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+  lwc-lint:
+    name: ESLint (Changed Files Only)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node20-${{ hashFiles('package.json', 'yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Get changed LWC files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only --diff-filter=ACMR origin/${{ github.base_ref }}...HEAD -- 'force-app/main/default/lwc/**/*.js' | tr '\n' ' ')
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          if [ -z "$FILES" ]; then
+            echo "No changed LWC JS files found."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changed files: $FILES"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Lint changed LWC files
+        if: steps.changed.outputs.skip == 'false'
+        run: npx eslint ${{ steps.changed.outputs.files }}
