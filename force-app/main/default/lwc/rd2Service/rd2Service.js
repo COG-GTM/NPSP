@@ -54,14 +54,8 @@ class Rd2Service {
     }
 
     async save(rd2State) {
-        let result;
-        try {
-            const saveRequest = this.getSaveRequest(rd2State);
-            result = await saveRecurringDonation({ saveRequest });
-        } catch (ex) {
-            // Error handled by caller via undefined result
-        }
-        return result;
+        const saveRequest = this.getSaveRequest(rd2State);
+        return saveRecurringDonation({ saveRequest });
     }
 
     /***
