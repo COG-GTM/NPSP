@@ -810,7 +810,7 @@ export default class rd2EntryForm extends LightningElement {
             }
             this.setError(constructedError);
         } catch (ex) {
-            console.error("Unhandled save error", ex);
+            // Error already handled via setError above
         }
 
         this.enableSaveButton();

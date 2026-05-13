@@ -82,7 +82,7 @@
             return JSON.parse(window.atob(decodedFragment)).attributes.recordId;
 
         } catch (error) {
-            console.error(JSON.stringify(error));
+            return '';
         }
     }
 })

@@ -612,8 +612,6 @@
                    element.getElement().setAttribute('tabindex', '-1'); 
                } 
            } catch (error) { 
-                   console.error('Error setting focus on element:', error); 
-
            } 
            }, 0); 
    }
