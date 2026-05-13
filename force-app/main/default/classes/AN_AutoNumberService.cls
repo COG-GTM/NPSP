@@ -169,7 +169,7 @@ public inherited sharing class AN_AutoNumberService {
      * properties for AutoNumber__c records.
      */
     @TestVisible
-    private with sharing class AutoNumber {
+    private inherited sharing class AutoNumber {
         AutoNumber__c record;
         Integer nextAutoNumber;
         AN_AutoNumberService autoNumberService;
