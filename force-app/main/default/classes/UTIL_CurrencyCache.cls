@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utilities for working with the currency exchange rate organization cahce
 */
-public with sharing class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
+public inherited sharing class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
 
     // ====================================================================
     // STATIC VARS USED TO HOLD VALUES THROUGH THE EXECUTION CONTEXT

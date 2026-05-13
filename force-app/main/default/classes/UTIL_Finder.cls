@@ -33,7 +33,7 @@
 * @group Utilities
 * @description The SObject Finder use to query, filter, sort and limit number of records by using SOQL or SOSL
 */
-public virtual with sharing class UTIL_Finder {
+public virtual inherited sharing class UTIL_Finder {
     /** @description Search exception class */
     public with sharing class SoslException extends Exception {}
 
