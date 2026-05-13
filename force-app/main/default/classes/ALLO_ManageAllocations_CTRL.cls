@@ -229,6 +229,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
             parentId = null;
         }
         if (parentId == null) {
+            isLoading = false;
             return;
         }
         hasAccess = canUserRead(parentId.getSobjectType());
