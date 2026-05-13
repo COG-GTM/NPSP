@@ -242,7 +242,7 @@
                                             <td>
                                                 <div class="slds-form-element">
                                                     <div class="slds-form-element__control slds-input-has-fixed-addon">
-                                                        <apex:inputField id="alloInputPercent" styleClass="slds-input slds-size_2-of-3 alloPercent percent{!JSENCODE(cnt)}" onkeyup="window.changePercent({!JSENCODE(cnt)})" value="{!JSENCODE(Allo.Percent__c)}"/>
+                                                        <apex:inputField id="alloInputPercent" styleClass="slds-input slds-size_2-of-3 alloPercent percent{!cnt}" onkeyup="window.changePercent({!JSENCODE(cnt)})" value="{!Allo.Percent__c}"/>
                                                         <label for="{!$Component.alloInputPercent}" class="slds-form-element__label slds-form-element__addon">%</label>
                                                     </div>
                                                 </div>
