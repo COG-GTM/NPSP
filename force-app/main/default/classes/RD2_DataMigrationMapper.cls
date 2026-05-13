@@ -393,5 +393,5 @@ public with sharing class RD2_DataMigrationMapper {
     /**
      * @description Exception thrown when Recurring Donation cannot be converted to the enhanced format
      */
-    public class MigrationException extends Exception { }
+    public with sharing class MigrationException extends Exception { }
 }

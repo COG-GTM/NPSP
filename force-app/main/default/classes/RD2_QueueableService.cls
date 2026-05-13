@@ -134,7 +134,7 @@ public inherited sharing class RD2_QueueableService {
      * @description Queueable service to process Installment Opportunities for a Recurring Donation
      * that was inserted or modified.
      */
-    public class EvaluateInstallmentOpportunities implements Queueable {
+    public inherited sharing class EvaluateInstallmentOpportunities implements Queueable {
         Set<Id> rdIds;
         List<npe03__Recurring_Donation__c> oldRds;
 
@@ -211,7 +211,7 @@ public inherited sharing class RD2_QueueableService {
      * @description Queueable service to process inserted Recurring Donations that have a value
      * in the Elevate CommitmentId__c field.
      */
-    public class ElevateOpportunityMatcher implements Queueable {
+    public inherited sharing class ElevateOpportunityMatcher implements Queueable {
         Map<String, Id> rdIdByCommitmentId;
 
         /***
@@ -247,7 +247,7 @@ public inherited sharing class RD2_QueueableService {
     /**
      * @description Queueable service to make callouts to Elevate payment services and cancel commitments
      */
-    public class CancelCommitmentService implements Queueable, Database.AllowsCallouts {
+    public inherited sharing class CancelCommitmentService implements Queueable, Database.AllowsCallouts {
         List<RD2_CancelCommitmentService.RecordWrapper> commitmentRDs;
 
         /**
@@ -304,7 +304,7 @@ public inherited sharing class RD2_QueueableService {
     /**
      * @description Queueable service to recalculate Opportunity names
      */
-    public class OpportunityNamingService implements Queueable {
+    public inherited sharing class OpportunityNamingService implements Queueable {
         List<Opportunity> updatedOpps;
 
         /**

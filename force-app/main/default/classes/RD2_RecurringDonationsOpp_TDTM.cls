@@ -192,7 +192,7 @@ public inherited sharing class RD2_RecurringDonationsOpp_TDTM extends TDTM_Runna
     * @description Currency validator on Opportunities related to Recurring Donations
     * when multi-currency is enabled for the organization
     */
-    public class MultiCurrencyValidator {
+    public inherited sharing class MultiCurrencyValidator {
         /***
          * @description CurrencyIsoCode field name
          */

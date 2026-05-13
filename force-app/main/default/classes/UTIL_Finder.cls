@@ -35,7 +35,7 @@
 */
 public virtual with sharing class UTIL_Finder {
     /** @description Search exception class */
-    public class SoslException extends Exception {}
+    public with sharing class SoslException extends Exception {}
 
     /** @description Message to indicate the Search is constructed incorrectly when sObjectType is not provided */
     @TestVIsible private static final String SOBJECT_TYPE_REQUIRED = 'sObjectType is required for the search';

@@ -130,7 +130,7 @@ public abstract inherited sharing class UTIL_AbstractRollup_BATCH implements dat
     }
 
     // this data structure defines all the parameters of a single rollup
-    public class RollupSpec {
+    public inherited sharing class RollupSpec {
 
         // the object that has the details to be rolled up, e.g. opportunity
         string childObjectName;

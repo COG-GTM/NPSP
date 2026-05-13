@@ -390,7 +390,7 @@ public with sharing class UTIL_RecordTypes {
      * wrapper around the Schema.RecordTypeInfo class.  Additionally, a method
      * is available to access the wrapped Schema.RecordTypeInfo instance.
      */
-    private class RecordTypeInfoWrapper implements RecordTypeInfo {
+    private with sharing class RecordTypeInfoWrapper implements RecordTypeInfo {
         private Schema.RecordTypeInfo rti;
         public RecordTypeInfoWrapper(Schema.RecordTypeInfo rti) {
             this.rti = rti;
@@ -424,7 +424,7 @@ public with sharing class UTIL_RecordTypes {
      * perform null checks within this utility class, as per the Null Object
      * pattern.
      */
-    private class UnavailableRecordTypeInfo implements RecordTypeInfo {
+    private with sharing class UnavailableRecordTypeInfo implements RecordTypeInfo {
         public Schema.RecordTypeInfo getRecordTypeInfo() {
             return null;
         }

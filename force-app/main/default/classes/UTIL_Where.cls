@@ -35,7 +35,7 @@
 */
 public with sharing class UTIL_Where {
     /** @description Exception class */
-    public class CriteriaException extends Exception {}
+    public with sharing class CriteriaException extends Exception {}
 
     /** @description Filter operator options */
     public Enum Operator {
@@ -285,7 +285,7 @@ public with sharing class UTIL_Where {
     }
 
     /** @description Group of field expressions */
-    public class GroupExpression { 
+    public with sharing class GroupExpression { 
         /** @description Field expressions */
         private List<FieldExpression> fieldExpressions;
         /** @description The logic operator. The default operator is AND */
@@ -446,7 +446,7 @@ public with sharing class UTIL_Where {
 
 
     /** @description Field expression */
-    public class FieldExpression {
+    public with sharing class FieldExpression {
         /** @description The field */
         private Schema.sObjectField sObjField;
         /** @description The reference field (if any) */
