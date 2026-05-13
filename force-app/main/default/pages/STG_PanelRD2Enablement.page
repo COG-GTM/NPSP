@@ -51,8 +51,8 @@
 
     </apex:outputPanel>
     <script>
-        if ({!isRunningUserIsAdmin}) {
-            var namespace = '{!namespace}';
+        if ({!JSENCODE(isRunningUserIsAdmin)}) {
+            var namespace = '{!JSENCODE(namespace)}';
             var isSimpleVersion = {!isSimpleVersion};
             var compName = namespace + (isSimpleVersion === true ? ':RD2_EnablementDelegateSimple' : ':RD2_EnablementDelegate');
 

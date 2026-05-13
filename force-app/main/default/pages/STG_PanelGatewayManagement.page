@@ -39,9 +39,9 @@
 
     <script>
         if ({!isRunningUserIsAdmin}) {
-            $Lightning.use("{!namespace}" + ":RD2_EnablementApp", function () {
+            $Lightning.use("{!JSENCODE(namespace)}" + ":RD2_EnablementApp", function () {
                 $Lightning.createComponent(
-                    "{!namespace}" + ":gePaymentGatewayManagement",
+                    "{!JSENCODE(namespace)}" + ":gePaymentGatewayManagement",
                     {},
                     "stgPanelGatewayManagementSettings",
                     function () { }

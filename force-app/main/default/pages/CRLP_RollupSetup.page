@@ -53,7 +53,7 @@
     </div>
 
     <script>
-        var ns = '{!namespacePrefix}';
+        var ns = '{!JSENCODE(namespacePrefix)}';
         if (!ns || ns === '') {
             ns = 'c';
         }

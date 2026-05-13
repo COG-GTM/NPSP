@@ -251,7 +251,7 @@
         // hate doing stuff like this, but could not get the focus going to the first control (batch)
         // even trying html-tabIndex and tabindexhint.  focus kept ending up on the last control instead!
         window.addEventListener('load', function() {
-            if ({!isEditMode}) {
+            if ({!JSENCODE(isEditMode)}) {
                 var fld = document.getElementById('{!IF(isShowBatchOnlyFields, $Component.fldName, $Component.fldBatch)}');
                 if (fld !== null) {
                     fld.focus();

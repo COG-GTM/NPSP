@@ -89,12 +89,12 @@
 
         function handleMounting(paymentMethod, gatewayOverride) {
             if (isValidPaymentMethod(paymentMethod)) {
-                const mountGateway = !!gatewayOverride ? gatewayOverride : '{!gatewayIds}';
+                const mountGateway = !!gatewayOverride ? gatewayOverride : '{!JSENCODE(gatewayIds)}';
                 const config = {
                     id: 'payments',
-                    clientId: '{!clientId}',
+                    clientId: '{!JSENCODE(clientId)}',
                     gatewayId: mountGateway,
-                    merchantId: '{!merchantIds}',
+                    merchantId: '{!JSENCODE(merchantIds)}',
                     designSystem: 'Lightning',
                     paymentMethod: deriveElevatePaymentMethodFrom(paymentMethod),
                     styles: styles
@@ -131,8 +131,8 @@
         */
         function handleTokenCreation(params) {
             const auth = {
-                jwt: '{!jwtForToken}',
-                userName: '{!$User.Username}'
+                jwt: '{!JSENCODE(jwtForToken)}',
+                userName: '{!JSENCODE($User.Username)}'
             };
             const authConfig = {
                 auth: auth
@@ -161,8 +161,8 @@
 
         function handleAchTokenCreation (params) {
            const auth = {
-              jwt: '{!jwtForToken}',
-              userName: '{!$User.Username}'
+              jwt: '{!JSENCODE(jwtForToken)}',
+              userName: '{!JSENCODE($User.Username)}'
            };
            const tokenConfig = {
               auth: auth,
@@ -210,7 +210,7 @@
         }
 
         function buildLightningOrigin() {
-            return 'https://{!LightningURL}';
+            return 'https://{!JSENCODE(LightningURL)}';
         }
 
         function setReadyToMount() {

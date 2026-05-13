@@ -49,7 +49,7 @@
                                     sObj="{!hh}"
                                     sObjType="{!objType}"
                                     required="{!f.DBRequired || f.Required}"
-                                    onchange="{!IF(f.FieldPath = 'npe01__One2OneContact__c', 'fireContactChangedEvent();', '')}"/>
+                                    onchange="{!JSENCODE(IF(f.FieldPath = 'npe01__One2OneContact__c', 'fireContactChangedEvent();', ''))}"/>
                         </apex:repeat>
                     </div>
             </div>
@@ -61,7 +61,7 @@
 
     <script>
     var j$ = jQuery.noConflict();
-    var ns = '{!namespacePrefix}';
+    var ns = '{!JSENCODE(namespacePrefix)}';
     var nsPrefix;
     if (ns === '') {
         nsPrefix = '';

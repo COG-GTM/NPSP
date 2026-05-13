@@ -4,8 +4,8 @@
 
     <script>
         if ({!NOT(hasMinimumAccess)}) {
-           $Lightning.use("{!namespace}" + ":RD2_EnablementApp", function() {
-               $Lightning.createComponent("{!namespace}" + ":utilIllustration",
+           $Lightning.use("{!JSENCODE(namespace)}" + ":RD2_EnablementApp", function() {
+               $Lightning.createComponent("{!JSENCODE(namespace)}" + ":utilIllustration",
                    {   title : "{!$Label.commonAdminPermissionErrorTitle}",
                        message : "{!$Label.commonAccessErrorMessage}",
                        size: 'small',
@@ -69,7 +69,7 @@
             <apex:outputPanel rendered="{!sforceNav != null}" id="navigator">
                 <script type="text/javascript">
                     (function() {
-                        var sforceNav = '{!sforceNav}';
+                        var sforceNav = '{!JSENCODE(sforceNav)}';
                         if (sforceNav === 'back') {
                             sforce.one.back(true);
                         } else {
