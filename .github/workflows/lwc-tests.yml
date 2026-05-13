@@ -83,13 +83,13 @@ jobs:
             const body = summary + testResult;
 
             // Find existing comment to update
-            const { data: comments } = await github.rest.issues.listComments({
+            const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
             const marker = '## LWC Test Coverage Report';
-            const existing = comments.find(c => c.body.includes(marker));
+            const existing = comments.find(c => c.body?.includes(marker));
 
             if (existing) {
               await github.rest.issues.updateComment({
