@@ -524,13 +524,13 @@ public with sharing class BGE_ConfigurationWizard_CTRL {
             dataImportBatch.GiftBatch__c = true;
             dataImportBatch.Process_Using_Scheduled_Job__c = false;
 
-            SObjectAccessDecision decision = Security.stripInaccessible(
-                dataImportBatch.Id != null ? AccessType.UPDATABLE : AccessType.CREATABLE,
-                new List<DataImportBatch__c>{ dataImportBatch }
-            );
-            upsert decision.getRecords();
+            if (dataImportBatch.Id != null) {
+                Database.update(dataImportBatch, AccessLevel.USER_MODE);
+            } else {
+                Database.insert(dataImportBatch, AccessLevel.USER_MODE);
+            }
 
-            recordDetails.id = decision.getRecords()[0].Id;
+            recordDetails.id = dataImportBatch.Id;
 
             return JSON.serialize(recordDetails);
 
