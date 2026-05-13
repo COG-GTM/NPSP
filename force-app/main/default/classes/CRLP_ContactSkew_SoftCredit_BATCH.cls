@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Contact Soft Credit Rollup Batch Job for the "Skew" rollup method
 */
-public class CRLP_ContactSkew_SoftCredit_BATCH extends CRLP_Batch_Base_Skew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
+public inherited sharing class CRLP_ContactSkew_SoftCredit_BATCH extends CRLP_Batch_Base_Skew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
 
     /*******************************************************************************************************
      * @description The CRLP_RollupProcessingOptions.RollupType of this class.

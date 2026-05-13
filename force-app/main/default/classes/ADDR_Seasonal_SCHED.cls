@@ -33,7 +33,7 @@
 * @group Address Management
 * @description Supports the automatic scheduling of Seasonal Address updates  
 */ 
-public class ADDR_Seasonal_SCHED implements Database.Batchable<SObject>, Schedulable {
+public inherited sharing class ADDR_Seasonal_SCHED implements Database.Batchable<SObject>, Schedulable {
 
     @TestVisible
     private OrgConfig orgConfig {

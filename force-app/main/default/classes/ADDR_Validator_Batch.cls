@@ -33,7 +33,7 @@
 * @group Address Management
 * @description Batch class for SmartyStreets address verification. It looks for all populated addresses and updates them if the setting is turned on.
 */
-public class ADDR_Validator_Batch extends UTIL_AbstractChunkingLDV_BATCH implements Database.AllowsCallouts {
+public inherited sharing class ADDR_Validator_Batch extends UTIL_AbstractChunkingLDV_BATCH implements Database.AllowsCallouts {
     /**
     * @description # of records in each batch
     */

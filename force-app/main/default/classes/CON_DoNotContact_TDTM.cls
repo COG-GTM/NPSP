@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Contacts.htm
 * @description Handles changes to the deceased and do not contact fields on Contact.
 */
-public class CON_DoNotContact_TDTM extends TDTM_Runnable {
+public inherited sharing class CON_DoNotContact_TDTM extends TDTM_Runnable {
     
     private DmlWrapper dmlWrapper = new DmlWrapper();
 

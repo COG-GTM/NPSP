@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Abstract base class Non-Skew Mode batch rollup operations
 */
-public abstract class CRLP_Batch_Base_NonSkew extends CRLP_Batch_Base {
+public abstract inherited sharing class CRLP_Batch_Base_NonSkew extends CRLP_Batch_Base {
 
     /*******************************************************************************************************
     * @description When Chunking mode is used for an LDV org, this is the last Id retrieved

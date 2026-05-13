@@ -35,7 +35,7 @@
 * @description trigger handler on Address object to support propagating addresses 
 * @async_support this trigger handler has been tested with async=true, and appears to not cause problems.
 */
-public class ADDR_Addresses_TDTM extends TDTM_Runnable {
+public inherited sharing class ADDR_Addresses_TDTM extends TDTM_Runnable {
 
     private final TDTM_ProcessControl.flag recursionFlag =
             TDTM_ProcessControl.flag.ADDR_hasRunTrigger;

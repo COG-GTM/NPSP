@@ -35,7 +35,7 @@
 * manage the creation and retrieval of Auto Number records, for use with the
 * DataImportBatch object in Lightning web components.
 */
-public class BDI_BatchNumberSettingsController {
+public inherited sharing class BDI_BatchNumberSettingsController {
 
     static SObjectType sObjType = DataImportBatch__c.SObjectType;
     static AN_AutoNumberService autoNumberService =

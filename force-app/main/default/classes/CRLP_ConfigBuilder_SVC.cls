@@ -40,7 +40,7 @@
 *    the deployment status from the Customizable Rollups Custom Settings object
 * 3) Call clearQueue() when done (unless the code execution contents changes in which case the static contents are lost)
 */
-public class CRLP_ConfigBuilder_SVC {
+public with sharing class CRLP_ConfigBuilder_SVC {
 
     /** @description Metadata queued up for deployment */
     @TestVisible

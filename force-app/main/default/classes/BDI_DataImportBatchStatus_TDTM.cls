@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/BatchDataImport.htm
 * @description Trigger Handler for the DataImport SObject to set the batch status
 */
-public class BDI_DataImportBatchStatus_TDTM extends TDTM_Runnable {
+public inherited sharing class BDI_DataImportBatchStatus_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************************
      * @description Trigger Handler on DataImport

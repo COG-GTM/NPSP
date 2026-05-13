@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Affiliations.htm
 * @description  Trigger handler for Affiliations related operations on Contacts, Accounts, or Affiliations.
 */
-public class AFFL_Affiliations_TDTM extends TDTM_Runnable {
+public inherited sharing class AFFL_Affiliations_TDTM extends TDTM_Runnable {
     @TestVisible
     private static String DEFAULT_FORMER_STATUS = 'Former';
 

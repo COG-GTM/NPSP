@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/BatchDataImport.htm
 * @description Wrapper class used to hold source field to target field mappings.
 */
-public class BDI_TargetFields {
+public with sharing class BDI_TargetFields {
     private Map<SObjectType, Set<SObjectField>> targetFieldsByTargetObject =
             new Map<SObjectType, Set<SObjectField>>();
 

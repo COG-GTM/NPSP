@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Abstract base class for all Customizable Rollup batch jobs
 */
-public abstract class CRLP_Batch_Base {
+public abstract inherited sharing class CRLP_Batch_Base {
 
     /** @description The job type for this batch job -- AccountHardCredit, AccountSoftCredit, etc. */
     protected CRLP_RollupProcessingOptions.RollupType jobType;

@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Abstract base class Skew Mode batch rollup operations
 */
-public abstract class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
+public abstract inherited sharing class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
     protected CRLP_Batch_Base_Skew() { }
 
     /**

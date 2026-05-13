@@ -34,7 +34,7 @@
  * @description Cascade deletion and undeletion Domain Classes
  */
 
-public class CDL_CascadeDeleteLookups {
+public without sharing class CDL_CascadeDeleteLookups {
 
     @TestVisible
     private static final String HTML_TEXT_CHILD_RECORDS_FORMAT = '<li><a href="#" onclick="window.open(\'\'/{0}\'\', \'\'\'\');return false;" target="_blank">{1}</a></li>';

@@ -37,7 +37,7 @@
 * Batch process looks for all DataImport records that need to be processed
 *
 */
-public class BDI_DataImport_BATCH implements Database.Batchable<sObject> {
+public inherited sharing class BDI_DataImport_BATCH implements Database.Batchable<sObject> {
 
     /*******************************************************************************************************
     * @description instance of the data import service

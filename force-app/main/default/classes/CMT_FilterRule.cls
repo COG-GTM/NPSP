@@ -34,7 +34,7 @@
 * @description Instance class for a single Filter Rule. Handles actions for that specific Filter Rule, such as
 * evaluating the rule against a specified SObject record.
 */
-public class CMT_FilterRule {
+public with sharing class CMT_FilterRule {
 
     /**
      * @description Enum of valid filter operations. Matches Filter_Rule__mdt.Operation__c

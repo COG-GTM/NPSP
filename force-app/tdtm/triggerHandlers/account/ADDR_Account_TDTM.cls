@@ -34,7 +34,7 @@
 * @description Trigger Handler on Account for Address management 
 * @async_support this trigger handler has been tested with async=true, and appears to not cause problems.
 */
-public class ADDR_Account_TDTM extends TDTM_Runnable {
+public inherited sharing class ADDR_Account_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Trigger Handler on Account that handles Address management.

@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/BatchDataImport.htm
 * @description Visualforce page Controller for the Manage Advanced Mappings VF page
 */
-public class BDI_ManageAdvancedMappingCtrl {
+public with sharing class BDI_ManageAdvancedMappingCtrl {
     
     /*******************************************************************************************************
     * @description Returns a wrapper class containing the current namespace and the npsp namespace defined 

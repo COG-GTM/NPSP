@@ -31,7 +31,7 @@
 * @description Utility methods to handle manipulating CustomMetadataType objects through the Apex MD Api
 *
 */
-public class CMT_MetadataAPI {
+public with sharing class CMT_MetadataAPI {
 
     public static final String DEPLOYMENT_SUCCESS_TEXT = 'Succeeded';
 

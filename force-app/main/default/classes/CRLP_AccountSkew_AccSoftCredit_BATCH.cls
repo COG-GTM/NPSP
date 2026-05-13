@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Recurring Donation Rollup Batch Job using the "Skew" rollup method
 */
-public class CRLP_AccountSkew_AccSoftCredit_BATCH extends CRLP_Batch_Base_Skew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
+public inherited sharing class CRLP_AccountSkew_AccSoftCredit_BATCH extends CRLP_Batch_Base_Skew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
 
     /*******************************************************************************************************
      * @description The CRLP_RollupProcessingOptions.RollupType of this class.
