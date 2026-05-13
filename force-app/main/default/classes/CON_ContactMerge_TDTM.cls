@@ -123,7 +123,7 @@ public inherited sharing class CON_ContactMerge_TDTM extends TDTM_Runnable {
     *   - recalculate Opportunity Rollups
     *
     ********************************************************************************************************/
-    private class ContactMergeFixupQueueable implements Queueable {
+    private inherited sharing class ContactMergeFixupQueueable implements Queueable {
         List<String> mergeKeys;
 
         /***************************************************************************************************************
@@ -147,7 +147,7 @@ public inherited sharing class CON_ContactMerge_TDTM extends TDTM_Runnable {
     * @description Fixes records related to merged contacts
     ********************************************************************************************************/
     @TestVisible
-    private class ContactMergeProcessor {
+    private inherited sharing class ContactMergeProcessor {
         @TestVisible
         private List<String> oldContactIds = new List<String>();
         @TestVisible

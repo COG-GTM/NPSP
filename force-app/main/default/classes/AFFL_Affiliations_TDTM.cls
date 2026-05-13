@@ -290,7 +290,7 @@ public inherited sharing class AFFL_Affiliations_TDTM extends TDTM_Runnable {
     /*******************************************************************************************************
     * @description Wrapper class to track affiliations and which operations need to be performed on them.
     */ 
-    private class AfflOps {
+    private inherited sharing class AfflOps {
 
         // constructor
         AfflOps(Id contactId, Id accountId) {

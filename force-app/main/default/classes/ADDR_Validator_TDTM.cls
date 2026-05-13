@@ -48,7 +48,7 @@ public inherited sharing class ADDR_Validator_TDTM extends TDTM_Runnable {
     /*******************************************************************************************************
     * @description Exception raised during the address validation process.
     */
-    public class ADDR_Validator_Exception extends Exception { }
+    public inherited sharing class ADDR_Validator_Exception extends Exception { }
 
     /*******************************************************************************************************
     * @description Verifies new or modified address records, if verification enabled in the settings.

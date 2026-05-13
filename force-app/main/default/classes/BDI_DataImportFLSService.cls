@@ -176,7 +176,7 @@ public with sharing class BDI_DataImportFLSService {
         return false;
     }
 
-    private class SObjectFieldWrapper {
+    private with sharing class SObjectFieldWrapper {
 
         SObjectType sObjType;
         SObjectField field;

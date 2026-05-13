@@ -123,7 +123,7 @@ public without sharing class CDL_CascadeDeleteLookups {
     * @description Contains Cascade Delete logic. The Trigger Handlers use this class to retrieve  
     * the children of the deleted records, validate and delete children records.
     ********************************************************************************************************/
-    public class CascadeDelete {
+    public without sharing class CascadeDelete {
         private Map<Id, SObject> deletedRecords;
         private List<SObject> children;
 
@@ -208,7 +208,7 @@ public without sharing class CDL_CascadeDeleteLookups {
     * @description Contains Cascade Undelete logic. The Trigger Handlers use this class to retrieve 
     * the children of the undeleted records, and undelete the children records.
     ********************************************************************************************************/
-    public class CascadeUndelete {
+    public without sharing class CascadeUndelete {
         private Set<Id> undeletedRecordIds;
         private CascadeUndeleteLoader loader;
 
@@ -266,7 +266,7 @@ public without sharing class CDL_CascadeDeleteLookups {
     /*******************************************************************************************************
     * @description Contains the logic that displays the error messages for a deleted record.
     ********************************************************************************************************/
-    public class Error {
+    public without sharing class Error {
         private String deletedRecordName;
         private Map<String, Map<Id, String>> childrenByErrorType;
 

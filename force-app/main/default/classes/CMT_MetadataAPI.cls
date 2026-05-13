@@ -148,7 +148,7 @@ public with sharing class CMT_MetadataAPI {
     /******************************************************************************************************************
      * @description Wrapper used to deserialize the deployment request response
      */
-    private class DeploymentResponse {
+    private with sharing class DeploymentResponse {
         Metadata.DeployResult deployResult;
     }
 
@@ -176,7 +176,7 @@ public with sharing class CMT_MetadataAPI {
      * If the call is not successfull, the Customizable_Rollup_Settings__c  record is updated
      * with the result status.
      *****************************************************************************************************************/
-    public class MetadataCallBack implements Metadata.DeployCallBack {
+    public with sharing class MetadataCallBack implements Metadata.DeployCallBack {
 
         private String jobId;
 

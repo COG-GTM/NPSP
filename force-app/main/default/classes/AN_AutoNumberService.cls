@@ -42,7 +42,7 @@
 public with sharing class AN_AutoNumberService {
     SObjectType sObjType;
     List<SObject> recordsToBeAutoNumbered;
-    public class AutoNumberException extends Exception {}
+    public with sharing class AutoNumberException extends Exception {}
 
     /**
      * @description This constructor is currently used by the settings UI
@@ -169,7 +169,7 @@ public with sharing class AN_AutoNumberService {
      * properties for AutoNumber__c records.
      */
     @TestVisible
-    private class AutoNumber {
+    private with sharing class AutoNumber {
         AutoNumber__c record;
         Integer nextAutoNumber;
         AN_AutoNumberService autoNumberService;
@@ -340,7 +340,7 @@ public with sharing class AN_AutoNumberService {
     * @description Utility class that can be used when testing methods in this class.
     */
     @TestVisible
-    private class TestUtility {
+    private with sharing class TestUtility {
 
         SObjectType sObjType;
         String sObjTypeName {

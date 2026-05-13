@@ -642,5 +642,5 @@ global inherited sharing class CONV_Account_Conversion_BATCH implements Database
     /*******************************************************************************************************
     * @description Thrown after the rollback when a batch fails
     */
-    public class AccountModelConversionException extends Exception {}
+    public inherited sharing class AccountModelConversionException extends Exception {}
 }
