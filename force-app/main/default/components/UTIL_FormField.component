@@ -95,7 +95,7 @@
         </div>
         <script type="text/javascript">
             (function() {
-                var oc = '{!JSENCODE(onchange)}';
+                var oc = '{!onchange}';
                 var input = document.getElementById("{!$Component.inputCB}");
 
                 // Add onchange event only when needed
