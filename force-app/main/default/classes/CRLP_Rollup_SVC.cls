@@ -427,5 +427,5 @@ public with sharing class CRLP_Rollup_SVC {
         );
     }
 
-    public class CRLP_Exception extends Exception {}
+    public with sharing class CRLP_Exception extends Exception {}
 }

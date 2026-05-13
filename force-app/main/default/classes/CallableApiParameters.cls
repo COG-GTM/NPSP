@@ -402,6 +402,6 @@ public with sharing class CallableApiParameters {
     /**
     * @description Exception class for Parameter Parsing
     */
-    private class ParameterException extends Exception {}
+    private with sharing class ParameterException extends Exception {}
 
 }

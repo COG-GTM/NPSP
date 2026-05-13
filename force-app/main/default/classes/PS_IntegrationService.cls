@@ -235,10 +235,10 @@ global with sharing class PS_IntegrationService {
     }
 
     // Custom Exception
-    public class IntegrationServiceException extends Exception {}
+    public with sharing class IntegrationServiceException extends Exception {}
 
     // Inner class representation of the configuration parameters for tests
-    public class Config {
+    public with sharing class Config {
         public String key;
         public String value;
 

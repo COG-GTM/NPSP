@@ -82,7 +82,7 @@ public with sharing class ContactMergeService {
     /*******************************************************************************************************
     * @description Exception raised by the contact merge process.
     */
-    public class ConMergeException extends Exception {} 
+    public with sharing class ConMergeException extends Exception {} 
         
     /*******************************************************************************************************
     * @description Merges the winner and losers.

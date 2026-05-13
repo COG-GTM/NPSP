@@ -199,7 +199,7 @@ public virtual inherited sharing class ERR_AsyncErrors implements Queueable {
      * @description A simple wrapper class around the AsyncApexJob object.
      */
     @TestVisible
-    private class AsyncApexJobWrapper {
+    private inherited sharing class AsyncApexJobWrapper {
         public String JobType;
         public String ApexClassName;
         public String ApexClassNamespacePrefix;

@@ -77,7 +77,7 @@ public with sharing class CRLP_FiscalYears {
      * @description Wrapper class for the Organization Fiscal year information. This allows the values
      * to be overrriden by unit tests
      */
-    public class OrgFiscalYearInfo {
+    public with sharing class OrgFiscalYearInfo {
         public Integer fiscalYearStartMonth { get; set; }
         public Boolean usesStartDateAsFiscalYearName { get; set; }
 

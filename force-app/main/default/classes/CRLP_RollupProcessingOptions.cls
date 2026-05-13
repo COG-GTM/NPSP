@@ -97,7 +97,7 @@ public with sharing class CRLP_RollupProcessingOptions {
      * @description Processing Options to use for the CRLP_RollupProcessor.startRollupProcessing() method. These
      * define special conditions that the processing logic uses.
      */
-    public class ProcessingOptions {
+    public with sharing class ProcessingOptions {
 
         /**
         * @description This is set to true if the Summary Object should be built and compared to the current object
