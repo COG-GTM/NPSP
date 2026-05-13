@@ -116,7 +116,7 @@ public with sharing class UTIL_JobProgress_CTRL {
         //Query the Batch apex jobs, excluding skew dispatcher jobs (unless the skew mode job is in holding status)
         String skewDispatcherClassName =  CRLP_SkewDispatcher_BATCH.class.getName();
         skewDispatcherClassName = (skewDispatcherClassName.contains('__') ? skewDispatcherClassName.split('__')[1] : skewDispatcherClassName);
-        List<AsyncApexJob> batchJobs = [SELECT TotalJobItems, Status, ExtendedStatus, NumberOfErrors, MethodName, JobType, JobItemsProcessed, Id,
+        List<AsyncApexJob> asyncJobs = [SELECT TotalJobItems, Status, ExtendedStatus, NumberOfErrors, MethodName, JobType, JobItemsProcessed, Id,
                                     CreatedDate, CreatedById, CompletedDate, ApexClassId, ApexClass.Name, CreatedBy.Name
                                     FROM AsyncApexJob
                                     WHERE JobType='BatchApex'
@@ -125,7 +125,7 @@ public with sharing class UTIL_JobProgress_CTRL {
                                     AND CreatedDate >= :batchJobStartDT
                                     AND CreatedById = :currUserId
                                     ORDER BY CreatedDate DESC, Id LIMIT :numberOfJobs];
-        for (AsyncApexJob a : batchJobs) {
+        for (AsyncApexJob a : asyncJobs) {
 
             BatchJob j = new BatchJob(a);
 
