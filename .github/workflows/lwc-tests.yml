@@ -132,8 +132,10 @@ jobs:
 
       - name: Get changed LWC files
         id: changed
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          FILES=$(git diff --name-only --diff-filter=ACMR origin/${{ github.base_ref }}...HEAD -- 'force-app/main/default/lwc/**/*.js' | tr '\n' ' ')
+          FILES=$(git diff --name-only --diff-filter=ACMR "origin/$BASE_REF"...HEAD -- 'force-app/main/default/lwc/**/*.js' | tr '\n' ' ')
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           if [ -z "$FILES" ]; then
             echo "No changed LWC JS files found."
@@ -145,4 +147,6 @@ jobs:
 
       - name: Lint changed LWC files
         if: steps.changed.outputs.skip == 'false'
-        run: npx eslint ${{ steps.changed.outputs.files }}
+        env:
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+        run: npx eslint $CHANGED_FILES
