@@ -83,24 +83,28 @@ public with sharing class RD2_VisualizeScheduleController {
      */
     @AuraEnabled
     public static Map<String, Object> getInstallments(Id recordId, Integer displayNum) {
-        validate(recordId);
+        try {
+            validate(recordId);
 
-        RD2_RecurringDonation rd = getRecurringDonation(recordId);
-        DataTable dataTable = buildInstallmentDataTable(rd.getSObject());
+            RD2_RecurringDonation rd = getRecurringDonation(recordId);
+            DataTable dataTable = buildInstallmentDataTable(rd.getSObject());
 
-        if (dataTable.getColumns().isEmpty()) {
-            throwAuraHandledException(System.Label.RD2_ScheduleVisualizerFLSInstallment);
+            if (dataTable.getColumns().isEmpty()) {
+                throwAuraHandledException(System.Label.RD2_ScheduleVisualizerFLSInstallment);
+            }
+
+            getInstallmentRecords(rd, displayNum, dataTable);
+
+            if (dataTable.getRecords().isEmpty()) {
+                throwAuraHandledException(System.Label.RD2_ScheduleVisualizerMessageNoSchedule);
+            }
+
+            sanitizeInstallments(dataTable);
+
+            return new Map<String, Object>{ 'dataTable' => dataTable };
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        getInstallmentRecords(rd, displayNum, dataTable);
-
-        if (dataTable.getRecords().isEmpty()) {
-            throwAuraHandledException(System.Label.RD2_ScheduleVisualizerMessageNoSchedule);
-        }
-
-        sanitizeInstallments(dataTable);
-
-        return new Map<String, Object>{ 'dataTable' => dataTable };
     }
 
     /**
@@ -133,29 +137,33 @@ public with sharing class RD2_VisualizeScheduleController {
      */
     @AuraEnabled
     public static Map<String, Object> getSchedules(Id recordId) {
-        validate(recordId);
+        try {
+            validate(recordId);
 
-        RD2_RecurringDonation rd = getRecurringDonation(recordId);
-        DataTable dataTable = buildScheduleDataTable(rd.getSObject());
+            RD2_RecurringDonation rd = getRecurringDonation(recordId);
+            DataTable dataTable = buildScheduleDataTable(rd.getSObject());
 
-        if (dataTable.getColumns().size() <= 1) {//"isCurrent" field is always part of the data table fields
-            throwAuraHandledException(System.Label.RD2_ScheduleVisualizerFLSSchedule);
-        }
-
-        Integer counter = 1;
-        if (!rd.isClosed()) {
-            for (RD2_ScheduleService.ActiveSchedule schedule : scheduleService.getVisualizedSchedules(rd.getSObject())) {
-                dataTable.addRecord(new Schedule(counter++, schedule));
+            if (dataTable.getColumns().size() <= 1) {//"isCurrent" field is always part of the data table fields
+                throwAuraHandledException(System.Label.RD2_ScheduleVisualizerFLSSchedule);
             }
+
+            Integer counter = 1;
+            if (!rd.isClosed()) {
+                for (RD2_ScheduleService.ActiveSchedule schedule : scheduleService.getVisualizedSchedules(rd.getSObject())) {
+                    dataTable.addRecord(new Schedule(counter++, schedule));
+                }
+            }
+
+            if (dataTable.getRecords().isEmpty()) {
+                throwAuraHandledException(System.Label.RD2_ScheduleVisualizerMessageNoActiveSchedule);
+            }
+
+            sanitizeSchedules(dataTable);
+
+            return new Map<String, Object>{ 'dataTable' => dataTable };
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        if (dataTable.getRecords().isEmpty()) {
-            throwAuraHandledException(System.Label.RD2_ScheduleVisualizerMessageNoActiveSchedule);
-        }
-
-        sanitizeSchedules(dataTable);
-
-        return new Map<String, Object>{ 'dataTable' => dataTable };
     }
 
     /**
@@ -518,7 +526,11 @@ public with sharing class RD2_VisualizeScheduleController {
          */
         @AuraEnabled
         public List<DataTableColumn> getColumns() {
-            return columnByFieldName.values();
+            try {
+                return columnByFieldName.values();
+            } catch (Exception ex) {
+                throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+            }
         }
 
         /**
@@ -560,7 +572,11 @@ public with sharing class RD2_VisualizeScheduleController {
          */
         @AuraEnabled
         public List<Object> getRecords() {
-            return this.records == null ? new List<Object>() : this.records;
+            try {
+                return this.records == null ? new List<Object>() : this.records;
+            } catch (Exception ex) {
+                throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+            }
         }
     }
 

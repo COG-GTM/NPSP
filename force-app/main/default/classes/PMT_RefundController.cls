@@ -47,60 +47,68 @@ public with sharing class PMT_RefundController {
 
     @AuraEnabled
     public static RefundView getInitialView(Id paymentId) {
-        RefundView refundView = new RefundView();
-        setPermissionData(refundView);
+        try {
+            RefundView refundView = new RefundView();
+            setPermissionData(refundView);
 
-        if (!refundView.hasRequiredPermissions) {
+            if (!refundView.hasRequiredPermissions) {
+                return refundView;
+            }
+
+            refundService.withOriginalPaymentIds(new Set<Id>{paymentId});
+            PMT_RefundService.RefundInfo refundInfo = refundService.getRefundInfoFor(paymentId);
+
+            if (isElevatePayment(refundInfo.originalPayment.Elevate_Payment_ID__c)) {
+                UTIL_Http.Response response = refundService.getElevatePaymentRefundInfo(refundInfo.originalPayment.Elevate_Payment_ID__c);
+                processPaymentInfoResponse(refundView, response);
+            } else {
+                refundView.remainingBalance = refundInfo.remainingBalance;
+            }
+
+            if (UserInfo.isMultiCurrencyOrganization()) {
+                refundView.currencyCode = (String) refundInfo.originalPayment.get(UTIL_Currency.CURRENCY_ISO_CODE_FIELD);
+
+            } else {
+                refundView.currencyCode = null;
+            }
             return refundView;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        refundService.withOriginalPaymentIds(new Set<Id>{paymentId});
-        PMT_RefundService.RefundInfo refundInfo = refundService.getRefundInfoFor(paymentId);
-
-        if (isElevatePayment(refundInfo.originalPayment.Elevate_Payment_ID__c)) {
-            UTIL_Http.Response response = refundService.getElevatePaymentRefundInfo(refundInfo.originalPayment.Elevate_Payment_ID__c);
-            processPaymentInfoResponse(refundView, response);
-        } else {
-            refundView.remainingBalance = refundInfo.remainingBalance;
-        }
-
-        if (UserInfo.isMultiCurrencyOrganization()) {
-            refundView.currencyCode = (String) refundInfo.originalPayment.get(UTIL_Currency.CURRENCY_ISO_CODE_FIELD);
-
-        } else {
-            refundView.currencyCode = null;
-        }
-        return refundView;
     }
 
     @AuraEnabled 
     public static RefundView processRefund(Id paymentId, Decimal refundAmount) {
-        RefundView refundView = new RefundView();
-        setPermissionData(refundView);
+        try {
+            RefundView refundView = new RefundView();
+            setPermissionData(refundView);
 
-        if (!refundView.hasRequiredPermissions) {
+            if (!refundView.hasRequiredPermissions) {
+                return refundView;
+            }
+
+            refundService.withOriginalPaymentIds(new Set<Id>{paymentId});
+            PMT_RefundService.RefundInfo refundInfo = refundService.getRefundInfoFor(paymentId);
+
+            if (!isPaymentRefundable(refundInfo.originalPayment)) {
+                handleError(refundView, System.Label.pmtPaymentNotRefundable);
+                return refundView;
+            }
+
+            if (refundView.isSuccess != null && !refundView.isSuccess) {
+                return refundView;
+            }
+
+            if (isElevatePayment(refundInfo?.originalPayment?.Elevate_Payment_ID__c)) {
+                processElevateRefund(refundInfo.originalPayment, refundView, refundAmount);
+            } else {
+                processNonElevateRefund(refundInfo.originalPayment, refundView, refundAmount);
+            }
+
             return refundView;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        refundService.withOriginalPaymentIds(new Set<Id>{paymentId});
-        PMT_RefundService.RefundInfo refundInfo = refundService.getRefundInfoFor(paymentId);
-
-        if (!isPaymentRefundable(refundInfo.originalPayment)) {
-            handleError(refundView, System.Label.pmtPaymentNotRefundable);
-            return refundView;
-        }
-
-        if (refundView.isSuccess != null && !refundView.isSuccess) {
-            return refundView;
-        }
-
-        if (isElevatePayment(refundInfo?.originalPayment?.Elevate_Payment_ID__c)) {
-            processElevateRefund(refundInfo.originalPayment, refundView, refundAmount);
-        } else {
-            processNonElevateRefund(refundInfo.originalPayment, refundView, refundAmount);
-        }
-
-        return refundView;
     }
 
     private static Boolean isPaymentRefundable(npe01__OppPayment__c originalPayment) {

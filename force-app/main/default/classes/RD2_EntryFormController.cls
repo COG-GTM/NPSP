@@ -97,50 +97,54 @@ public with sharing class RD2_EntryFormController {
 
     @AuraEnabled
     public static RD2_AppView getInitialView(Id parentId, Id recordId) {
-        RD2_AppView view = new RD2_AppView();
+        try {
+            RD2_AppView view = new RD2_AppView();
 
-        view.hasRequiredPermissions = hasRequiredFieldPermissions();
-        if (!view.hasRequiredPermissions) {
-            return view;
-        }
-
-        view.isAutoNamingEnabled = RD2_NamingService.isAutomaticNamingEnabled;
-        view.isMultiCurrencyEnabled = UserInfo.isMultiCurrencyOrganization();
-        view.parentSObjectType = (parentId == null) ? null : UTIL_Describe.objectNameFromId(parentId);
-        view.InstallmentPeriodPermissions = getFieldPermissionsMap('npe03__Installment_Period__c');
-        view.InstallmentFrequencyPermissions = getFieldPermissionsMap(String.valueOf(npe03__Recurring_Donation__c.InstallmentFrequency__c));
-        view.customFieldSets = getCustomFieldSectionFields();
-        view.isElevateCustomer = RD2_ElevateIntegrationService.isIntegrationEnabled();
-        view.isChangeLogEnabled = RD2_ChangeLogService.isChangeLogEnabled;
-        view.periodToYearlyFrequencyMap = RD2_Constants.PERIOD_TO_YEARLY_FREQUENCY;
-        view.closedStatusValues = new List<String>(RD2_StatusMapper.getInstance().getClosedStatusValues());
-        view.defaultRecurringType = UTIL_Describe.getDefaultSelectOption(
-                'npe03__Recurring_Donation__c',
-                String.valueOf(npe03__Recurring_Donation__c.RecurringType__c)
-        );
-        view.defaultInstallmentPeriod = UTIL_Describe.getDefaultSelectOption(
-                'npe03__Recurring_Donation__c',
-                String.valueOf(npe03__Recurring_Donation__c.npe03__Installment_Period__c)
-        );
-        view.defaultDayOfMonth = UTIL_Describe.getDefaultSelectOption(
-                'npe03__Recurring_Donation__c',
-                String.valueOf(npe03__Recurring_Donation__c.Day_of_Month__c)
-        );
-
-        if (recordId != null) {
-            npe03__Recurring_Donation__c rd = selector.getRecurringDonationForUI(recordId);
-            view.withRecord(rd);
-            view.record.donorType = getDonorType(rd);
-            if (view.isMultiCurrencyEnabled) {
-                view.record.currencyIsoCode = (String)rd.get('CurrencyIsoCode');
+            view.hasRequiredPermissions = hasRequiredFieldPermissions();
+            if (!view.hasRequiredPermissions) {
+                return view;
             }
-        } else if (parentId != null) {
-            view.withParentId(parentId);
+
+            view.isAutoNamingEnabled = RD2_NamingService.isAutomaticNamingEnabled;
+            view.isMultiCurrencyEnabled = UserInfo.isMultiCurrencyOrganization();
+            view.parentSObjectType = (parentId == null) ? null : UTIL_Describe.objectNameFromId(parentId);
+            view.InstallmentPeriodPermissions = getFieldPermissionsMap('npe03__Installment_Period__c');
+            view.InstallmentFrequencyPermissions = getFieldPermissionsMap(String.valueOf(npe03__Recurring_Donation__c.InstallmentFrequency__c));
+            view.customFieldSets = getCustomFieldSectionFields();
+            view.isElevateCustomer = RD2_ElevateIntegrationService.isIntegrationEnabled();
+            view.isChangeLogEnabled = RD2_ChangeLogService.isChangeLogEnabled;
+            view.periodToYearlyFrequencyMap = RD2_Constants.PERIOD_TO_YEARLY_FREQUENCY;
+            view.closedStatusValues = new List<String>(RD2_StatusMapper.getInstance().getClosedStatusValues());
+            view.defaultRecurringType = UTIL_Describe.getDefaultSelectOption(
+                    'npe03__Recurring_Donation__c',
+                    String.valueOf(npe03__Recurring_Donation__c.RecurringType__c)
+            );
+            view.defaultInstallmentPeriod = UTIL_Describe.getDefaultSelectOption(
+                    'npe03__Recurring_Donation__c',
+                    String.valueOf(npe03__Recurring_Donation__c.npe03__Installment_Period__c)
+            );
+            view.defaultDayOfMonth = UTIL_Describe.getDefaultSelectOption(
+                    'npe03__Recurring_Donation__c',
+                    String.valueOf(npe03__Recurring_Donation__c.Day_of_Month__c)
+            );
+
+            if (recordId != null) {
+                npe03__Recurring_Donation__c rd = selector.getRecurringDonationForUI(recordId);
+                view.withRecord(rd);
+                view.record.donorType = getDonorType(rd);
+                if (view.isMultiCurrencyEnabled) {
+                    view.record.currencyIsoCode = (String)rd.get('CurrencyIsoCode');
+                }
+            } else if (parentId != null) {
+                view.withParentId(parentId);
+            }
+
+            view.setRecordCreateDefaults();
+
+            return view;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        view.setRecordCreateDefaults();
-
-        return view;
     }
 
     public String getDefaultInstallmentPeriod() {
@@ -247,24 +251,28 @@ public with sharing class RD2_EntryFormController {
 
     @AuraEnabled
     public static SaveResultView saveRecurringDonation(RD2_SaveRequest saveRequest) {
-        npe03__Recurring_Donation__c rd = saveRequest.removeNonCreateableCustomFields().toRecord();
-        Database.SaveResult sr;
+        try {
+            npe03__Recurring_Donation__c rd = saveRequest.removeNonCreateableCustomFields().toRecord();
+            Database.SaveResult sr;
 
-        if (!hasRequiredSavePermissions(saveRequest)) {
-            return new SaveResultView(Label.commonAccessErrorMessage);
-        }
+            if (!hasRequiredSavePermissions(saveRequest)) {
+                return new SaveResultView(Label.commonAccessErrorMessage);
+            }
 
-        if (rd.Id != null) {
-            sr = Database.update(rd, false);
-        } else {
-            sr = Database.insert(rd, false);
-        }
+            if (rd.Id != null) {
+                sr = Database.update(rd, false);
+            } else {
+                sr = Database.insert(rd, false);
+            }
 
-        if (sr.success) {
-            npe03__Recurring_Donation__c record = selector.getRecurringDonationForUI(rd.Id);
-            return new SaveResultView(sr, record);
-        } else {
-            return new SaveResultView(sr);
+            if (sr.success) {
+                npe03__Recurring_Donation__c record = selector.getRecurringDonationForUI(rd.Id);
+                return new SaveResultView(sr, record);
+            } else {
+                return new SaveResultView(sr);
+            }
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
     }
 
@@ -331,7 +339,11 @@ public with sharing class RD2_EntryFormController {
     */
     @AuraEnabled
     public static void logError(Id recordId, String errorMessage) {
-        commitmentService.logError(recordId, errorMessage);
+        try {
+            commitmentService.logError(recordId, errorMessage);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
 

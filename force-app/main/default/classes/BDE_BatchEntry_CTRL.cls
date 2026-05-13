@@ -287,8 +287,12 @@ public with sharing class BDE_BatchEntry_CTRL {
    */
    @AuraEnabled
    public static Batch_Data_Entry_Settings__c getBatchDataEntrySettings () {
-      Batch_Data_Entry_Settings__c settings = Batch_Data_Entry_Settings__c.getInstance(UserInfo.getUserId());
-      return settings;
+       try {
+          Batch_Data_Entry_Settings__c settings = Batch_Data_Entry_Settings__c.getInstance(UserInfo.getUserId());
+          return settings;
+       } catch (Exception ex) {
+           throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+       }
    }
 
    /*********************************************************************************************************
@@ -298,11 +302,15 @@ public with sharing class BDE_BatchEntry_CTRL {
     */
    @AuraEnabled
    public static void upsertRetirementAlert (Boolean hasViewedAlert) {
-      Batch_Data_Entry_Settings__c settings = getBatchDataEntrySettings();
-      if (!settings.Viewed_Retirement_Alert__c) {
-         settings.Viewed_Retirement_Alert__c = hasViewedAlert;
-         upsert settings;
-      }
+       try {
+          Batch_Data_Entry_Settings__c settings = getBatchDataEntrySettings();
+          if (!settings.Viewed_Retirement_Alert__c) {
+             settings.Viewed_Retirement_Alert__c = hasViewedAlert;
+             upsert settings;
+          }
+       } catch (Exception ex) {
+           throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+       }
    }
 
 }

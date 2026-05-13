@@ -36,20 +36,28 @@ public with sharing class RelationshipsTreeGridController {
 
     @AuraEnabled(Cacheable=true)
     public static RelationshipsListView getInitialView(Id contactId) {
-        RelationshipsService service = RelationshipsService.getInstance();
+        try {
+            RelationshipsService service = RelationshipsService.getInstance();
 
-        List<RelationshipView> relationships = getRelationshipsWithAccessCheck(contactId);
-        RelationshipsListView initialView = new RelationshipsListView(relationships);
-        initialView.vfPageURL = service.getVFPageURL();
-        initialView.labels = service.getListUILabels();
-        initialView.showCreateRelationshipButton = service.canCreateRelationship();
+            List<RelationshipView> relationships = getRelationshipsWithAccessCheck(contactId);
+            RelationshipsListView initialView = new RelationshipsListView(relationships);
+            initialView.vfPageURL = service.getVFPageURL();
+            initialView.labels = service.getListUILabels();
+            initialView.showCreateRelationshipButton = service.canCreateRelationship();
 
-        return initialView;
+            return initialView;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled(Cacheable=true)
     public static List<RelationshipView> getRelationships(Id contactId) {
-        return getRelationshipsWithAccessCheck(contactId);
+        try {
+            return getRelationshipsWithAccessCheck(contactId);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     private static List<RelationshipView> getRelationshipsWithAccessCheck(Id contactId) {

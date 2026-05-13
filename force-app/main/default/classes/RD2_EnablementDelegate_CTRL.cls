@@ -117,13 +117,17 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled(cacheable=false)
     public static String loadState() {
-        EnablementState state = getEnablementState();
+        try {
+            EnablementState state = getEnablementState();
 
-        if (!state.isEnabled && state.isConfirmed && isDryRunOutdated(state)) {
-            state.isConfirmed = false;
+            if (!state.isEnabled && state.isConfirmed && isDryRunOutdated(state)) {
+                state.isConfirmed = false;
+            }
+
+            return JSON.serialize(state);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        return JSON.serialize(state);
     }
 
     /***
@@ -200,14 +204,18 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled
     public static void confirmEnablement() {
-        EnablementState state = getEnablementState();
+        try {
+            EnablementState state = getEnablementState();
 
-        if (isDryRunOutdated(state)) {
-            throwAuraHandledException(System.Label.RD2_EnablementDryRunOutdatedError);
+            if (isDryRunOutdated(state)) {
+                throwAuraHandledException(System.Label.RD2_EnablementDryRunOutdatedError);
+            }
+
+            state.isConfirmed = true;
+            saveEnablementState(state);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        state.isConfirmed = true;
-        saveEnablementState(state);
     }
 
     /***
@@ -295,22 +303,26 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled(cacheable=false)
     public static String getMetaDeployURL() {
-        String urlFormat = 'https://install.salesforce.org/products/npsp/{0}enhanced-recurring-donations';
-        String version;
+        try {
+            String urlFormat = 'https://install.salesforce.org/products/npsp/{0}enhanced-recurring-donations';
+            String version;
 
-        if (UTIL_Namespace.isCustomerOrg()) {
-            UTIL_Version_API versionAPI = new UTIL_Version_API();
+            if (UTIL_Namespace.isCustomerOrg()) {
+                UTIL_Version_API versionAPI = new UTIL_Version_API();
 
-            //Note: the exception cannot be caught in Apex
-            version = String.valueOf(versionAPI.requestVersion());
+                //Note: the exception cannot be caught in Apex
+                version = String.valueOf(versionAPI.requestVersion());
+            }
+
+            version = String.isBlank(version) ? '' : (version + '/');
+
+            return String.format(
+                urlFormat,
+                new String[]{ version }
+            );
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        version = String.isBlank(version) ? '' : (version + '/');
-
-        return String.format(
-            urlFormat,
-            new String[]{ version }
-        );
     }
 
     /***
@@ -319,15 +331,19 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled
     public static void launchMetaDeploy() {
-        EnablementState state = getEnablementState();
-        state.isMetaLaunched = true;
+        try {
+            EnablementState state = getEnablementState();
+            state.isMetaLaunched = true;
 
-        saveEnablementState(state);
+            saveEnablementState(state);
 
-        System.enqueueJob(new EnablementQueueable(QueueableMode.DisableRollup));
+            System.enqueueJob(new EnablementQueueable(QueueableMode.DisableRollup));
 
-        if (!Test.isRunningTest()) {
-            UTIL_OrgTelemetry_SVC.asyncProcessNpspSettingsTelemetry();
+            if (!Test.isRunningTest()) {
+                UTIL_OrgTelemetry_SVC.asyncProcessNpspSettingsTelemetry();
+            }
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
     }
 
@@ -337,17 +353,21 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled
     public static void confirmMetaDeploy() {
-        if (!hasMetaDeployCompleted()) {
-            throwAuraHandledException(System.Label.RD2_EnablementMetaDeployConfirmError);
-        }
+        try {
+            if (!hasMetaDeployCompleted()) {
+                throwAuraHandledException(System.Label.RD2_EnablementMetaDeployConfirmError);
+            }
 
-        EnablementState state = getEnablementState();
-        state.isMetaConfirmed = true;
+            EnablementState state = getEnablementState();
+            state.isMetaConfirmed = true;
 
-        saveEnablementState(state);
+            saveEnablementState(state);
 
-        if (!Test.isRunningTest()) {
-            UTIL_OrgTelemetry_SVC.asyncProcessNpspSettingsTelemetry();
+            if (!Test.isRunningTest()) {
+                UTIL_OrgTelemetry_SVC.asyncProcessNpspSettingsTelemetry();
+            }
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
     }
 
@@ -375,7 +395,11 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled
     public static void skipDryRun() {
-        setMigrationEnabled(true);
+        try {
+            setMigrationEnabled(true);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /***
@@ -384,7 +408,11 @@ public with sharing class RD2_EnablementDelegate_CTRL extends STG_Panel {
     */
     @AuraEnabled
     public static void skipMigration() {
-        setMigrationEnabled(false);
+        try {
+            setMigrationEnabled(false);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /***

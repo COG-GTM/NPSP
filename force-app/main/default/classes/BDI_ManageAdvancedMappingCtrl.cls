@@ -42,7 +42,11 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled(cacheable=true)
     public static NamespaceWrapper getNamespaceWrapper() {
-        return new NamespaceWrapper();
+        try {
+            return new NamespaceWrapper();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -90,12 +94,16 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled
     public static Boolean isAdminUser(Id userId) {
-        List<User> runningUser = [SELECT ProfileId FROM User WHERE Id = :userId];
-        Map<Id, Boolean> userIdToIsAdmin = USER_UserService.isSysAdmin(
-                runningUser
-        );
+        try {
+            List<User> runningUser = [SELECT ProfileId FROM User WHERE Id = :userId];
+            Map<Id, Boolean> userIdToIsAdmin = USER_UserService.isSysAdmin(
+                    runningUser
+            );
 
-        return userIdToIsAdmin.get(userId);
+            return userIdToIsAdmin.get(userId);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -153,11 +161,15 @@ public class BDI_ManageAdvancedMappingCtrl {
      */
     @AuraEnabled
     public static AdvancedMappingObjectData getAdvancedMappingObjectData () {
-        if (!isAdminUser(UserInfo.getUserId())) {
-            throw new AuraHandledException(Label.commonInsufficientPermissions);
-        }
+        try {
+            if (!isAdminUser(UserInfo.getUserId())) {
+                throw new AuraHandledException(Label.commonInsufficientPermissions);
+            }
 
-        return new AdvancedMappingObjectData(getObjectMappings(), getObjectOptions());
+            return new AdvancedMappingObjectData(getObjectMappings(), getObjectOptions());
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -170,12 +182,16 @@ public class BDI_ManageAdvancedMappingCtrl {
     @AuraEnabled(Cacheable = true)
     public static AdvancedMappingFieldData getAdvancedMappingFieldsData (String targetObjectApiName,
         String sourceObjectApiName) {
-        String fieldMappingSetName = getFieldMappingSetName();
-        FieldInfo[] sourceObjectFieldDescribes = getObjectFieldDescribes(sourceObjectApiName, false);
-        FieldInfo[] targetObjectFieldDescribes = getObjectFieldDescribes(targetObjectApiName, false);
-        List<String> mappedDISourceFields = getMappedDISourceFields();
-        return new AdvancedMappingFieldData(
-            fieldMappingSetName, sourceObjectFieldDescribes, targetObjectFieldDescribes, mappedDISourceFields);
+            try {
+            String fieldMappingSetName = getFieldMappingSetName();
+            FieldInfo[] sourceObjectFieldDescribes = getObjectFieldDescribes(sourceObjectApiName, false);
+            FieldInfo[] targetObjectFieldDescribes = getObjectFieldDescribes(targetObjectApiName, false);
+            List<String> mappedDISourceFields = getMappedDISourceFields();
+            return new AdvancedMappingFieldData(
+                fieldMappingSetName, sourceObjectFieldDescribes, targetObjectFieldDescribes, mappedDISourceFields);
+            } catch (Exception ex) {
+                throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+            }
     }
 
     /*******************************************************************************************************
@@ -185,7 +201,11 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled
     public static String getDataImportObjectName() {
-        return DataImport__c.SObjectType.getDescribe().getName();
+        try {
+            return DataImport__c.SObjectType.getDescribe().getName();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -197,7 +217,11 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled
     public static FieldInfo[] getObjectFieldDescribes(String objectName) {
-        return getObjectFieldDescribes(objectName,false);
+        try {
+            return getObjectFieldDescribes(objectName,false);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -211,25 +235,29 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled
     public static FieldInfo[] getObjectFieldDescribes(String objectName, Boolean includeReferenceToObjectList) {
-        FieldInfo[] fieldInfos = new List<FieldInfo>();
+        try {
+            FieldInfo[] fieldInfos = new List<FieldInfo>();
 
-        if (includeReferenceToObjectList == null) {
-            includeReferenceToObjectList = false;
-        }
-
-        Map<String, Schema.DescribeFieldResult> fieldDescribes =
-            UTIL_Describe.getAllFieldsDescribe(objectName);
-
-        for (String key : fieldDescribes.keySet()) {
-
-            //Only include fields that are createable by the current user or formula fields.
-            //Formula fields can be selectively excluded later by the calling component.
-            if (fieldDescribes.get(key).isCreateable() || fieldDescribes.get(key).isCalculated()) {
-                fieldInfos.add(new FieldInfo(fieldDescribes.get(key),includeReferenceToObjectList));
+            if (includeReferenceToObjectList == null) {
+                includeReferenceToObjectList = false;
             }
-        }
 
-        return fieldInfos;
+            Map<String, Schema.DescribeFieldResult> fieldDescribes =
+                UTIL_Describe.getAllFieldsDescribe(objectName);
+
+            for (String key : fieldDescribes.keySet()) {
+
+                //Only include fields that are createable by the current user or formula fields.
+                //Formula fields can be selectively excluded later by the calling component.
+                if (fieldDescribes.get(key).isCreateable() || fieldDescribes.get(key).isCalculated()) {
+                    fieldInfos.add(new FieldInfo(fieldDescribes.get(key),includeReferenceToObjectList));
+                }
+            }
+
+            return fieldInfos;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -244,18 +272,22 @@ public class BDI_ManageAdvancedMappingCtrl {
     @AuraEnabled
     public static DataImportFieldMappingWrapper[] getFieldMappingsByObjectAndFieldSetNames(
         String objectName, String fieldMappingSetname) {
-        DataImportFieldMappingWrapper[] fieldMappingWrappers =
-            new List<DataImportFieldMappingWrapper>();
-        BDI_FieldMapping[] fieldMappings = extractInvalidFieldMappings(
-            bdiMsAdv.objectMappingByDevName.get(objectName));
-        for (BDI_FieldMapping fieldMapping : fieldMappings) {
-            if ((bdiMsAdv.fieldMappingSet.DeveloperName == fieldMappingSetname &&
-                fieldMapping.Is_Deleted == false)) {
-                DataImportFieldMappingWrapper wrapper = new DataImportFieldMappingWrapper(fieldMapping);
-                fieldMappingWrappers.add(wrapper);
+            try {
+            DataImportFieldMappingWrapper[] fieldMappingWrappers =
+                new List<DataImportFieldMappingWrapper>();
+            BDI_FieldMapping[] fieldMappings = extractInvalidFieldMappings(
+                bdiMsAdv.objectMappingByDevName.get(objectName));
+            for (BDI_FieldMapping fieldMapping : fieldMappings) {
+                if ((bdiMsAdv.fieldMappingSet.DeveloperName == fieldMappingSetname &&
+                    fieldMapping.Is_Deleted == false)) {
+                    DataImportFieldMappingWrapper wrapper = new DataImportFieldMappingWrapper(fieldMapping);
+                    fieldMappingWrappers.add(wrapper);
+                }
             }
-        }
-        return fieldMappingWrappers;
+            return fieldMappingWrappers;
+            } catch (Exception ex) {
+                throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+            }
     }
 
     /**
@@ -781,33 +813,37 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled(cacheable=true)
     public static FieldInfo[] getRelationshipFieldOptions(String objectName, String lookupToObjectName) {
-        FieldInfo[] fieldInfos = new List<FieldInfo>();
+        try {
+            FieldInfo[] fieldInfos = new List<FieldInfo>();
 
-        Map<String, Schema.DescribeFieldResult> fieldDescribes =
-            UTIL_Describe.getAllFieldsDescribe(objectName);
+            Map<String, Schema.DescribeFieldResult> fieldDescribes =
+                UTIL_Describe.getAllFieldsDescribe(objectName);
 
-        for (String key : fieldDescribes.keySet()) {
-            Schema.DescribeFieldResult dfr = fieldDescribes.get(key);
+            for (String key : fieldDescribes.keySet()) {
+                Schema.DescribeFieldResult dfr = fieldDescribes.get(key);
 
-            if (dfr.getType().name() == 'REFERENCE' && dfr.isCreateable()) {
+                if (dfr.getType().name() == 'REFERENCE' && dfr.isCreateable()) {
 
-                List<Schema.sObjectType> objTypes = dfr.getReferenceTo();
+                    List<Schema.sObjectType> objTypes = dfr.getReferenceTo();
 
-                //Get sObjectType of the object being looked up to for comparison purposes.
-                Schema.SObjectType lookupToObjectType = 
-                    Schema.getGlobalDescribe().get(lookupToObjectName.toLowerCase());
+                    //Get sObjectType of the object being looked up to for comparison purposes.
+                    Schema.SObjectType lookupToObjectType = 
+                        Schema.getGlobalDescribe().get(lookupToObjectName.toLowerCase());
 
-                if (objTypes != null) {
-                    for (Schema.sObjectType objType : objTypes) {
-                        if (objType == lookupToObjectType) {
-                            fieldInfos.add(new FieldInfo(dfr));
-                            break;
+                    if (objTypes != null) {
+                        for (Schema.sObjectType objType : objTypes) {
+                            if (objType == lookupToObjectType) {
+                                fieldInfos.add(new FieldInfo(dfr));
+                                break;
+                            }
                         }
                     }
                 }
             }
+            return fieldInfos;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-        return fieldInfos;
     }
 
 
@@ -818,23 +854,27 @@ public class BDI_ManageAdvancedMappingCtrl {
     */
     @AuraEnabled(cacheable=true)
     public static List<String> getMappedDISourceFields() {
+        try {
 
-        Set<String> mappedFieldNamesSet = new Set<String>();
+            Set<String> mappedFieldNamesSet = new Set<String>();
 
-        if (bdiMsAdv.fieldMappingsByObjMappingDevName != null) {
-            for (String objMappingDevName : bdiMsAdv.fieldMappingsByObjMappingDevName.keySet()) {
-                BDI_FieldMapping[] fieldMappings =
-                    bdiMsAdv.fieldMappingsByObjMappingDevName.get(objMappingDevName);
+            if (bdiMsAdv.fieldMappingsByObjMappingDevName != null) {
+                for (String objMappingDevName : bdiMsAdv.fieldMappingsByObjMappingDevName.keySet()) {
+                    BDI_FieldMapping[] fieldMappings =
+                        bdiMsAdv.fieldMappingsByObjMappingDevName.get(objMappingDevName);
 
-                if (fieldMappings != null) {
-                    for (BDI_FieldMapping fieldMapping : fieldMappings) {
-                        mappedFieldNamesSet.add(fieldMapping.Source_Field_API_Name.toLowerCase());
+                    if (fieldMappings != null) {
+                        for (BDI_FieldMapping fieldMapping : fieldMappings) {
+                            mappedFieldNamesSet.add(fieldMapping.Source_Field_API_Name.toLowerCase());
+                        }
                     }
                 }
             }
+            List<String> mappedFieldNamesList = new List<String>(mappedFieldNamesSet);
+            return mappedFieldNamesList;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-        List<String> mappedFieldNamesList = new List<String>(mappedFieldNamesSet);
-        return mappedFieldNamesList;
     }
 
     /*******************************************************************************************************

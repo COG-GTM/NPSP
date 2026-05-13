@@ -41,8 +41,12 @@ public with sharing class GS_ApplicationStatusController {
     */
     @AuraEnabled(Cacheable=true)
     public static Boolean isActiveOrg(){
-        
-        return !GS_NonprofitTrialOrgService.isSandbox() && GS_NonprofitTrialOrgService.getExpirationDate() == null;
+        try {
+
+            return !GS_NonprofitTrialOrgService.isSandbox() && GS_NonprofitTrialOrgService.getExpirationDate() == null;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**
@@ -55,12 +59,16 @@ public with sharing class GS_ApplicationStatusController {
      */
     @AuraEnabled(Cacheable=true)
     public static ApplicationStatus getApplicationStatus() { 
-                
-        ApplicationStatus status = new ApplicationStatus();
-        status.isSandbox = GS_NonprofitTrialOrgService.isSandbox();
-        status.trialExpirationDate = GS_NonprofitTrialOrgService.getExpirationDate();
-        status.applicationDate = GS_NonprofitTrialOrgService.getApplicationDate();
-        return status;
+        try {
+
+            ApplicationStatus status = new ApplicationStatus();
+            status.isSandbox = GS_NonprofitTrialOrgService.isSandbox();
+            status.trialExpirationDate = GS_NonprofitTrialOrgService.getExpirationDate();
+            status.applicationDate = GS_NonprofitTrialOrgService.getApplicationDate();
+            return status;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
     
     /**

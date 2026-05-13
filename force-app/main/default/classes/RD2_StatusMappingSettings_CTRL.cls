@@ -99,16 +99,20 @@ public with sharing class RD2_StatusMappingSettings_CTRL extends STG_Panel {
      */
     @AuraEnabled(cacheable=true)
     public static List<PicklistOptionView> getStateOptions() {
-        List<PicklistOptionView> options = new List<PicklistOptionView>();
-        for (String value : stateLabelByValue.keySet()) {
-            options.add(
-                new PicklistOptionView()
-                    .withValue(value)
-                    .withLabel(stateLabelByValue.get(value))
-            );
-        }
+        try {
+            List<PicklistOptionView> options = new List<PicklistOptionView>();
+            for (String value : stateLabelByValue.keySet()) {
+                options.add(
+                    new PicklistOptionView()
+                        .withValue(value)
+                        .withLabel(stateLabelByValue.get(value))
+                );
+            }
 
-        return options;
+            return options;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /***
@@ -144,7 +148,11 @@ public with sharing class RD2_StatusMappingSettings_CTRL extends STG_Panel {
     */
     @AuraEnabled(cacheable=true)
     public static String getStatusFieldLabel() {
-        return SObjectType.npe03__Recurring_Donation__c.fields.Status__c.getLabel();
+        try {
+            return SObjectType.npe03__Recurring_Donation__c.fields.Status__c.getLabel();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**
@@ -188,7 +196,11 @@ public with sharing class RD2_StatusMappingSettings_CTRL extends STG_Panel {
      */
     @AuraEnabled
     public static String saveMapping(String jsonMapping) {
-        return saveMapping(jsonMapping, new DeploymentHandler());
+        try {
+            return saveMapping(jsonMapping, new DeploymentHandler());
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**
@@ -272,7 +284,11 @@ public with sharing class RD2_StatusMappingSettings_CTRL extends STG_Panel {
      */
     @AuraEnabled
     public static String getDeployResult(String deploymentId) {
-        return getDeployResult(deploymentId, new DeploymentHandler(deploymentId));
+        try {
+            return getDeployResult(deploymentId, new DeploymentHandler(deploymentId));
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**

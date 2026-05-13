@@ -150,6 +150,10 @@ public with sharing class DonationHistoryController {
 
     @AuraEnabled(cacheable=true)
     public static Id getContactIdByUserId(){
-        return USER_UserService.getContactIdByUserId();
+        try {
+            return USER_UserService.getContactIdByUserId();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 }

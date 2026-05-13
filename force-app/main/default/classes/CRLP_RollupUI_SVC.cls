@@ -147,25 +147,29 @@ public with sharing class CRLP_RollupUI_SVC {
     */
     @AuraEnabled
     public static String setupRollupGrid() {
-        STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
+        try {
+            STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
 
-        RollupGridModel model = new RollupGridModel();
+            RollupGridModel model = new RollupGridModel();
 
-        model.labels = getAppLabels();
-        model.isCRLPEnabled = Customizable_Rollup_Settings__c.getOrgDefaults().Customizable_Rollups_Enabled__c;
-        model.isSystemAdminUser = STG_Panel.runningUserIsAdmin();
+            model.labels = getAppLabels();
+            model.isCRLPEnabled = Customizable_Rollup_Settings__c.getOrgDefaults().Customizable_Rollups_Enabled__c;
+            model.isSystemAdminUser = STG_Panel.runningUserIsAdmin();
 
-        //return early with just labels and CRLP enabled flag if CRLP is disabled
-        if (!model.isCRLPEnabled) {
-            return JSON.serialize(model);
+            //return early with just labels and CRLP enabled flag if CRLP is disabled
+            if (!model.isCRLPEnabled) {
+                return JSON.serialize(model);
+            }
+
+            model.items = getRollupDefinitions();
+            model.filterGroups = getFilterGroupDefinitions();
+
+            //serialize to avoid passing inner classes, which is technically unsupported
+            String modelString = JSON.serialize(model);
+            return modelString;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        model.items = getRollupDefinitions();
-        model.filterGroups = getFilterGroupDefinitions();
-
-        //serialize to avoid passing inner classes, which is technically unsupported
-        String modelString = JSON.serialize(model);
-        return modelString;
     }
 
     /*******************************************************************************************************
@@ -178,23 +182,27 @@ public with sharing class CRLP_RollupUI_SVC {
     */
     @AuraEnabled
     public static String setupRollupDetail(String rollupId, List<String> targetObjectNames, List<String> detailObjectNames) {
-        STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
+        try {
+            STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
 
-        RollupDetailModel model = new RollupDetailModel();
-        String summaryField = '';
+            RollupDetailModel model = new RollupDetailModel();
+            String summaryField = '';
 
-        if(!String.isEmpty(rollupId)){
-            Rollup__mdt rlp = CRLP_Rollup_SEL.getRollupById(Id.valueOf(rollupId));
-            model.rollup = new CRLP_RollupCMT.Rollup(rlp);
-            summaryField = model.rollup.summaryField;
+            if(!String.isEmpty(rollupId)){
+                Rollup__mdt rlp = CRLP_Rollup_SEL.getRollupById(Id.valueOf(rollupId));
+                model.rollup = new CRLP_RollupCMT.Rollup(rlp);
+                summaryField = model.rollup.summaryField;
+            }
+            model.fieldsByDataType = getFieldsByDataType(summaryField, targetObjectNames, detailObjectNames);
+            model.timeBoundOperations = getTimeBoundOperations();
+            model.operations = getRollupOperations();
+
+            //serialize to avoid passing inner classes, which is technically unsupported
+            String modelString = JSON.serialize(model);
+            return modelString;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-        model.fieldsByDataType = getFieldsByDataType(summaryField, targetObjectNames, detailObjectNames);
-        model.timeBoundOperations = getTimeBoundOperations();
-        model.operations = getRollupOperations();
-
-        //serialize to avoid passing inner classes, which is technically unsupported
-        String modelString = JSON.serialize(model);
-        return modelString;
     }
 
     /*******************************************************************************************************
@@ -204,18 +212,22 @@ public with sharing class CRLP_RollupUI_SVC {
     */
     @AuraEnabled
     public static List<RollupTableItem> getRollupDefinitions() {
-        STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
+        try {
+            STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
 
-        List<RollupTableItem> mdtTableList = new List<RollupTableItem>();
+            List<RollupTableItem> mdtTableList = new List<RollupTableItem>();
 
-        List<Rollup__mdt> rollups = CRLP_Rollup_SEL.getRollupDefinitions();
-        for(Rollup__mdt rlp : rollups){
-            if(!rlp.Is_Deleted__c) {
-                mdtTableList.add(createRollupItem(rlp));
+            List<Rollup__mdt> rollups = CRLP_Rollup_SEL.getRollupDefinitions();
+            for(Rollup__mdt rlp : rollups){
+                if(!rlp.Is_Deleted__c) {
+                    mdtTableList.add(createRollupItem(rlp));
+                }
             }
-        }
 
-        return mdtTableList;
+            return mdtTableList;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -289,28 +301,32 @@ public with sharing class CRLP_RollupUI_SVC {
     */
     @AuraEnabled
     public static List<FilterGroupTableItem> getFilterGroupDefinitions() {
-        STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
+        try {
+            STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
 
-        List<FilterGroupTableItem> mdtTableList = new List<FilterGroupTableItem>();
-        List<Filter_Group__mdt> mdtList = CMT_FilterRule_SEL.getFilterGroups();
-        Map<Id, List<Rollup__mdt>> rollupsByFilterGroup = CRLP_Rollup_SEL.getRollupsByFilterGroup();
+            List<FilterGroupTableItem> mdtTableList = new List<FilterGroupTableItem>();
+            List<Filter_Group__mdt> mdtList = CMT_FilterRule_SEL.getFilterGroups();
+            Map<Id, List<Rollup__mdt>> rollupsByFilterGroup = CRLP_Rollup_SEL.getRollupsByFilterGroup();
 
-        for(Integer i=0; i<mdtList.size(); i++) {
-            FilterGroupTableItem item = new FilterGroupTableItem();
+            for(Integer i=0; i<mdtList.size(); i++) {
+                FilterGroupTableItem item = new FilterGroupTableItem();
 
-            item.label = mdtList[i].MasterLabel;
-            item.name = mdtList[i].DeveloperName;
-            item.description = mdtList[i].Description__c;
-            item.countFilterRules = mdtList[i].Filter_Rules__r.size();
-            item.countRollups = (rollupsByFilterGroup.containsKey(mdtList[i].Id) ? rollupsByFilterGroup.get(mdtList[i].Id).size() : 0);
-            item.recordId = mdtList[i].Id;
-            item.isDeleted = false;
+                item.label = mdtList[i].MasterLabel;
+                item.name = mdtList[i].DeveloperName;
+                item.description = mdtList[i].Description__c;
+                item.countFilterRules = mdtList[i].Filter_Rules__r.size();
+                item.countRollups = (rollupsByFilterGroup.containsKey(mdtList[i].Id) ? rollupsByFilterGroup.get(mdtList[i].Id).size() : 0);
+                item.recordId = mdtList[i].Id;
+                item.isDeleted = false;
 
-            mdtTableList.add(item);
+                mdtTableList.add(item);
+            }
+
+            return mdtTableList;
+
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        return mdtTableList;
-
     }
 
     /*******************************************************************************************************
@@ -336,33 +352,37 @@ public with sharing class CRLP_RollupUI_SVC {
     */
     @AuraEnabled
     public static String setupFilterGroupDetail(String filterGroupId, List<String> objectNames) {
-        STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
+        try {
+            STG_Panel.throwAuraExceptionIfRunningUserNotAdmin();
 
-        Map<String,List<Map<String,String>>> objNameToFieldTypeMap = new Map<String,List<Map<String,String>>>();
-        Set<String> excludedTypes = new Set<String>{'TIME', 'TEXTAREA'};
+            Map<String,List<Map<String,String>>> objNameToFieldTypeMap = new Map<String,List<Map<String,String>>>();
+            Set<String> excludedTypes = new Set<String>{'TIME', 'TEXTAREA'};
 
-        for(String obj : objectNames){
-            if (obj == UTIL_Namespace.StrAllNSPrefix('Partial_Soft_Credit__c')) {
-                List<String> pscFieldsToReturn = new List<String>{
-                        UTIL_Namespace.StrAllNSPrefix('Role_Name__c'),
-                        UTIL_Namespace.StrAllNSPrefix('Amount__c')
-                };
-                List<Map<String, String>> pscList = getSpecificFieldsWithType(obj, pscFieldsToReturn, false);
-                objNameToFieldTypeMap.put(obj, pscList);
+            for(String obj : objectNames){
+                if (obj == UTIL_Namespace.StrAllNSPrefix('Partial_Soft_Credit__c')) {
+                    List<String> pscFieldsToReturn = new List<String>{
+                            UTIL_Namespace.StrAllNSPrefix('Role_Name__c'),
+                            UTIL_Namespace.StrAllNSPrefix('Amount__c')
+                    };
+                    List<Map<String, String>> pscList = getSpecificFieldsWithType(obj, pscFieldsToReturn, false);
+                    objNameToFieldTypeMap.put(obj, pscList);
 
-            } else {
-                List<Map<String, String>> detailNameToFieldTypeObj = getFilterRuleFieldsExcludingTypes(obj, excludedTypes);
-                objNameToFieldTypeMap.put(obj, detailNameToFieldTypeObj);
+                } else {
+                    List<Map<String, String>> detailNameToFieldTypeObj = getFilterRuleFieldsExcludingTypes(obj, excludedTypes);
+                    objNameToFieldTypeMap.put(obj, detailNameToFieldTypeObj);
+                }
             }
+
+            FilterGroupModel model = createFilterGroupModel(filterGroupId);
+            model.operators = getfilterRuleOperations();
+            model.filterFieldsByDataType = objNameToFieldTypeMap;
+
+            //serialize to avoid passing inner classes, which is technically unsupported
+            String modelString = JSON.serialize(model);
+            return modelString;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        FilterGroupModel model = createFilterGroupModel(filterGroupId);
-        model.operators = getfilterRuleOperations();
-        model.filterFieldsByDataType = objNameToFieldTypeMap;
-
-        //serialize to avoid passing inner classes, which is technically unsupported
-        String modelString = JSON.serialize(model);
-        return modelString;
     }
 
     /*******************************************************************************************************

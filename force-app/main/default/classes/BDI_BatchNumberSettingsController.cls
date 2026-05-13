@@ -43,17 +43,29 @@ public class BDI_BatchNumberSettingsController {
 
     @AuraEnabled
     public static Boolean isSysAdmin() {
-        return STG_Panel.runningUserIsAdmin();
+        try {
+            return STG_Panel.runningUserIsAdmin();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled
     public static void activate(String autoNumberId) {
-        autoNumberService.activate(autoNumberId);
+        try {
+            autoNumberService.activate(autoNumberId);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled
     public static void deactivate(String autoNumberId) {
-        autoNumberService.deactivate(autoNumberId);
+        try {
+            autoNumberService.deactivate(autoNumberId);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled
@@ -67,7 +79,11 @@ public class BDI_BatchNumberSettingsController {
 
     @AuraEnabled
     public static List<AutoNumber__c> getAutoNumbers() {
-        return autoNumberService.getAutoNumbers(sObjType);
+        try {
+            return autoNumberService.getAutoNumbers(sObjType);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**
@@ -78,22 +94,26 @@ public class BDI_BatchNumberSettingsController {
      */
     @AuraEnabled(cacheable=true)
     public static String getFieldDescribes() {
-        return JSON.serialize(new Map<String, Object>{
-                Schema.SObjectType.AutoNumber__c.fields.IsActive__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.IsActive__c,
-                Schema.SObjectType.AutoNumber__c.fields.Display_Format__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.Display_Format__c,
-                Schema.SObjectType.AutoNumber__c.fields.Starting_Number__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.Starting_Number__c,
-                Schema.SObjectType.AutoNumber__c.fields.Description__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.Description__c,
-                Schema.SObjectType.AutoNumber__c.fields.Max_Used_Number__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.Max_Used_Number__c,
-                Schema.SObjectType.AutoNumber__c.fields.Object_API_Name__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.Object_API_Name__c,
-                Schema.SObjectType.AutoNumber__c.fields.Field_API_Name__c.Name =>
-                        Schema.SObjectType.AutoNumber__c.fields.Field_API_Name__c
-        });
+        try {
+            return JSON.serialize(new Map<String, Object>{
+                    Schema.SObjectType.AutoNumber__c.fields.IsActive__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.IsActive__c,
+                    Schema.SObjectType.AutoNumber__c.fields.Display_Format__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.Display_Format__c,
+                    Schema.SObjectType.AutoNumber__c.fields.Starting_Number__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.Starting_Number__c,
+                    Schema.SObjectType.AutoNumber__c.fields.Description__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.Description__c,
+                    Schema.SObjectType.AutoNumber__c.fields.Max_Used_Number__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.Max_Used_Number__c,
+                    Schema.SObjectType.AutoNumber__c.fields.Object_API_Name__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.Object_API_Name__c,
+                    Schema.SObjectType.AutoNumber__c.fields.Field_API_Name__c.Name =>
+                            Schema.SObjectType.AutoNumber__c.fields.Field_API_Name__c
+            });
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
 }

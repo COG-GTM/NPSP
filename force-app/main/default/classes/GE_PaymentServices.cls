@@ -130,13 +130,17 @@ public with sharing class GE_PaymentServices {
      */
     @AuraEnabled(cacheable=true)
     public static String getPaymentTransactionStatusValues() {
-        Map<String, String> paymentStatusNameByEnum = new Map<String, String>();
+        try {
+            Map<String, String> paymentStatusNameByEnum = new Map<String, String>();
 
-        for (ElevateTransactionStatus status : ElevateTransactionStatus.values()) {
-            paymentStatusNameByEnum.put(status.name(), status.name());
+            for (ElevateTransactionStatus status : ElevateTransactionStatus.values()) {
+                paymentStatusNameByEnum.put(status.name(), status.name());
+            }
+
+            return JSON.serialize(paymentStatusNameByEnum);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        return JSON.serialize(paymentStatusNameByEnum);
     }
 
     /**
@@ -154,10 +158,14 @@ public with sharing class GE_PaymentServices {
      */
     @AuraEnabled(cacheable=true)
     public static OriginUrls getOriginUrls(String namespace) {
-        return new OriginUrls(
-            DomainCreator.getVisualforceHostname(namespace),
-                DomainCreator.getLightningHostname()
-        );
+        try {
+            return new OriginUrls(
+                DomainCreator.getVisualforceHostname(namespace),
+                    DomainCreator.getLightningHostname()
+            );
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     public class OriginUrls {
