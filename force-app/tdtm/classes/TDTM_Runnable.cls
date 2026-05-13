@@ -41,7 +41,7 @@
  * before the future runs (and since the future method calls the non-future method, which checks the flag, 
  * the future method would have no effect.) Also, some classes might not want to prevent it.
  */
-global abstract class TDTM_Runnable {
+global abstract inherited sharing class TDTM_Runnable {
     @TestVisible
     protected UTIL_IntegrationGateway integrationGateway {
         get {

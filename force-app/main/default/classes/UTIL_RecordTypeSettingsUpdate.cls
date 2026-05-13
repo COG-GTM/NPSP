@@ -35,7 +35,7 @@
  * types are stored by id).
  *
  */
-global virtual class UTIL_RecordTypeSettingsUpdate {
+global virtual with sharing class UTIL_RecordTypeSettingsUpdate {
     @TestVisible
     /** @description Private constructor for singleton pattern */
     private UTIL_RecordTypeSettingsUpdate() {}

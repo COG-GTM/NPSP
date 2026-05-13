@@ -35,7 +35,7 @@
 * from Legacy to Enhanced Recurring Donation format
 *
 */
-public class RD2_DataMigrationDryRun_BATCH extends RD2_DataMigrationBase_BATCH {
+public inherited sharing class RD2_DataMigrationDryRun_BATCH extends RD2_DataMigrationBase_BATCH {
 
     /***
     * @description Schedulable executes the batch job

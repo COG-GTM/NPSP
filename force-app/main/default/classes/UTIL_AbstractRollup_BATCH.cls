@@ -44,7 +44,7 @@
 *  4) instantiate the subclass as part of triggers, schedulable classes, and VF controllers
 *
 *-----------------------------------------------------------------------------------------------*/
-public abstract class UTIL_AbstractRollup_BATCH implements database.batchable<SObject> {
+public abstract inherited sharing class UTIL_AbstractRollup_BATCH implements database.batchable<SObject> {
 
     // the object into which aggregate values get saved, e.g. account
     public string parentObjName;

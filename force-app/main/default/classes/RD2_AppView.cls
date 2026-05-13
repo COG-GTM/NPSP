@@ -33,7 +33,7 @@
 * @date 2022
 * @description Main View class for the Recurring Donations App
 */
-public class RD2_AppView {
+public with sharing class RD2_AppView {
     @AuraEnabled public Boolean isAutoNamingEnabled;
     @AuraEnabled public Boolean isMultiCurrencyEnabled;
     @AuraEnabled public String parentSObjectType;

@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utility class for debug statements to turn them off in a managed context, as well as to display relevant performance information.
 */
-public class UTIL_Debug {
+public with sharing class UTIL_Debug {
 
     // Disable debug logs in all tests, otherwise get the setting
     // August 2018: Previously, debugging was enabled in all tests. Disabling should significantly help with performance.

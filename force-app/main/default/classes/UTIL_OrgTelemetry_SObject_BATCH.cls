@@ -43,7 +43,7 @@
 * indexed field, however in this case the goal was to use " != null" which would not use the index. As a result
 * this job will query and loop through all Opportunity records, but just count the Recurring Donation related ones.
 */
-public class UTIL_OrgTelemetry_SObject_BATCH implements Database.Batchable<SObject>, Database.Stateful {
+public inherited sharing class UTIL_OrgTelemetry_SObject_BATCH implements Database.Batchable<SObject>, Database.Stateful {
 
     /**
      * @description Batch size for OPPORTUNITY job mode

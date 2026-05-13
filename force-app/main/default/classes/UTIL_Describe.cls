@@ -38,7 +38,7 @@
 * that are made, making the total transaction more efficient.
 */
 
-public class UTIL_Describe {
+public with sharing class UTIL_Describe {
 
     // throw custom exceptions when a bogus object or field is provided.
     public class SchemaDescribeException extends Exception {}

@@ -35,7 +35,7 @@
 * Legacy to Enhanced Recurring Donation format
 *
 */
-public abstract class RD2_DataMigrationBase_BATCH implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
+public abstract inherited sharing class RD2_DataMigrationBase_BATCH implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
 
     public static final String LOG_CONTEXT_MIGRATION = 'RDDataMigration:';
     public static final String LOG_CONTEXT_DRY_RUN = 'RDValidateMigration:';

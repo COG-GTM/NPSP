@@ -34,7 +34,7 @@
 * @description Trigger on Recurring Donation Opportunities when enhanced Recurring Donations are enabled
 *
 */
-public class RD2_RecurringDonationsOpp_TDTM extends TDTM_Runnable {
+public inherited sharing class RD2_RecurringDonationsOpp_TDTM extends TDTM_Runnable {
     
     /***
     * @description Trigger handler on Opportunities when Recurring Donation enhancement is enabled

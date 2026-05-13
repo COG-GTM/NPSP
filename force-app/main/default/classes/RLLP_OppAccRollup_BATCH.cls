@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups.htm
 * @description Batch class for opportunity account rollups. 
 */
-public class RLLP_OppAccRollup_BATCH implements Database.Batchable<SObject>, Schedulable {
+public inherited sharing class RLLP_OppAccRollup_BATCH implements Database.Batchable<SObject>, Schedulable {
 
     /** @description Instantiates RLLP_OppRollup_UTIL */
     RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();

@@ -34,7 +34,7 @@
 *
 * @description Methods for obtaining information about record types
 */
-public class UTIL_RecordTypes {
+public with sharing class UTIL_RecordTypes {
     /**
      * @description Get the ids of the record types for the given record type names
      *

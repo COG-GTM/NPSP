@@ -33,7 +33,7 @@
 * @date 2022
 * @description View class representing Recurring Donation record data for the Recurring Donations App
 */
-public class RD2_RecordView {
+public with sharing class RD2_RecordView {
     @AuraEnabled public Id recordId;
     @AuraEnabled public String recordName;
     @AuraEnabled public String recurringStatus;

@@ -36,7 +36,7 @@
 * fully deprecated.
 *
 */
-public class RD_Constants {
+public with sharing class RD_Constants {
 
     /**
     * @description Recurring Donation "Schedule Type" picklist API values

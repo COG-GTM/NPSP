@@ -35,7 +35,7 @@
  * @description Primary class for recursion process control logic shared across all TDTM classes
  *
 ***/
-public class TDTM_ProcessControl {
+public with sharing class TDTM_ProcessControl {
 
     /*******************************************************************************************************
     * @description Enum to define the various recursion prevention types used by all the related TDTM classes

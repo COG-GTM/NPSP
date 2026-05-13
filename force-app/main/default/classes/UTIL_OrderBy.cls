@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utility used to build the ORDER BY clause
 */
-public class UTIL_OrderBy {
+public with sharing class UTIL_OrderBy {
 
     /** @description Sorting Order options */
     public enum SortingOrder { ASCENDING, DESCENDING }

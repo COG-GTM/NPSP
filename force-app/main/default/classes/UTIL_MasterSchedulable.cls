@@ -36,7 +36,7 @@
 * upgrade without manually unscheduling it.
 * @group Utilities
 */
-public class UTIL_MasterSchedulable implements Schedulable {
+public inherited sharing class UTIL_MasterSchedulable implements Schedulable {
     
     /*******************************************************************************************************
     * @description This is deprecated and does nothing.

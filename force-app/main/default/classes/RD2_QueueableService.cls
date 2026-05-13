@@ -34,7 +34,7 @@
 * @description Queueable Services for Enhanced Recurring Donations
 *
 */
-public class RD2_QueueableService {
+public inherited sharing class RD2_QueueableService {
     /**
     * @desciprtion A set of Recurring Donation Id to keep track of which RD has been queue up to process in a single transaction
     * to prevent race condition.

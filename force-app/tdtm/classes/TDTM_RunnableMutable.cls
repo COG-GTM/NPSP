@@ -37,7 +37,7 @@
  * DmlWrapper collection to which TDTM_TriggerHandler adds records returned from other classes that
  * implement the TDTM_Runnable interface.
  */
-global abstract class TDTM_RunnableMutable {
+global abstract inherited sharing class TDTM_RunnableMutable {
 
     /*******************************************************************************************************
      * @description Method to be implemented by the classes the extend this abstract class. This is the method

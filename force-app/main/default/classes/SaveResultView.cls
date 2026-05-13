@@ -33,7 +33,7 @@
 * @date 2022
 * @description View class representing a successful Save of a Recurring Donation
 */
-public class SaveResultView {
+public with sharing class SaveResultView {
     @AuraEnabled public Boolean success;
     @AuraEnabled public Id recordId;
     @AuraEnabled public String recordName;
