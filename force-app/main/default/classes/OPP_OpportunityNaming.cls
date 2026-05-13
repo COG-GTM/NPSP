@@ -77,8 +77,9 @@ public inherited sharing class OPP_OpportunityNaming implements OPP_INaming {
         }
 
         //query for opportunities and associated contacts
-        String oppQuery = getOppQuery(allFields) + ' WHERE Id IN :oppList';
-        Map<String, Object> bindVars = new Map<String, Object>{ 'oppList' => oppList };
+        String oppQuery = getOppQuery(allFields) + ' WHERE Id IN :oppIds';
+        Set<Id> oppIds = new Map<Id, Opportunity>(oppList).keySet();
+        Map<String, Object> bindVars = new Map<String, Object>{ 'oppIds' => oppIds };
         Map<Id,Opportunity> mapOppsQuery = new Map<Id,Opportunity>(
             (List<Opportunity>)Database.queryWithBinds(oppQuery, bindVars, AccessLevel.SYSTEM_MODE)
         );
@@ -126,8 +127,9 @@ public inherited sharing class OPP_OpportunityNaming implements OPP_INaming {
         }
 
         //query for opportunities and associated contacts
-        String oppQueryAfterInsert = getOppQuery(allFields) + ' WHERE Id IN :oppList';
-        Map<String, Object> bindVarsAfterInsert = new Map<String, Object>{ 'oppList' => oppList };
+        String oppQueryAfterInsert = getOppQuery(allFields) + ' WHERE Id IN :oppIds';
+        Set<Id> oppIds = new Map<Id, Opportunity>(oppList).keySet();
+        Map<String, Object> bindVarsAfterInsert = new Map<String, Object>{ 'oppIds' => oppIds };
         Map<Id,Opportunity> mapOppsQuery = new Map<Id,Opportunity>(
             (List<Opportunity>) Database.queryWithBinds(oppQueryAfterInsert, bindVarsAfterInsert, AccessLevel.SYSTEM_MODE)
         );
