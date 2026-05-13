@@ -167,7 +167,8 @@ public class PMT_Payment_TDTM extends TDTM_Runnable {
             'WHERE npe01__Opportunity__c IN :oppIds ' +
             'ORDER BY npe01__Opportunity__c';
 
-        for (npe01__OppPayment__c pmt : database.query(soql)) {
+        List<npe01__OppPayment__c> pmtResults = database.query(soql);
+        for (npe01__OppPayment__c pmt : pmtResults) {
             Opportunity opp = (Opportunity)pmt.getSObject('npe01__Opportunity__r');
 
             if (dmlWrapperSObjectById.containsKey(pmt.Id)) {

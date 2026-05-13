@@ -505,7 +505,8 @@ public abstract class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
             String paymentsQuery = CRLP_Query_SEL.buildObjectQueryForRollup(npe01__OppPayment__c.SObjectType) +
                     ' WHERE npe01__Opportunity__c IN :detailIds ORDER BY npe01__Opportunity__c, CreatedDate ASC';
 
-            for (npe01__OppPayment__c pmt : Database.query(paymentsQuery)) {
+            List<npe01__OppPayment__c> pmtResults = Database.query(paymentsQuery);
+            for (npe01__OppPayment__c pmt : pmtResults) {
                 if (!paymentsByOpp.containsKey(pmt.npe01__Opportunity__c)) {
                     paymentsByOpp.put(pmt.npe01__Opportunity__c, new List<npe01__OppPayment__c>());
                 }

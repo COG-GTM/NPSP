@@ -362,13 +362,13 @@ public without sharing class UTIL_OrgTelemetry_SVC {
      */
     private void handleNonEnglishLanguageCount() {
         Set<String> languages = new Set<String>();
-        for (User u : [SELECT LanguageLocaleKey
+        List<User> nonEnglishUsers = [SELECT LanguageLocaleKey
                 FROM User
                 WHERE IsActive = TRUE
                 AND UserType = 'Standard'
                 AND LanguageLocaleKey != 'en_US'
-                ORDER BY LanguageLocaleKey]
-        ) {
+                ORDER BY LanguageLocaleKey];
+        for (User u : nonEnglishUsers) {
             if (u.LanguageLocaleKey != null && !u.LanguageLocaleKey.startsWithIgnoreCase('en_')) {
                 languages.add(u.LanguageLocaleKey);
             }

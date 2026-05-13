@@ -95,7 +95,8 @@ public class ALLO_MakeDefaultAllocations_BATCH implements Database.Batchable<sOb
             }
         }
 
-        for (Allocation__c allo : [SELECT Id, General_Accounting_Unit__c, Opportunity__c, Amount__c FROM Allocation__c WHERE Opportunity__c IN :mapIdOpp.keySet()]) {
+        List<Allocation__c> alloList = [SELECT Id, General_Accounting_Unit__c, Opportunity__c, Amount__c FROM Allocation__c WHERE Opportunity__c IN :mapIdOpp.keySet()];
+        for (Allocation__c allo : alloList) {
             if (!mapOppIdAllo.containsKey(allo.Opportunity__c)) 
                 mapOppIdAllo.put(allo.Opportunity__c, new list<Allocation__c>());
 

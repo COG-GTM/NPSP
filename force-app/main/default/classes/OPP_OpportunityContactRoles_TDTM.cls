@@ -119,8 +119,9 @@ public without sharing class OPP_OpportunityContactRoles_TDTM extends TDTM_Runna
         
         Map<Id,Account> primaryAccounts = new Map<Id,Account>([select id, npe01__One2OneContact__c, npe01__SYSTEM_AccountType__c from Account where id IN :oppAccounts]);
         if (!primaryContactIds.isEmpty()) {
-            for (Contact thisContact : [select AccountId,Account.Id,Account.npe01__SYSTEM_AccountType__c from Contact
-                    where Id IN :primaryContactIds]) {
+            List<Contact> primaryContacts = [select AccountId,Account.Id,Account.npe01__SYSTEM_AccountType__c from Contact
+                    where Id IN :primaryContactIds];
+            for (Contact thisContact : primaryContacts) {
                 if (thisContact.AccountId != null) {
                     contactsAndOneToOneAccounts.put(thisContact.Id, thisContact.Account);
                 }
@@ -239,7 +240,8 @@ public without sharing class OPP_OpportunityContactRoles_TDTM extends TDTM_Runna
         Map<Id, List<Id>> accountsToOpportunities = populateAccountToOpportunities(listOpps, oppAccountDetails);
 
         //Get existing primary contact roles for the trigger opps. 
-        for (OpportunityContactRole ocr : [SELECT OpportunityId, ContactId, Role, IsPrimary FROM OpportunityContactRole WHERE IsPrimary = true and OpportunityId IN :listOpps]) {
+        List<OpportunityContactRole> primaryOcrs = [SELECT OpportunityId, ContactId, Role, IsPrimary FROM OpportunityContactRole WHERE IsPrimary = true and OpportunityId IN :listOpps];
+        for (OpportunityContactRole ocr : primaryOcrs) {
             mapOppIdPrimaryOCR.put(ocr.OpportunityId, ocr);
         }
 
@@ -404,8 +406,9 @@ public without sharing class OPP_OpportunityContactRoles_TDTM extends TDTM_Runna
 
         //query for OCRs, hand off to processing methods
         if (!mapOppIdMapConIdOCR.isEmpty()) {
-            for (OpportunityContactRole ocr : [SELECT OpportunityId, ContactId, isPrimary, Role FROM OpportunityContactRole 
-                                                    WHERE OpportunityId IN :mapOppIdMapConIdOCR.keyset()]) {
+            List<OpportunityContactRole> existingOcrs = [SELECT OpportunityId, ContactId, isPrimary, Role FROM OpportunityContactRole 
+                                                    WHERE OpportunityId IN :mapOppIdMapConIdOCR.keyset()];
+            for (OpportunityContactRole ocr : existingOcrs) {
                 mapOppIdMapConIdOCR.get(ocr.OpportunityId).put(ocr.ContactId, ocr);
             }
 

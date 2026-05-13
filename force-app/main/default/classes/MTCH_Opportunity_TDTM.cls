@@ -63,8 +63,9 @@ public class MTCH_Opportunity_TDTM extends TDTM_Runnable {
         }
 
         if (!listOppIdClosed.isEmpty()) {
-            for (Opportunity opp : [select Id, Matching_Gift_Status__c from Opportunity
-                where Matching_Gift_Status__C != 'Received' and Matching_Gift__c in :listOppIdClosed]) {
+            List<Opportunity> matchingOpps = [select Id, Matching_Gift_Status__c from Opportunity
+                where Matching_Gift_Status__C != 'Received' and Matching_Gift__c in :listOppIdClosed];
+            for (Opportunity opp : matchingOpps) {
                 opp.Matching_Gift_Status__c = 'Received';
                 dmlWrapper.objectsToUpdate.add(opp);
             }

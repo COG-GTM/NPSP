@@ -242,10 +242,11 @@ public with sharing class BDI_GAUAllocationsUtil {
 
         // If there are any created RDs without DI donations then query for open Opportunities for allocation processing
         if (diByCreatedRDId.size() > 0) {
-            for (Opportunity oppt : [SELECT Id, npe03__Recurring_Donation__c
+            List<Opportunity> openOppts = [SELECT Id, npe03__Recurring_Donation__c
                                     FROM Opportunity
                                     WHERE IsClosed = FALSE
-                                        AND npe03__Recurring_Donation__c IN: diByCreatedRDID.keySet()]) {
+                                        AND npe03__Recurring_Donation__c IN: diByCreatedRDID.keySet()];
+            for (Opportunity oppt : openOppts) {
                 opptIdsForAllocProcessing.add(oppt.Id);
                 openOpptIdByDIId.put(diByCreatedRDId.get(oppt.npe03__Recurring_Donation__c).Id,oppt.Id);
                 diForAlloProcessing.add(diByCreatedRDId.get(oppt.npe03__Recurring_Donation__c));

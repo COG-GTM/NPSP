@@ -64,7 +64,8 @@ public with sharing class GE_LookupController {
         String query = String.format(queryTemplate, args);
 
         List<LookupResult> results = new List<LookupResult>();
-        for (SObject result : Database.query(query)) {
+        List<SObject> queryResults = Database.query(query);
+        for (SObject result : queryResults) {
             results.add(new LookupResult(result));
         }
 
@@ -113,7 +114,8 @@ public with sharing class GE_LookupController {
         String query = String.format(queryTemplate, args);
 
         List<LookupResult> results = new List<LookupResult>();
-        for (SObject result : Database.query(query)) {
+        List<SObject> soqlResults = Database.query(query);
+        for (SObject result : soqlResults) {
             results.add(new LookupResult(result));
         }
 

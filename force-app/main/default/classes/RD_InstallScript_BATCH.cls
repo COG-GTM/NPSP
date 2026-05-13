@@ -46,7 +46,8 @@ public without sharing class RD_InstallScript_BATCH implements Database.Batchabl
     public void execute(Database.BatchableContext BC, List<sObject> scope) {
         map<id,list<Opportunity>> mapRdListOpp = new map<id,list<Opportunity>>();
         list<Opportunity> listOppsForUpdate = new list<Opportunity>();
-        for (Opportunity opp : [SELECT Id, Recurring_Donation_Installment_Number__c, npe03__Recurring_Donation__c FROM Opportunity WHERE npe03__Recurring_Donation__c IN :scope ORDER BY CloseDate]) {
+        List<Opportunity> rdOpps = [SELECT Id, Recurring_Donation_Installment_Number__c, npe03__Recurring_Donation__c FROM Opportunity WHERE npe03__Recurring_Donation__c IN :scope ORDER BY CloseDate];
+        for (Opportunity opp : rdOpps) {
             if (mapRdListOpp.containsKey(opp.npe03__Recurring_Donation__c)) {
                 mapRdListOpp.get(opp.npe03__Recurring_Donation__c).add(opp);
             } else {

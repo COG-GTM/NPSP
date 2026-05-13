@@ -274,7 +274,8 @@ public class AFFL_Affiliations_TDTM extends TDTM_Runnable {
         
             //we need an extra query here to get the correct role from the contact title
             if (!mapConIdToAfflOps.isEmpty()) {
-                for (Contact con : [SELECT Id, Title FROM Contact WHERE Id IN :mapConIdToAfflOps.keySet()])
+                List<Contact> afflContacts = [SELECT Id, Title FROM Contact WHERE Id IN :mapConIdToAfflOps.keySet()];
+                for (Contact con : afflContacts)
                     mapConIdToAfflOps.get(con.id).strRole = con.Title;
             }
 
@@ -365,8 +366,9 @@ public class AFFL_Affiliations_TDTM extends TDTM_Runnable {
         // get existing affiliations
         map<string, npe5__Affiliation__c> mapStrComboKeyAffl = new map<string, npe5__Affiliation__c>();
 
-        for (npe5__Affiliation__c a : [Select Id, npe5__Contact__c, npe5__Organization__c from npe5__Affiliation__c 
-                where npe5__EndDate__c = null and npe5__Contact__c in :setContactId and npe5__Organization__c in :setAccountId]) {
+        List<npe5__Affiliation__c> existingAffiliations = [Select Id, npe5__Contact__c, npe5__Organization__c from npe5__Affiliation__c 
+                where npe5__EndDate__c = null and npe5__Contact__c in :setContactId and npe5__Organization__c in :setAccountId];
+        for (npe5__Affiliation__c a : existingAffiliations) {
             mapStrComboKeyAffl.put(strComboKeyFromContactIdAccountId(a.npe5__Contact__c, a.npe5__Organization__c), a);
         }
 

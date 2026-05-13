@@ -236,7 +236,8 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
 
         try {
             List<OpportunityWrapper> opportunityWrappers = new List<OpportunityWrapper>();
-            for (Opportunity opportunity : Database.query(query)) {
+            List<Opportunity> opportunities = Database.query(query);
+            for (Opportunity opportunity : opportunities) {
                 opportunityWrappers.add(new OpportunityWrapper(opportunity));
             }
             return JSON.serialize(opportunityWrappers);

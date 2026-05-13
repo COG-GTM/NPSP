@@ -716,7 +716,8 @@ public class BDI_Donations {
         if (opportunityIds.size() > 0) {
             Map<Id, npe01__OppPayment__c> mapOppIdToPayment = new Map<Id, npe01__OppPayment__c>();
             String paymentQuery = buildPaymentQuery('opportunityIds');
-            for (npe01__OppPayment__c payment : Database.query(paymentQuery)) {
+            List<npe01__OppPayment__c> paymentResults = Database.query(paymentQuery);
+            for (npe01__OppPayment__c payment : paymentResults) {
                 mapOppIdToPayment.put(payment.npe01__Opportunity__c, payment);
             }
 

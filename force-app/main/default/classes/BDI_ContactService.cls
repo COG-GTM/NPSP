@@ -309,7 +309,8 @@ public with sharing class BDI_ContactService {
     private void refreshContact1HouseholdAccounts(Set<Id> setConId) {
         // get the Household Accounts for C1's
         Map<Id, Id> mapC1IdToHHId = new Map<Id, Id>();
-        for (Contact con : database.query(getSoqlSelectForContact() + ' WHERE Id IN :setConId')) {
+        List<Contact> conResults = database.query(getSoqlSelectForContact() + ' WHERE Id IN :setConId');
+        for (Contact con : conResults) {
             mapC1IdToHHId.put(con.Id, con.AccountId);
         }
         // store it back in C1 and the DI for later use

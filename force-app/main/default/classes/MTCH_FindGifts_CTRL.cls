@@ -449,7 +449,8 @@ public with sharing class MTCH_FindGifts_CTRL {
         get {
             if (closedWonStages == null) {
                 closedWonStages = new Set<String>();
-                for (OpportunityStage s : [SELECT MasterLabel,ApiName FROM OpportunityStage WHERE IsClosed = true AND IsWon = true]) {
+                List<OpportunityStage> wonStages = [SELECT MasterLabel,ApiName FROM OpportunityStage WHERE IsClosed = true AND IsWon = true];
+                for (OpportunityStage s : wonStages) {
                     closedWonStages.add(s.ApiName);
                 }
             }

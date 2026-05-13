@@ -154,8 +154,9 @@ public without sharing class UTIL_MasterSchedulableHelper {
         Map<String, CronTrigger> scheduledJobs = new Map<String, CronTrigger>();
 
         //query for all scheduled apex
-        for (CronTrigger ct : [SELECT Id, CronExpression, CronJobDetail.Name, CreatedBy.Name, CreatedBy.IsActive
-                FROM CronTrigger WHERE CronJobDetail.JobType = '7']) {
+        List<CronTrigger> cronTriggers = [SELECT Id, CronExpression, CronJobDetail.Name, CreatedBy.Name, CreatedBy.IsActive
+                FROM CronTrigger WHERE CronJobDetail.JobType = '7'];
+        for (CronTrigger ct : cronTriggers) {
             scheduledJobs.put(ct.CronJobDetail.Name, ct);
         }
 
