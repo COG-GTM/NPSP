@@ -35,7 +35,7 @@
 * @description Wrapper classes for the Customizable Rollups CustomMetadataType objects used to create the
 * default CMT data as well as for updates through the Customizable Rollups UI.
 */
-public with sharing class CRLP_RollupCMT {
+public inherited sharing class CRLP_RollupCMT {
 
     /**
      * @description Enum of the supported MetadataType objects (without the __mdt suffix)

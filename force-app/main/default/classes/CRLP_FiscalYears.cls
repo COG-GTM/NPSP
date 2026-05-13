@@ -35,7 +35,7 @@
 * @description Methods needed to handle Fiscal or Calendar Year operations
 *
 */
-public with sharing class CRLP_FiscalYears {
+public inherited sharing class CRLP_FiscalYears {
 
     /*********************************************************************************************************
      * @description Should getYear() use the defined Fiscal Year or the Calendar Year
