@@ -1,0 +1,53 @@
+name: Salesforce Code Analyzer
+on:
+  pull_request:
+jobs:
+  salesforce-code-analyzer:
+    permissions:
+      pull-requests: write
+      contents: read
+      actions: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out files
+        uses: actions/checkout@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '>=20.9.0'
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: '>=11'
+          distribution: 'zulu'
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '>=3.10'
+
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli@latest
+
+      - name: Install Code Analyzer Plugin
+        run: sf plugins install code-analyzer@latest
+
+      - name: Run Salesforce Code Analyzer
+        id: run-code-analyzer
+        uses: forcedotcom/run-code-analyzer@v2
+        with:
+          run-arguments: --workspace . --view detail --output-file sfca_results.html --output-file sfca_results.json
+          results-artifact-name: salesforce-code-analyzer-results
+          github-token: ${{ github.token }}
+
+      - name: Check for Critical/High Violations in Changed Files
+        if: |
+          steps.run-code-analyzer.outputs.num-sev1-violations-in-changed-files > 0 ||
+          steps.run-code-analyzer.outputs.num-sev2-violations-in-changed-files > 0
+        run: |
+          echo "Critical or High severity violations found in changed files."
+          echo "Critical: ${{ steps.run-code-analyzer.outputs.num-sev1-violations-in-changed-files }}"
+          echo "High: ${{ steps.run-code-analyzer.outputs.num-sev2-violations-in-changed-files }}"
+          exit 1
