@@ -528,7 +528,7 @@ public abstract class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
         // Resequence the Parent (Summary) records to be in the exact order of the detail records
         // using the defined parent Id
         List<SObject> reorderedSummaryRecords = new List<SObject>();
-        Map<Id, SObject> mapOfSummaryRecords = new Map<Id, SObject>(Database.queryWithBinds(soql, new Map<String, Object>(), AccessLevel.SYSTEM_MODE));
+        Map<Id, SObject> mapOfSummaryRecords = new Map<Id, SObject>(Database.queryWithBinds(soql, new Map<String, Object>{'parentIds' => parentIds}, AccessLevel.SYSTEM_MODE));
         for (Id parentId : parentIds) {
             reorderedSummaryRecords.add(mapOfSummaryRecords.get(parentId));
         }

@@ -142,7 +142,7 @@ public with sharing class MTCH_FindGifts_CTRL {
 
         String query = queryBuilder.build();
         Id excludeOppId = opp.Id;
-        Map<String, Object> giftBindVars = new Map<String, Object>{'excludeOppId' => excludeOppId};
+        Map<String, Object> giftBindVars = new Map<String, Object>{'excludeOppId' => excludeOppId, 'closedWonStages' => closedWonStages};
         potentialGifts = Database.queryWithBinds(query, giftBindVars, AccessLevel.USER_MODE);
 
         selection = new Map<Id, Boolean>();
@@ -408,7 +408,7 @@ public with sharing class MTCH_FindGifts_CTRL {
 
         String query = queryBuilder.build();
 
-        List<Opportunity> potentialGifts2 = Database.queryWithBinds(query, new Map<String, Object>(), AccessLevel.USER_MODE);
+        List<Opportunity> potentialGifts2 = Database.queryWithBinds(query, new Map<String, Object>{'closedWonStages' => closedWonStages, 'potentialGifts' => potentialGifts}, AccessLevel.USER_MODE);
         for (Opportunity o : potentialGifts2){
             if (o.Matching_Gift__c == opp.Id){
                 selection.put(o.Id, true);
