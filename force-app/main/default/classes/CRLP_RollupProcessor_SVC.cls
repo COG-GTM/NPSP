@@ -35,7 +35,7 @@
 * @description Customizable Rollups service methods specific to Batch and Queueable rollup operations
 *
 */
-public class CRLP_RollupProcessor_SVC {
+public with sharing class CRLP_RollupProcessor_SVC {
 
     /**
      * @description Returns the Type of the appropriate CRLP_RollupXXXX_SVC class to use for handling the

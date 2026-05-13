@@ -35,7 +35,7 @@
 * @description Virtual class that all Rollup Source Object Handlers will extend from. Implements only the specific
 * methods defined in the IRollupHandler interface.
 */
-public virtual class CRLP_VRollupHandler implements CRLP_Rollup_SVC.IRollupHandler {
+public virtual with sharing class CRLP_VRollupHandler implements CRLP_Rollup_SVC.IRollupHandler {
 
     /* @description 'Name' of the object referenced in the rollup. Visible to classes that extend this virtual class. */
     protected final String oppObjectName = UTIL_Describe.getObjectDescribe('Opportunity').getName();

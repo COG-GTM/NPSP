@@ -33,7 +33,7 @@
 * @group Opportunity Contact Role
 * @description Batch Class for the deletion of the duplicate primary OCRs.
 */
-public class OPP_PrimaryContactRoleMerge_BATCH  implements Database.Batchable<sObject> {
+public inherited sharing class OPP_PrimaryContactRoleMerge_BATCH  implements Database.Batchable<sObject> {
 
     /******************************************************************************************************
     * @description Batch start method. Runs through all the Opportunities in the org.

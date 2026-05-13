@@ -32,7 +32,7 @@
 * @description Customizable Rollups for TDTM on the Opportunity and Payment objects only
 *
 */
-public class CRLP_Rollup_TDTM extends TDTM_Runnable {
+public inherited sharing class CRLP_Rollup_TDTM extends TDTM_Runnable {
 
     /** @description Prevent additional Batch or Queueable jobs if there are already this many queued/executing */
     private static final Integer MAX_ALLOWED_QUEUED_JOBS = 5;

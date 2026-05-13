@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Opportunity.htm
 * @description Batch class creates payments for Opportunities that are missing them.
  */
-public class PMT_PaymentCreator_BATCH implements Database.Batchable<sObject> {
+public inherited sharing class PMT_PaymentCreator_BATCH implements Database.Batchable<sObject> {
     
     /** @description The query for the batch process to run on.*/
     private String query;

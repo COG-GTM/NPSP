@@ -32,7 +32,7 @@
 * @description Service class for Queueable (ASynchronous) roll-up operations on any supported Object.
 * Basically hands control off to the CRLP_RollupProcessor_SVC.startRollupProcess() method.
 */
-public class CRLP_RollupQueueable implements System.Queueable {
+public inherited sharing class CRLP_RollupQueueable implements System.Queueable {
 
     /** @description To prevent a governor limit during the rollup, limit the maximum number of child opps
      * that can be queried for a given parent. This is a rough calculation based on the number of summary

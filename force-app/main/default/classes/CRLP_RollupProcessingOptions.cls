@@ -35,7 +35,7 @@
 * @description Wrapper class of Rollup Processing Options used by the CRLP_RollupProcessor_SVC methods
 *
 */
-public class CRLP_RollupProcessingOptions {
+public with sharing class CRLP_RollupProcessingOptions {
 
     /**
      * @description Defines the type of rollups being executed by the specific batch job. This is used with the

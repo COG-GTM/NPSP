@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Rollup Services unique to the Account roll-ups from Opportunity and Payment objects
 */
-public class CRLP_RollupAccount_SVC extends CRLP_VRollupHandler {
+public with sharing class CRLP_RollupAccount_SVC extends CRLP_VRollupHandler {
 
     public CRLP_RollupAccount_SVC() { }    // default constructor
 

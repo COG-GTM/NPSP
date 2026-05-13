@@ -38,7 +38,7 @@
 * This class is not marked with sharing as it needs access to Tasks dependent on those in the trigger 
 * set that are potentially owned by other users.
 */
-public class EP_TaskDependency_TDTM extends TDTM_Runnable {
+public inherited sharing class EP_TaskDependency_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Trigger Handler on Task that checks for dependent Tasks based on EP Task dependencies,

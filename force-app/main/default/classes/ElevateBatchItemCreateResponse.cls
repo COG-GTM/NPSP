@@ -27,7 +27,7 @@
  *     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *     POSSIBILITY OF SUCH DAMAGE.
  */
-public class ElevateBatchItemCreateResponse {
+public with sharing class ElevateBatchItemCreateResponse {
     private List<Errors> errors;
     public ElevateBatchItemType batchItemType;
     public CommitmentResponse commitmentResponse;

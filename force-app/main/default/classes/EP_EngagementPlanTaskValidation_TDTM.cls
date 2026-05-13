@@ -33,7 +33,7 @@
 * @group Engagement Plans
 * @description Trigger Handler on Engagement Plan Tasks 
 */
-public class EP_EngagementPlanTaskValidation_TDTM extends TDTM_Runnable {
+public inherited sharing class EP_EngagementPlanTaskValidation_TDTM extends TDTM_Runnable {
     
     /*******************************************************************************************************
     * @description Trigger Handler on Engagement Plan Tasks that prevents recursion on dependent tasks and

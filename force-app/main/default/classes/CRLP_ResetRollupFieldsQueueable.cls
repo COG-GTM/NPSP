@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Skew mode queueable job to zero out summary records whose related detail records have been deleted.
 */
-public class CRLP_ResetRollupFieldsQueueable implements System.Queueable {
+public inherited sharing class CRLP_ResetRollupFieldsQueueable implements System.Queueable {
 
     /** @description The job type for this batch job -- AccountHardCredit, AccountSoftCredit, etc.
      * Currently only supported for GAU jobType.

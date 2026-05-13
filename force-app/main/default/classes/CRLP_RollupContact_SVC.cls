@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Rollup Services unique to the Contact rollups from Opportunity and Payment objects
 */
-public class CRLP_RollupContact_SVC extends CRLP_VRollupHandler {
+public with sharing class CRLP_RollupContact_SVC extends CRLP_VRollupHandler {
 
     public CRLP_RollupContact_SVC() { }       // default constructor
 

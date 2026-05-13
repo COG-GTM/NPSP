@@ -36,7 +36,7 @@
 * or GAU records in small groups (as a single batch iteration) and submits those record Ids to the rollup batch job class
 * for final processing.
 */
-public class CRLP_SkewDispatcher_BATCH implements Database.Batchable<SObject>, Database.Stateful {
+public inherited sharing class CRLP_SkewDispatcher_BATCH implements Database.Batchable<SObject>, Database.Stateful {
 
     /** @description Batch size for Apex Job. Uses default of 300 if Custom Setting is null. */
     public static Integer BATCH_SIZE = (UTIL_CustomSettingsFacade.getCustomizableRollupSettings().Rollups_Skew_Dispatcher_Batch_Size__c != null) ?

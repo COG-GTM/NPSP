@@ -33,7 +33,7 @@
 * @group Opportunity
 * @description Batch job runs after installation to populate Primary_Contact__c on opportunity.
 */
-public class OPP_PrimaryContact_BATCH implements Database.Batchable<sObject> {
+public inherited sharing class OPP_PrimaryContact_BATCH implements Database.Batchable<sObject> {
     
     /** @description The query for the batch process to run on.*/
     private String query;

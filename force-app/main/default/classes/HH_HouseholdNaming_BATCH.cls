@@ -35,7 +35,7 @@
 * automatic household naming, or to refresh all household naming (when the user changes their custom format).
 * works on both Household Objects and Household Accounts.
 */
-public class HH_HouseholdNaming_BATCH implements Database.Batchable<SObject> {
+public inherited sharing class HH_HouseholdNaming_BATCH implements Database.Batchable<SObject> {
 // batch apex class to name households in existing orgs
     
     /*******************************************************************************************************

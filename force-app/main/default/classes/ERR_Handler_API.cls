@@ -35,7 +35,7 @@
 * @group-content ../../ApexDocContent/API.htm
 * @description API class that exposes error handling.
 */
-global class ERR_Handler_API {
+global with sharing class ERR_Handler_API {
 
     global enum Context {
         /* @description Address context. */

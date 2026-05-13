@@ -33,7 +33,7 @@
 * @group Settings
 * @description Batch Class to recalculate the All Household Members Deceased flag on Household Accounts.
 */
-public class DeceasedBatch implements Database.Batchable<sObject> {
+public inherited sharing class DeceasedBatch implements Database.Batchable<sObject> {
 
     final String HH_ACCOUNT_TYPE = CAO_Constants.HH_ACCOUNT_TYPE;
 

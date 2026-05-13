@@ -34,7 +34,7 @@
 * @group ErrorHandling
 * @group-content ../../ApexDocContent/ErrorHandling.htm
 */
-public class ERR_Notifier {
+public with sharing class ERR_Notifier {
 
     /** @description Filtering options to reduce the number of records processed during the notify job */
     @TestVisible

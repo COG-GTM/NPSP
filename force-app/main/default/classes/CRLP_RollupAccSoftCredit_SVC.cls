@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Rollup Services unique to the Account Soft Credit roll-ups to Account.
 */
-public class CRLP_RollupAccSoftCredit_SVC extends CRLP_VRollupHandler {
+public with sharing class CRLP_RollupAccSoftCredit_SVC extends CRLP_VRollupHandler {
 
     public CRLP_RollupAccSoftCredit_SVC() {
     }    // default constructor

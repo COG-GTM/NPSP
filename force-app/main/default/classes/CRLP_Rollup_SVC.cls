@@ -38,7 +38,7 @@
 * Customizable Rollups engine. Methods that are specific to data operations (Triggers, Batch, and Queueables)
 * are stored in the CRLP_RollupProcessor_SVC class.
 */
-public class CRLP_Rollup_SVC {
+public with sharing class CRLP_Rollup_SVC {
 
     @TestVisible
     private static Boolean UPDATE_NULL_TO_ZERO = false;

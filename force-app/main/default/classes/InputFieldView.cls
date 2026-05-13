@@ -33,7 +33,7 @@
 * @date 2022
 * @description Wrapper class for custom fields in the Recurring Donations App
 */
-public class InputFieldView {
+public with sharing class InputFieldView {
     @AuraEnabled public String apiName;
     @AuraEnabled public Boolean required;
     @AuraEnabled public Object value;

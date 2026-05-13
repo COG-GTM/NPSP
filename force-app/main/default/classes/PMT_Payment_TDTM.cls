@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Payments.htm
 * @description trigger handler on Payment and Opportunity objects for supporting Payments
 */
-public class PMT_Payment_TDTM extends TDTM_Runnable {
+public inherited sharing class PMT_Payment_TDTM extends TDTM_Runnable {
 
     /** @description Retrieve and cache the household settings the first time this class is loaded only */
     private static final npo02__Households_Settings__c householdSettings = UTIL_CustomSettingsFacade.getHouseholdsSettings();

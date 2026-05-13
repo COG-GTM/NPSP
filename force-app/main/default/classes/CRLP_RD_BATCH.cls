@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Recurring Donations Rollup Batch Job
 */
-public class CRLP_RD_BATCH extends CRLP_Batch_Base_NonSkew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
+public inherited sharing class CRLP_RD_BATCH extends CRLP_Batch_Base_NonSkew implements Database.Batchable<SObject>, Database.Stateful, Schedulable {
 
     public CRLP_RD_BATCH() { }
 

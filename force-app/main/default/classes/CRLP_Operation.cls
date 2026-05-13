@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Enum of valid Rollup Operation Types and supporting static methods for those Enums.
 */
-public class CRLP_Operation {
+public with sharing class CRLP_Operation {
 
     /**
      * @description Enum of valid Rollup Operation Types supported by the Customizable Rollups Engine
