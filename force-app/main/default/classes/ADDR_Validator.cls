@@ -179,7 +179,8 @@ public with sharing class ADDR_Validator {
     private without sharing class EscalatedPermissions implements ADDR_Validator.PermissionController {
 
         public List<Address__c> queryRows(String soql, Set<Id> recordIds) {
-            return Database.query(soql);
+            Map<String, Object> bindVars = new Map<String, Object>{'recordIds' => recordIds};
+            return Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
         }
 
         public List<Database.SaveResult> updateRows(List<Address__c> rows) {
@@ -194,7 +195,8 @@ public with sharing class ADDR_Validator {
     private inherited sharing class StandardPermissions implements ADDR_Validator.PermissionController {
 
         public List<Address__c> queryRows(String soql, Set<Id> recordIds) {
-            return Database.query(soql);
+            Map<String, Object> bindVars = new Map<String, Object>{'recordIds' => recordIds};
+            return Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
         }
 
         public List<Database.SaveResult> updateRows(List<Address__c> rows) {

@@ -59,7 +59,8 @@ public inherited sharing class ContactSelector {
             return new List<Contact>();
         }
 
-        return Database.Query(householdMembersQueryFor(queryHHIds));
+        Map<String, Object> bindVars = new Map<String, Object>{'queryHHIds' => queryHHIds};
+        return Database.queryWithBinds(householdMembersQueryFor(queryHHIds), bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     private String householdMembersQueryFor(Set<Id> queryHHIds) {
@@ -99,7 +100,8 @@ public inherited sharing class ContactSelector {
     }
 
     public static List<Contact> getContactAddressFieldsForContactAccountsIn(Set<Id> householdAccountIds) {
-        return Database.query(contactAddressFieldsFromAccountSOQL(householdAccountIds));
+        Map<String, Object> bindVars = new Map<String, Object>{'householdAccountIds' => householdAccountIds, 'householdAccountType' => householdAccountType};
+        return Database.queryWithBinds(contactAddressFieldsFromAccountSOQL(householdAccountIds), bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     private static String contactAddressFieldsSOQL(Set<Id> contactIds) {
@@ -147,7 +149,8 @@ public inherited sharing class ContactSelector {
     }
 
     public List<Contact> getContactsWithAccountAndAddressFields(List<Contact> contacts) {
-        return Database.query(buildContactSoql(contacts));
+        Map<String, Object> bindVars = new Map<String, Object>{'contacts' => contacts};
+        return Database.queryWithBinds(buildContactSoql(contacts), bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     public static List<Contact> getContactOverridesForAddressesIn(Set<Id> addressIds) {

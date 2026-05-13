@@ -210,7 +210,8 @@ public abstract class CRLP_Batch_Base {
             );
         oppQuery += ' WHERE Id IN :oppIds';
 
-        Map<Id, Opportunity> oppById = new Map<Id, Opportunity>((List<Opportunity>)Database.query(oppQuery));
+        Map<String, Object> bindVars = new Map<String, Object>{'oppIds' => oppIds};
+        Map<Id, Opportunity> oppById = new Map<Id, Opportunity>((List<Opportunity>)Database.queryWithBinds(oppQuery, bindVars, AccessLevel.SYSTEM_MODE));
 
         List<Partial_Soft_Credit__c> partialSoftCredits = new List<Partial_Soft_Credit__c>();
         for (OpportunityContactRole ocr : ocrs) {
@@ -361,7 +362,7 @@ public abstract class CRLP_Batch_Base {
                 }
 
                 if (lastIdProcessed != null) {
-                    whereClauses.add('Id > \'' + lastIdProcessed + '\'');
+                    whereClauses.add('Id > \'' + String.escapeSingleQuotes(String.valueOf(lastIdProcessed)) + '\'');
                 }
 
                 String innerJoinWhereClause = getMainQueryInnerJoinFilter();
@@ -649,7 +650,7 @@ public abstract class CRLP_Batch_Base {
                 null
         );
         String query = builder.buildQuery();
-        return Database.query(query).size() == 1;
+        return Database.queryWithBinds(query, new Map<String, Object>{'recordIds' => recordIds}, AccessLevel.SYSTEM_MODE).size() == 1;
     }
 
     /*******************************************************************************************************

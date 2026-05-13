@@ -524,14 +524,15 @@ public with sharing class GE_GiftEntryController {
                 'npe01__Payment_Amount__c, ' +
                 'Elevate_Payment_API_Status__c ' +
                 'FROM npe01__OppPayment__c ' +
-                'WHERE npe01__Opportunity__r.' + relationshipField + ' = :donorId ' +
+                'WHERE npe01__Opportunity__r.' + String.escapeSingleQuotes(relationshipField) + ' = :donorId ' +
                 'AND npe01__Written_Off__c = false ' +
                 'AND npe01__Paid__c = false ' +
                 'WITH SECURITY_ENFORCED';
 
         try {
             // CRUD / FLS of this operation already verified by checkCRUDFLS()
-            List<npe01__OppPayment__c> unpaidPayments = Database.query(paymentSOQL);
+            Map<String, Object> bindVars = new Map<String, Object>{'donorId' => donorId};
+            List<npe01__OppPayment__c> unpaidPayments = Database.queryWithBinds(paymentSOQL, bindVars, AccessLevel.USER_MODE);
             Set<Id> oppIdsWithUnpaidPayments = new Set<Id>();
             for (npe01__OppPayment__c payment : unpaidPayments) {
                 oppIdsWithUnpaidPayments.add(payment.npe01__Opportunity__c);
@@ -558,13 +559,13 @@ public with sharing class GE_GiftEntryController {
                     'WHERE npe01__Written_Off__c = false ' +
                     'AND npe01__Paid__c = false)' +
                     'FROM Opportunity ' +
-                    'WHERE ' + relationshipField + ' = :donorId ' +
+                    'WHERE ' + String.escapeSingleQuotes(relationshipField) + ' = :donorId ' +
                     'AND IsClosed = false ' +
                     'WITH SECURITY_ENFORCED ' +
                     'ORDER BY CloseDate ASC';
 
             // CRUD / FLS of this operation already verified by checkCRUDFLS()
-            List<Opportunity> openOpportunities = Database.query(opportunitySOQL);
+            List<Opportunity> openOpportunities = Database.queryWithBinds(opportunitySOQL, bindVars, AccessLevel.USER_MODE);
 
             List<OpportunityWrapper> opportunityWrappers = new List<OpportunityWrapper>();
             for (Opportunity opportunity : openOpportunities) {
@@ -888,7 +889,7 @@ public with sharing class GE_GiftEntryController {
                 .withOrderBy(orderByClause)
                 .withLimit(limitClause)
                 .build();
-        return Database.query(queryString);
+        return Database.queryWithBinds(queryString, new Map<String, Object>(), AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -919,7 +920,7 @@ public with sharing class GE_GiftEntryController {
                 .withSecurityEnforced()
                 .withOrderBy(orderByClause)
                 .build();
-        return getColumnHeaderDataWithPermissions(Database.query(queryString), listName);
+        return getColumnHeaderDataWithPermissions(Database.queryWithBinds(queryString, new Map<String, Object>(), AccessLevel.USER_MODE), listName);
     }
 
     /*******************************************************************************************************
@@ -1385,7 +1386,8 @@ public with sharing class GE_GiftEntryController {
             .withFrom(DataImportBatch__c.SObjectType)
             .withWhere('Id =: batchId')
             .build();
-        List<DataImportBatch__c> batches = Database.query(query);
+        Map<String, Object> bindVars = new Map<String, Object>{'batchId' => batchId};
+        List<DataImportBatch__c> batches = Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
         return (String)batches[0].get(UTIL_Currency.CURRENCY_ISO_CODE_FIELD);
     }
 

@@ -95,11 +95,13 @@ global abstract class TDTM_Runnable {
 
         List<SObject> newList;
         if (newIds != null) {
-            newList = Database.query(qn + ':newIds ORDER BY Id');
+            Map<String, Object> newBindVars = new Map<String, Object>{'newIds' => newIds};
+            newList = Database.queryWithBinds(qn + ':newIds ORDER BY Id', newBindVars, AccessLevel.SYSTEM_MODE);
         }
         List<SObject> oldList;
         if (oldIds != null) {
-            oldList = Database.query(qn + ':oldIds ORDER BY Id');
+            Map<String, Object> oldBindVars = new Map<String, Object>{'oldIds' => oldIds};
+            oldList = Database.queryWithBinds(qn + ':oldIds ORDER BY Id', oldBindVars, AccessLevel.SYSTEM_MODE);
         }
 
         //Call the non-future method

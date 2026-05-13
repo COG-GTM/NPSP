@@ -82,7 +82,8 @@ public class OPP_AccountSoftCredit_TDTM extends TDTM_Runnable {
         //copy opportunity currency if multicurrency is enabled
         if (userInfo.isMultiCurrencyOrganization()) {
             String oppQuery = 'SELECT Id, CurrencyIsoCode FROM Opportunity WHERE Id IN :setOppId';
-            Map<Id, Opportunity> mapOppIdOpp = new Map<Id, Opportunity>((List<Opportunity>) Database.query(oppQuery));
+            Map<String, Object> bindVars = new Map<String, Object>{'setOppId' => setOppId};
+            Map<Id, Opportunity> mapOppIdOpp = new Map<Id, Opportunity>((List<Opportunity>) Database.queryWithBinds(oppQuery, bindVars, AccessLevel.SYSTEM_MODE));
 
             for (Account_Soft_Credit__c accSC : listAccSC)
                 accSC.put('CurrencyIsoCode', mapOppIdOpp.get(accSC.Opportunity__c).get('CurrencyIsoCode'));

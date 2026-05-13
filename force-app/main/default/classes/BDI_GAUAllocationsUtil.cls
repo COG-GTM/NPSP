@@ -172,7 +172,11 @@ public with sharing class BDI_GAUAllocationsUtil {
                     queryString += ' AND General_Accounting_Unit__c !=: defaultGAUId';
                 }
 
-                Allocation__c[] existingAllos = Database.query(queryString);
+                Map<String, Object> bindVars = new Map<String, Object>{
+                    'opptIds' => opptIds,
+                    'defaultGAUId' => defaultGAUId
+                };
+                Allocation__c[] existingAllos = Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
 
                 if (existingAllos != null) {
                     for (Allocation__c allo: existingAllos) {

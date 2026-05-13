@@ -154,7 +154,8 @@ public inherited sharing class RD2_QueryService {
             .withWhere('Id IN :rdIds')
             .build();
 
-        return Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'rdIds' => rdIds};
+        return Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     /**
@@ -188,7 +189,8 @@ public inherited sharing class RD2_QueryService {
             .withLimit(1)
             .build();
 
-        List<npe03__Recurring_Donation__c> results = Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'recurringDonationId' => recurringDonationId};
+        List<npe03__Recurring_Donation__c> results = Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
         return results[0];
     }
 
@@ -254,21 +256,24 @@ public inherited sharing class RD2_QueryService {
         Set<String> statusValues = statusMapper.getActiveStatusValues();
         String queryString = getSObjectWithRecurringDonationsQuery(sObjectType);
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'recordIds' => recordIds, 'statusValues' => statusValues};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     public List<SObject> getSObjectWithLapsedRecurringDonations(String sObjectType, Set<Id> recordIds) {
         Set<String> statusValues = statusMapper.getLapsedStatusValues();
         String queryString = getSObjectWithRecurringDonationsQuery(sObjectType);
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'recordIds' => recordIds, 'statusValues' => statusValues};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     public List<SObject> getSObjectWithClosedRecurringDonations(String sObjectType, Set<Id> recordIds) {
         Set<String> statusValues = statusMapper.getClosedStatusValues();
         String queryString = getSObjectWithRecurringDonationsQuery(sObjectType);
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'recordIds' => recordIds, 'statusValues' => statusValues};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     private String getSObjectWithRecurringDonationsQuery(String sObjectType) {

@@ -66,7 +66,8 @@ public class RLLP_OppPartialSoftCreditRollup {
         string pscQuery = RLLP_OppRollup_UTIL.buildSoftCreditPSCQuery();
         Set<Id> hardCreditOCRs = new Set<Id>();
         Map<Id, List<OpportunityContactRole>> opportunityContactRoles = new Map<Id, List<OpportunityContactRole>>();
-        for (OpportunityContactRole ocr : database.query(ocrQuery)) {
+        Map<String, Object> scBindVars = new Map<String, Object>{'cset' => cset, 'softCreditRoles' => softCreditRoles, 'rectypeset' => rectypeset, 'typeset' => typeset};
+        for (OpportunityContactRole ocr : Database.queryWithBinds(ocrQuery, scBindVars, AccessLevel.SYSTEM_MODE)) {
             if (isHardCredit(ocr)) {
                 hardCreditOCRs.add(ocr.Id);
             }
@@ -77,7 +78,7 @@ public class RLLP_OppPartialSoftCreditRollup {
         }
         
         Map<Id, List<Partial_Soft_Credit__c>> partialSoftCredits = new Map<Id, List<Partial_Soft_Credit__c>>();
-        for (Partial_Soft_Credit__c psr : database.query(pscQuery)) {
+        for (Partial_Soft_Credit__c psr : Database.queryWithBinds(pscQuery, scBindVars, AccessLevel.SYSTEM_MODE)) {
             if (!partialSoftCredits.containsKey(psr.Contact__c)) 
                 partialSoftCredits.put(psr.Contact__c, new List<Partial_Soft_Credit__c>());
             partialSoftCredits.get(psr.Contact__c).add(psr);

@@ -117,7 +117,8 @@ public class CRLP_RollupQueueable implements System.Queueable {
                 && !soql.contains('npo02__NumberOfClosedOpps__c')) {
             soql = soql.replace('SELECT ','SELECT npo02__NumberOfClosedOpps__c,');
         }
-        List<SObject> summaryRecords = Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'parentIds' => parentIds};
+        List<SObject> summaryRecords = Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
 
         Boolean includeChildPayments = CRLP_Rollup_SVC.hasActivePaymentRollupsForSObject(objType);
 
@@ -152,7 +153,8 @@ public class CRLP_RollupQueueable implements System.Queueable {
                 queryBuilder.includePaymentRecords();
             }
             String detailsQuery = queryBuilder.buildDetailsQuery();
-            List<SObject> detailRecords = Database.query(detailsQuery);
+            Map<String, Object> detailBindVars = new Map<String, Object>{'summaryRecordIds' => summaryRecordIds};
+            List<SObject> detailRecords = Database.queryWithBinds(detailsQuery, detailBindVars, AccessLevel.SYSTEM_MODE);
 
 
             Map<Id, List<SObject>> paymentsByOpp = new Map<Id, List<SObject>>();

@@ -716,7 +716,8 @@ public class BDI_Donations {
         if (opportunityIds.size() > 0) {
             Map<Id, npe01__OppPayment__c> mapOppIdToPayment = new Map<Id, npe01__OppPayment__c>();
             String paymentQuery = buildPaymentQuery('opportunityIds');
-            for (npe01__OppPayment__c payment : Database.query(paymentQuery)) {
+            Map<String, Object> bindVars = new Map<String, Object>{'opportunityIds' => opportunityIds};
+            for (npe01__OppPayment__c payment : Database.queryWithBinds(paymentQuery, bindVars, AccessLevel.SYSTEM_MODE)) {
                 mapOppIdToPayment.put(payment.npe01__Opportunity__c, payment);
             }
 
@@ -912,7 +913,8 @@ public class BDI_Donations {
         // add FROM and WHERE clauses
         query += ' FROM Opportunity WHERE Id IN: opptIdsForQuery';
 
-        Opportunity[] oppts = Database.query(query);
+        Map<String, Object> bindVars = new Map<String, Object>{'opptIdsForQuery' => opptIdsForQuery};
+        Opportunity[] oppts = Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
         
         if (oppts != null) {
             resultOpptsById = new Map<Id,Opportunity>(oppts);

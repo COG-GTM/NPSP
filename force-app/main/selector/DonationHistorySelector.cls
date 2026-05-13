@@ -37,7 +37,8 @@ public inherited sharing class DonationHistorySelector {
     * @description method to return Opportunity and Payment data.
     */
   public List<Opportunity> getWonOpportunitiesByContactId( Id contactId, Integer offset ) {       
-        return Database.query(
+        Map<String, Object> bindVars = new Map<String, Object>{'contactId' => contactId, 'offset' => offset};
+        return Database.queryWithBinds(
             'SELECT Id, '+
                     'Name, '+
                     'CloseDate,' +
@@ -55,7 +56,8 @@ public inherited sharing class DonationHistorySelector {
             'WITH SECURITY_ENFORCED ' +
             'ORDER BY CloseDate ' +
             'DESC LIMIT 50 ' +
-            'OFFSET :offset' 
+            'OFFSET :offset',
+            bindVars, AccessLevel.USER_MODE
         );
     }
 
@@ -66,7 +68,8 @@ public inherited sharing class DonationHistorySelector {
      * @return List<OpportunityContactRole>
      */
     public List<Opportunity> getWonOpportunitiesByContactIdAndYear(Id contactId, Integer offset, Integer year ) {
-        return Database.query(
+        Map<String, Object> bindVars = new Map<String, Object>{'contactId' => contactId, 'offset' => offset, 'year' => year};
+        return Database.queryWithBinds(
             'SELECT  Id, '+
                     'Name,' +
                     'CloseDate, '+
@@ -86,7 +89,8 @@ public inherited sharing class DonationHistorySelector {
             'WITH SECURITY_ENFORCED '+
             'ORDER BY Opportunity.CloseDate '+
             'DESC LIMIT 50 '+
-            'OFFSET :offset' 
+            'OFFSET :offset',
+            bindVars, AccessLevel.USER_MODE
         );
     }
 

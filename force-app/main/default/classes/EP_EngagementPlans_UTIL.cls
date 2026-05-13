@@ -84,7 +84,8 @@ public with sharing class EP_EngagementPlans_UTIL {
             targetFieldMap.put(engagementPlan.id, getTargetObjectField(engagementPlan, false));
         }
 
-        for (Engagement_Plan__c engagementPlan : database.query(getOwnerIdQuery() + ' WHERE Id IN :engagementPlans')) {
+        Map<String, Object> bindVars = new Map<String, Object>{'engagementPlans' => engagementPlans};
+        for (Engagement_Plan__c engagementPlan : Database.queryWithBinds(getOwnerIdQuery() + ' WHERE Id IN :engagementPlans', bindVars, AccessLevel.SYSTEM_MODE)) {
             String targetField = targetFieldMap.get(engagementPlan.id);
             if (!String.isBlank(targetField)) {
                 targetObjectIdMap.put(engagementPlan.id, (Id)engagementPlan.get(targetField));

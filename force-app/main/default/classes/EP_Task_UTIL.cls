@@ -133,7 +133,8 @@ public class EP_Task_UTIL {
         templateQuery += 'FROM Engagement_Plan_Template__c WHERE Id IN :templateIds';
 
         //query for templates and their child tasks
-        templateMap = new Map<Id, Engagement_Plan_Template__c>((List<Engagement_Plan_Template__c>)Database.query(templateQuery));
+        Map<String, Object> bindVars = new Map<String, Object>{'templateIds' => templateIds};
+        templateMap = new Map<Id, Engagement_Plan_Template__c>((List<Engagement_Plan_Template__c>)Database.queryWithBinds(templateQuery, bindVars, AccessLevel.SYSTEM_MODE));
 
         //query for tasks and their child tasks
         epTaskMap = new Map<Id, Engagement_Plan_Task__c>(

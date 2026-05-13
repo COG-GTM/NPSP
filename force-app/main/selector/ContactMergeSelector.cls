@@ -75,7 +75,8 @@ public with sharing class ContactMergeSelector {
             .withWhere('Id IN :contactIds')
             .build();
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'contactIds' => contactIds};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
     }
 
     public List<SObject> selectContactsByName(String name) {
@@ -101,7 +102,8 @@ public with sharing class ContactMergeSelector {
                 .withSelectFields(listStrContactField)
                 .withWhere(whereString)
                 .build();
-        List<SObject> results = Database.query(queryString);
+        Map<String, Object> drsBindVars = new Map<String, Object>{'duplicateRecordSetId' => duplicateRecordSetId};
+        List<SObject> results = Database.queryWithBinds(queryString, drsBindVars, AccessLevel.USER_MODE);
 
         SfdoInstrumentationService.getInstance().log(
             SfdoInstrumentationEnum.Feature.ContactMerge, 
@@ -114,7 +116,8 @@ public with sharing class ContactMergeSelector {
     }
 
     public List<Account> getAccountsFor(Set<Id> accountIds) {
-        return Database.query(buildAccountSoql(accountIds));
+        Map<String, Object> bindVars = new Map<String, Object>{'accountIds' => accountIds};
+        return Database.queryWithBinds(buildAccountSoql(accountIds), bindVars, AccessLevel.USER_MODE);
     }
 
     public List<Account> getHouseholdAndOrgAccountsFor(Set<Id> accountIds) {
@@ -158,7 +161,8 @@ public with sharing class ContactMergeSelector {
     }
 
     public List<Contact> getContactsWithAccountFields(List<Contact> contacts) {
-        return Database.query(buildContactSoqlOrderById(contacts));
+        Map<String, Object> bindVars = new Map<String, Object>{'contacts' => contacts};
+        return Database.queryWithBinds(buildContactSoqlOrderById(contacts), bindVars, AccessLevel.USER_MODE);
     }
 
     @TestVisible

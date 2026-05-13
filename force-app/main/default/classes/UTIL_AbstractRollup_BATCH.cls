@@ -332,8 +332,9 @@ public abstract class UTIL_AbstractRollup_BATCH implements database.batchable<SO
             if (parentRecsInitial == null) {
                 // build the full field list for all rollup specs
                 string flist = getQuerySelectClause();
-                parentRecsInitial = database.query(
-                    'SELECT ' + flist + ' FROM ' + parentObjName + ' WHERE id IN : parentRecIds');
+                Map<String, Object> bindVars = new Map<String, Object>{'parentRecIds' => parentRecIds};
+                parentRecsInitial = Database.queryWithBinds(
+                    'SELECT ' + flist + ' FROM ' + parentObjName + ' WHERE id IN : parentRecIds', bindVars, AccessLevel.SYSTEM_MODE);
             }
 
             // get the blank starting list to which we will add rollups
@@ -387,7 +388,8 @@ public abstract class UTIL_AbstractRollup_BATCH implements database.batchable<SO
                 system.debug(logginglevel.warn, 'SOQL for rollup: ' + soql);
 
                 // query and process the rows
-                for (sobject rollupRow : database.query(soql)) {
+                Map<String, Object> rollupBindVars = new Map<String, Object>{'parentRecIds' => parentRecIds};
+                for (sobject rollupRow : Database.queryWithBinds(soql, rollupBindVars, AccessLevel.SYSTEM_MODE)) {
 
                     //system.debug(logginglevel.warn,'row: ' + rollupRow);
 

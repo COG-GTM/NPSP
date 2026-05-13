@@ -167,7 +167,8 @@ public class PMT_Payment_TDTM extends TDTM_Runnable {
             'WHERE npe01__Opportunity__c IN :oppIds ' +
             'ORDER BY npe01__Opportunity__c';
 
-        for (npe01__OppPayment__c pmt : database.query(soql)) {
+        Map<String, Object> pmtBindVars = new Map<String, Object>{'oppIds' => oppIds};
+        for (npe01__OppPayment__c pmt : Database.queryWithBinds(soql, pmtBindVars, AccessLevel.SYSTEM_MODE)) {
             Opportunity opp = (Opportunity)pmt.getSObject('npe01__Opportunity__r');
 
             if (dmlWrapperSObjectById.containsKey(pmt.Id)) {
@@ -197,7 +198,8 @@ public class PMT_Payment_TDTM extends TDTM_Runnable {
                 ' FROM Opportunity.npe01__OppPayment__r)' +
                 ' FROM Opportunity WHERE Id IN :oppIds';
 
-        return new Map<Id, Opportunity>((List<Opportunity>)Database.query(soql));
+        Map<String, Object> bindVars = new Map<String, Object>{'oppIds' => oppIds};
+        return new Map<Id, Opportunity>((List<Opportunity>)Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE));
     }
 
     /*******************************************************************************************************

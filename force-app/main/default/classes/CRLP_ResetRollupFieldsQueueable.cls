@@ -114,7 +114,8 @@ public class CRLP_ResetRollupFieldsQueueable implements System.Queueable {
      */
     private List<SObject> getSummaryRecords() {
         String query = CRLP_Query_SEL.buildObjectQueryForRollup(summaryObjectType) + ' WHERE Id IN :recordIds';
-        List<SObject> parents = Database.query(query);
+        Map<String, Object> bindVars = new Map<String, Object>{'recordIds' => recordIds};
+        List<SObject> parents = Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
         return parents;
     }
 

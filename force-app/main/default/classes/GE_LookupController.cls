@@ -64,7 +64,8 @@ public with sharing class GE_LookupController {
         String query = String.format(queryTemplate, args);
 
         List<LookupResult> results = new List<LookupResult>();
-        for (SObject result : Database.query(query)) {
+        Map<String, Object> bindVars = new Map<String, Object>{'sObjectType' => sObjectType, 'formattedValue' => formattedValue};
+        for (SObject result : Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE)) {
             results.add(new LookupResult(result));
         }
 
@@ -107,13 +108,14 @@ public with sharing class GE_LookupController {
      */
     @TestVisible
     private static List<LookupResult> doSearchSOQL(String searchValue, String sObjectType) {
-        String formattedValue = '%' + searchValue + '%';
+        String formattedValue = '%' + String.escapeSingleQuotes(searchValue) + '%';
         String queryTemplate = 'SELECT Id, Name FROM {0} WHERE Name LIKE :formattedValue LIMIT {1}';
-        List<String> args = new List<String>{sObjectType, String.valueOf(RESULTS_LIMIT)};
+        List<String> args = new List<String>{String.escapeSingleQuotes(sObjectType), String.valueOf(RESULTS_LIMIT)};
         String query = String.format(queryTemplate, args);
 
         List<LookupResult> results = new List<LookupResult>();
-        for (SObject result : Database.query(query)) {
+        Map<String, Object> bindVars = new Map<String, Object>{'formattedValue' => formattedValue};
+        for (SObject result : Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE)) {
             results.add(new LookupResult(result));
         }
 

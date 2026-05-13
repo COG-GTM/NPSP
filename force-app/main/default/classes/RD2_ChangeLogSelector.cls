@@ -77,7 +77,8 @@ public with sharing class RD2_ChangeLogSelector {
             query.withWhere(getChangeTypeWhereClause());
         }
 
-        return Database.query(query.build());
+        Map<String, Object> bindVars = new Map<String, Object>{'recurringDonationId' => recurringDonationId};
+        return Database.queryWithBinds(query.build(), bindVars, AccessLevel.USER_MODE);
     }
 
     public RD2_ChangeLogSelector withRecordLimit(Integer recordLimit) {

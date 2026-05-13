@@ -430,9 +430,10 @@ public inherited sharing class LegacyHouseholds extends fflib_SObjects2 {
 
     private Map<Id, npo02__Household__c> getHouseholdMap(Set<Id> householdIds) {
         RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
+        Map<String, Object> bindVars = new Map<String, Object>{'householdIds' => householdIds};
         Map<Id, npo02__Household__c> hhmap = new Map<Id, npo02__Household__c>(
-                (List<npo02__Household__c>) Database.query(oppRollupUtil.buildHouseholdQuery() +
-                        ' WHERE Id IN :householdIds'));
+                (List<npo02__Household__c>) Database.queryWithBinds(oppRollupUtil.buildHouseholdQuery() +
+                        ' WHERE Id IN :householdIds', bindVars, AccessLevel.SYSTEM_MODE));
         return hhmap;
     }
 

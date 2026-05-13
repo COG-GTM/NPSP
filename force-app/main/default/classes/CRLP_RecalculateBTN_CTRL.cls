@@ -168,9 +168,10 @@ public with sharing class CRLP_RecalculateBTN_CTRL {
     private static void calculateContactSoftCredit(Id recordId) {
         RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
         String contactQuery = oppRollupUtil.buildContactQuery();
-        contactQuery += ' WHERE Id = \'' + recordId + '\'';
+        contactQuery += ' WHERE Id = :recordId';
 
         RLLP_OppRollup rollup = new RLLP_OppRollup();
-        rollup.RollupSoftCreditsWithPartialSupport(Database.query(contactQuery));
+        Map<String, Object> bindVars = new Map<String, Object>{'recordId' => recordId};
+        rollup.RollupSoftCreditsWithPartialSupport(Database.queryWithBinds(contactQuery, bindVars, AccessLevel.SYSTEM_MODE));
     }
 }

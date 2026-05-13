@@ -300,7 +300,7 @@ public virtual class UTIL_Finder {
     * @return List<sObject>
     */
     public virtual List<sObject> queryRecords(String soql) {
-        return Database.query(soql);
+        return Database.queryWithBinds(soql, new Map<String, Object>(), AccessLevel.SYSTEM_MODE);
     }
 
     /*********************************************************************************************************

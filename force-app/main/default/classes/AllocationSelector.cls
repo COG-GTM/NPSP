@@ -41,7 +41,8 @@ public with sharing class AllocationSelector {
             .withWhere('Opportunity__c IN: oppIds')
             .build();
 
-        return Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'oppIds' => oppIds};
+        return Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     private Set<String> getStandardAllocationFields() {

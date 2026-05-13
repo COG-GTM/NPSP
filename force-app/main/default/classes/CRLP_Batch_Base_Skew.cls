@@ -505,7 +505,8 @@ public abstract class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
             String paymentsQuery = CRLP_Query_SEL.buildObjectQueryForRollup(npe01__OppPayment__c.SObjectType) +
                     ' WHERE npe01__Opportunity__c IN :detailIds ORDER BY npe01__Opportunity__c, CreatedDate ASC';
 
-            for (npe01__OppPayment__c pmt : Database.query(paymentsQuery)) {
+            Map<String, Object> bindVars = new Map<String, Object>{'detailIds' => detailIds};
+            for (npe01__OppPayment__c pmt : Database.queryWithBinds(paymentsQuery, bindVars, AccessLevel.SYSTEM_MODE)) {
                 if (!paymentsByOpp.containsKey(pmt.npe01__Opportunity__c)) {
                     paymentsByOpp.put(pmt.npe01__Opportunity__c, new List<npe01__OppPayment__c>());
                 }
@@ -527,7 +528,7 @@ public abstract class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
         // Resequence the Parent (Summary) records to be in the exact order of the detail records
         // using the defined parent Id
         List<SObject> reorderedSummaryRecords = new List<SObject>();
-        Map<Id, SObject> mapOfSummaryRecords = new Map<Id, SObject>(Database.query(soql));
+        Map<Id, SObject> mapOfSummaryRecords = new Map<Id, SObject>(Database.queryWithBinds(soql, new Map<String, Object>(), AccessLevel.SYSTEM_MODE));
         for (Id parentId : parentIds) {
             reorderedSummaryRecords.add(mapOfSummaryRecords.get(parentId));
         }
@@ -580,7 +581,8 @@ public abstract class CRLP_Batch_Base_Skew extends CRLP_Batch_Base {
         // Get the Summary (target) records for the final record to be processed
         List<Id> parentIds = new List<Id>(parentIdsNotCommittedWithBatch.keySet());
         String query = CRLP_Query_SEL.buildObjectQueryForRollup(summaryObjectType) + ' WHERE Id IN :parentIds';
-        List<SObject> parents = Database.query(query);
+        Map<String, Object> bindVars = new Map<String, Object>{'parentIds' => parentIds};
+        List<SObject> parents = Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
 
         CRLP_RollupProcessingOptions.ProcessingOptions options = new CRLP_RollupProcessingOptions.ProcessingOptions();
         options.useRollupDefsByParentIdMap = true;

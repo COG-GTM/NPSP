@@ -212,7 +212,8 @@ public class RD_RecurringDonations {
 
         //get all possible rd records that may need updating, exclude ones that are closed.
         Map<Id, npe03__Recurring_Donation__c> rdMap = new Map<Id, npe03__Recurring_Donation__c>();
-        for (npe03__Recurring_Donation__c rd : Database.query(rdQuery)) {
+        Map<String, Object> bindVars = new Map<String, Object>{'RDids' => RDids};
+        for (npe03__Recurring_Donation__c rd : Database.queryWithBinds(rdQuery, bindVars, AccessLevel.SYSTEM_MODE)) {
             if (rd.npe03__Open_Ended_Status__c <> closedLabel) {
                 rdMap.put(rd.Id, rd);
             }
@@ -294,7 +295,8 @@ public class RD_RecurringDonations {
         String queryRCD = strQueryRDNoWhere();
         queryRCD += ' WHERE Id in :setRDId';
 
-        return Database.query(queryRCD);
+        Map<String, Object> bindVars = new Map<String, Object>{'setRDId' => setRDId};
+        return Database.queryWithBinds(queryRCD, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     /*******************************************************************************************************
@@ -728,7 +730,8 @@ public class RD_RecurringDonations {
         rdQuery+=' where npe03__Open_Ended_Status__c <> :closedLabel ';
         rdQuery+=' and id IN :recIDs ';
 
-        List<npe03__Recurring_Donation__c> rdsToUpdate = Database.query(rdQuery);
+        Map<String, Object> bindVars = new Map<String, Object>{'closedLabel' => closedLabel, 'recIDs' => recIDs};
+        List<npe03__Recurring_Donation__c> rdsToUpdate = Database.queryWithBinds(rdQuery, bindVars, AccessLevel.SYSTEM_MODE);
         Map<Id, npe03__Recurring_Donation__c> rdMap = new Map<Id, npe03__Recurring_Donation__c>(rdsToUpdate);
 
         List<Opportunity> oppList = [

@@ -50,7 +50,7 @@ public with sharing class STG_PanelOppRollups_CTRL extends STG_Panel {
         if (STG_Panel.stgService.stgHH.npo02__Use_Fiscal_Year_for_Rollups__c == true) {
             String fyQuery = 'select id from FiscalYearSettings where IsStandardYear = false';            
             List<SObject> fySettings = new List<SObject>();
-            fySettings = Database.query(fyQuery);
+            fySettings = Database.queryWithBinds(fyQuery, new Map<String, Object>(), AccessLevel.SYSTEM_MODE);
             integer hasCustomFYRecord = fySettings.size();
                 
             //if org has customFY records, disable FY settings

@@ -69,7 +69,8 @@ public with sharing class GiftsSelectorForProcessing {
             .withLimit(chunkSize)
             .build();
 
-        return Database.query(queryString);            
+        Map<String, Object> bindVars = new Map<String, Object>{'giftIds' => giftIds};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);            
     }
 
     public List<DataImport__c> getGiftsReadyToMoveToProcessing(GiftBatchId giftBatchId) {
@@ -92,6 +93,7 @@ public with sharing class GiftsSelectorForProcessing {
             .withLimit(50000)
             .build();
 
-        return Database.query(queryString);            
+        Map<String, Object> bindVars = new Map<String, Object>{'giftBatchIdValue' => giftBatchIdValue};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);            
     }
 }

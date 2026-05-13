@@ -90,7 +90,8 @@ public class PSC_PartialSoftCredit_TDTM extends TDTM_Runnable {
         //copy opportunity currency if multicurrency is enabled
         if (userInfo.isMultiCurrencyOrganization()) {
             string oppQuery = 'SELECT Id, CurrencyIsoCode FROM Opportunity WHERE Id IN :setOppId';
-            map<id, Opportunity> mapOppIdOpp = new map<id, Opportunity>((list<Opportunity>) database.query(oppQuery));
+            Map<String, Object> bindVars = new Map<String, Object>{'setOppId' => setOppId};
+            map<id, Opportunity> mapOppIdOpp = new map<id, Opportunity>((list<Opportunity>) Database.queryWithBinds(oppQuery, bindVars, AccessLevel.SYSTEM_MODE));
             
             for (Partial_Soft_Credit__c psc : listPSC)
                 psc.put('CurrencyIsoCode', mapOppIdOpp.get(psc.Opportunity__c).get('CurrencyIsoCode'));

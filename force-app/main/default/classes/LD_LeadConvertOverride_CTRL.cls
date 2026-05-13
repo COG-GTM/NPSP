@@ -883,14 +883,15 @@ public with sharing class LD_LeadConvertOverride_CTRL {
             UTIL_Query query = new UTIL_Query()
                 .withSelectFields(selectFields)
                 .withFrom(Contact.SObjectType)
-                .withWhere('Id = \'' + contactId + '\'');
+                .withWhere('Id = :contactId');
 
             queryString = query.build();
         }
 
         @TestVisible
         private Contact query() {
-            return Database.query(queryString);
+            Map<String, Object> bindVars = new Map<String, Object>{'contactId' => contactId};
+            return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
         }
     }
 

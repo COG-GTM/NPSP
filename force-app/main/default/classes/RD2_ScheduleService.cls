@@ -743,7 +743,8 @@ public without sharing class RD2_ScheduleService {
     public Map<Id, List<RecurringDonationSchedule__c>> getExistingSchedules(List<npe03__Recurring_Donation__c> rds) {
         Map<Id, List<RecurringDonationSchedule__c>> schedulesById = new Map<Id, List<RecurringDonationSchedule__c>>();
 
-        for (RecurringDonationSchedule__c schedule : Database.query(new ScheduleQueryHandler().buildQuery())) {
+        Map<String, Object> bindVars = new Map<String, Object>{'rds' => rds, 'currentDate' => currentDate};
+        for (RecurringDonationSchedule__c schedule : Database.queryWithBinds(new ScheduleQueryHandler().buildQuery(), bindVars, AccessLevel.SYSTEM_MODE)) {
             Boolean isActive = isActive(schedule, currentDate) || pauseHandler.isActivePause(schedule, currentDate);
             if (!isActive) {
                 continue;
@@ -1215,7 +1216,8 @@ public without sharing class RD2_ScheduleService {
                 .withOrderBy('StartDate__c')
                 .build();
 
-            for (RecurringDonationSchedule__c schedule : Database.query(soql)) {
+            Map<String, Object> bindVars = new Map<String, Object>{'rdId' => rdId, 'currentDate' => currentDate};
+            for (RecurringDonationSchedule__c schedule : Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE)) {
                 if (isActivePause(schedule, currentDate)) {
                     return schedule;
                 }

@@ -51,7 +51,8 @@ public inherited sharing class GiftBatchSelector {
             .withLimit(1)
             .build();
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'dataImportBatchId' => dataImportBatchId};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
     }
 
     public List<DataImportBatch__c> selectGiftBatchesById(Set<Id> ids) {

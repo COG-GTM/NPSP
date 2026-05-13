@@ -105,7 +105,8 @@ public with sharing class MTCH_FindGifts_CTRL {
         }
 
         oppQuery +=  ' FROM Opportunity WHERE Id = :oppId';
-        opp = Database.query(oppQuery);
+        Map<String, Object> bindVars = new Map<String, Object>{'oppId' => oppId};
+        opp = Database.queryWithBinds(oppQuery, bindVars, AccessLevel.USER_MODE);
         matchingGiftPercent = opp.Account.Matching_Gift_Percent__c == null ? 100 : opp.Account.Matching_Gift_Percent__c;
 
         // if the opp Amount is null, treat as $0 and still load the page.
@@ -137,10 +138,12 @@ public with sharing class MTCH_FindGifts_CTRL {
             .withSelectFields(queryFields)
             .withOrderBy('Name')
             .withWhere(whereClause)
-            .withWhere('Id != \'' + opp.Id + '\'');
+            .withWhere('Id != :excludeOppId');
 
         String query = queryBuilder.build();
-        potentialGifts = Database.query(query);
+        Id excludeOppId = opp.Id;
+        Map<String, Object> giftBindVars = new Map<String, Object>{'excludeOppId' => excludeOppId};
+        potentialGifts = Database.queryWithBinds(query, giftBindVars, AccessLevel.USER_MODE);
 
         selection = new Map<Id, Boolean>();
         for (Opportunity o : potentialGifts){
@@ -405,7 +408,7 @@ public with sharing class MTCH_FindGifts_CTRL {
 
         String query = queryBuilder.build();
 
-        List<Opportunity> potentialGifts2 = Database.query(query);
+        List<Opportunity> potentialGifts2 = Database.queryWithBinds(query, new Map<String, Object>(), AccessLevel.USER_MODE);
         for (Opportunity o : potentialGifts2){
             if (o.Matching_Gift__c == opp.Id){
                 selection.put(o.Id, true);

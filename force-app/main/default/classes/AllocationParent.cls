@@ -146,7 +146,8 @@ public inherited sharing class AllocationParent {
             .withLimit(1)
             .build();
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'id' => id};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     private Set<String> getSelectFieldsFor(SObjectType objectType) {

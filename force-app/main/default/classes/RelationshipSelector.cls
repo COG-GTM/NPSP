@@ -48,6 +48,7 @@ public with sharing class RelationshipSelector {
                 .withWhere('npe4__Contact__c = :contactId')
                 .withOrderBy(Contact.Name, 'npe4__RelatedContact__r.Name')
                 .withSecurityEnforced();
-        return Database.query(query.build());
+        Map<String, Object> bindVars = new Map<String, Object>{'contactId' => contactId};
+        return Database.queryWithBinds(query.build(), bindVars, AccessLevel.USER_MODE);
     }
 }

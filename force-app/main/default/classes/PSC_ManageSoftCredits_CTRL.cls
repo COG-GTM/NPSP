@@ -139,7 +139,8 @@ public with sharing class PSC_ManageSoftCredits_CTRL {
         }
 
         oppQuery +=  ' FROM Opportunity WHERE Id = :recordId';
-        opp = Database.query(oppQuery);
+        Map<String, Object> bindVars = new Map<String, Object>{'recordId' => recordId};
+        opp = Database.queryWithBinds(oppQuery, bindVars, AccessLevel.USER_MODE);
         isAmount = true;
         allowTooManySoftCredits = false;
 

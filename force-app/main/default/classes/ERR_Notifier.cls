@@ -281,10 +281,11 @@ public class ERR_Notifier {
             return;
         }
 
-        SObject collaborationGroup = Database.query('SELECT Id, Name' +
+        Map<String, Object> bindVars = new Map<String, Object>{'chatterGroupId' => chatterGroupId};
+        SObject collaborationGroup = Database.queryWithBinds('SELECT Id, Name' +
                 ' FROM CollaborationGroup' +
                 ' WHERE Id = :chatterGroupId' +
-                ' LIMIT 1');
+                ' LIMIT 1', bindVars, AccessLevel.SYSTEM_MODE);
 
         List<Error__c> errors = getErrorsPendingNotification();
 
