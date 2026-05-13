@@ -79,7 +79,9 @@ public without sharing class CRLP_ApiService {
         CRLP_RollupProcessingOptions.RollupType rollupType;
         try {
             rollupType = CRLP_RollupProcessingOptions.rollupTypeByName.get((String) rollupTypeName.toLowerCase());
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+            UTIL_Debug.debug('Error parsing rollup type: ' + ex.getMessage());
+        }
 
         if (rollupType == null) {
             throwParameterException(CallableApiParameters.PARAM_ROLLUP_TYPE, 'Unable to Match');
@@ -163,6 +165,7 @@ public without sharing class CRLP_ApiService {
         try {
             rollupType = CRLP_RollupProcessingOptions.rollupTypeByName.get((String) rollupTypeName.toLowerCase());
         } catch (Exception ex) {
+            UTIL_Debug.debug('Error parsing rollup type: ' + ex.getMessage());
         }
 
         if (rollupType == null) {
@@ -188,10 +191,12 @@ public without sharing class CRLP_ApiService {
         if (parentId == null) {
             throwParameterException(CallableApiParameters.PARAM_ROLLUP_PARENTID, 'A valid Parent record Id is required');
         }
+        String objName = String.escapeSingleQuotes(parentId.getSobjectType().getDescribe().getName());
         String validateParentSoql =
-            'SELECT COUNT() FROM ' + parentId.getSobjectType().getDescribe().getName() +
+            'SELECT COUNT() FROM ' + objName +
             ' WHERE Id = :parentId LIMIT 1';
-        if (Database.countQuery(validateParentSoql) != 1) {
+        Map<String, Object> bindVars = new Map<String, Object>{ 'parentId' => parentId };
+        if (Database.countQueryWithBinds(validateParentSoql, bindVars, AccessLevel.SYSTEM_MODE) != 1) {
             throwParameterException(CallableApiParameters.PARAM_ROLLUP_PARENTID, 'A existing Parent record is required');
         }
 

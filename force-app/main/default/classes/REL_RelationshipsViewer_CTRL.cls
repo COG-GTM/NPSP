@@ -168,9 +168,10 @@ global with sharing class REL_RelationshipsViewer_CTRL{
             Node basenode = new Node();
 
             String contactQuery = 'SELECT '+String.join(contactFields, ', ')+
-                ' FROM Contact WHERE Id = \''+contactId+'\' LIMIT 1';
+                ' FROM Contact WHERE Id = :contactId LIMIT 1';
 
-            List<Contact> contacts = Database.query(contactQuery);
+            Map<String, Object> contactBindVars = new Map<String, Object>{ 'contactId' => contactId };
+            List<Contact> contacts = Database.queryWithBinds(contactQuery, contactBindVars, AccessLevel.USER_MODE);
             Contact primaryContact = null;
             if(!contacts.isEmpty()) {
                 primaryContact = contacts[0];
@@ -188,14 +189,18 @@ global with sharing class REL_RelationshipsViewer_CTRL{
         }
 
         String relationshipQuery = 'SELECT '+String.join(relationshipFields, ', ')+
-            ' FROM npe4__Relationship__c WHERE npe4__Contact__c = \''+contactId+'\'';
+            ' FROM npe4__Relationship__c WHERE npe4__Contact__c = :contactId';
         
         if(!renderedRelationships.isEmpty()) {
             relationshipQuery += ' AND Id NOT IN :renderedRelationships'+
             ' AND npe4__ReciprocalRelationship__r.Id NOT IN :renderedRelationships'; 
         }
 
-        relationships = Database.query(relationshipQuery);
+        Map<String, Object> relBindVars = new Map<String, Object>{
+            'contactId' => contactId,
+            'renderedRelationships' => renderedRelationships
+        };
+        relationships = Database.queryWithBinds(relationshipQuery, relBindVars, AccessLevel.USER_MODE);
 
         for(npe4__Relationship__c currentRelationship : relationships) {
 
@@ -242,7 +247,7 @@ global with sharing class REL_RelationshipsViewer_CTRL{
         public RelationshipInfo() {
             npe4__Relationship_Settings__c rs = UTIL_CustomSettingsFacade.getRelationshipSettings();
 
-            this.prefix = npe4__Relationship__c.sObjectType.getDescribe().getKeyPrefix();
+            this.prefix = Schema.SObjectType.npe4__Relationship__c.getKeyPrefix();
             if (rs.npe4__Relationship_Name_Field_Id__c != null) {
                 this.nameField = rs.npe4__Relationship_Name_Field_Id__c;
             }

@@ -1015,7 +1015,8 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
         //getting payment and opportunity info here to avoid excess queries
         for (Allocation__c allo : [SELECT Id, Payment__c, Payment__r.npe01__Payment_Amount__c,  Payment__r.npe01__Paid__c, Payment__r.npe01__Written_Off__c, Opportunity__c, Opportunity__r.Amount, Amount__c, Percent__c, General_Accounting_Unit__c, Recurring_Donation__c, Campaign__c FROM Allocation__c
                 WHERE (Payment__c IN :setParentId OR Opportunity__c IN :setParentId OR Recurring_Donation__c IN :setParentId OR Campaign__c IN :setParentId)
-                AND Id NOT IN :setExistingAlloId]) {
+                AND Id NOT IN :setExistingAlloId
+                WITH SYSTEM_MODE]) {
 
             alloWrapper wrap = mapWrapper.get(getParentId(allo));
 
@@ -1067,7 +1068,7 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
 
         //we have opportunities we need to query for a parent amount
         if (!setOppIds.isEmpty()) {
-            for (Opportunity opp : [SELECT Id, Amount FROM Opportunity WHERE Id IN :setOppIds]) {
+            for (Opportunity opp : [SELECT Id, Amount FROM Opportunity WHERE Id IN :setOppIds WITH SYSTEM_MODE]) {
                 mapWrapper.get(opp.Id).parentAmount = opp.Amount;
             }
         }
@@ -1075,7 +1076,7 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
         //we have payments we need to query for a parent amount
         if (!setPmtIds.isEmpty()) {
             for (npe01__OppPayment__c pmt : [SELECT Id, npe01__Payment_Amount__c, npe01__Paid__c,
-                 npe01__Written_Off__c  FROM npe01__OppPayment__c WHERE Id IN :setPmtIds]) {
+                 npe01__Written_Off__c  FROM npe01__OppPayment__c WHERE Id IN :setPmtIds WITH SYSTEM_MODE]) {
                 mapWrapper.get(pmt.Id).parentAmount = pmt.npe01__Payment_Amount__c;
             }
         }
@@ -1133,7 +1134,8 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
         alloQueryString += ' FROM Allocation__c WHERE (Payment__c IN :setParentId OR Opportunity__c IN :setParentId OR Campaign__c IN :setParentId OR Recurring_Donation__c IN :setParentId)';
         //alloQueryString += ' AND General_Accounting_Unit__r.Active__c = TRUE';
 
-        for (Allocation__c allo : database.query(alloQueryString)) {
+        Map<String, Object> alloBindVars = new Map<String, Object>{ 'setParentId' => setParentId };
+        for (Allocation__c allo : Database.queryWithBinds(alloQueryString, alloBindVars, AccessLevel.SYSTEM_MODE)) {
 
             //create wrapper if it doesn't exist yet
             if (!mapWrapper.containsKey(getParentId(allo)))
@@ -1273,7 +1275,8 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
                                 '      npe01__Written_Off__c <> true AND ' +
                                 '      npe01__Opportunity__c in :updatedRecurringDonationOppIds';
 
-        List<SObject> pmtsRequiringAllocationReview = Database.query(pmtReviewQuery);
+        Map<String, Object> pmtBindVars = new Map<String, Object>{ 'updatedRecurringDonationOppIds' => updatedRecurringDonationOppIds };
+        List<SObject> pmtsRequiringAllocationReview = Database.queryWithBinds(pmtReviewQuery, pmtBindVars, AccessLevel.SYSTEM_MODE);
 
         List<SObject> pmtAllocations = new List<SObject>();
         for (SObject pmtSObj : pmtsRequiringAllocationReview) {

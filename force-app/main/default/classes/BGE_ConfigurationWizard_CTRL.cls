@@ -116,7 +116,8 @@ public with sharing class BGE_ConfigurationWizard_CTRL {
                     ' WHERE Id=:recordId' +
                     ' LIMIT 1';
 
-                DataImportBatch__c recordDetails = Database.query(soql);
+                Map<String, Object> bindVars = new Map<String, Object>{ 'recordId' => recordId };
+                DataImportBatch__c recordDetails = Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
 
                 model.name = recordDetails.Name;
                 model.id = recordDetails.Id;
@@ -523,9 +524,13 @@ public with sharing class BGE_ConfigurationWizard_CTRL {
             dataImportBatch.GiftBatch__c = true;
             dataImportBatch.Process_Using_Scheduled_Job__c = false;
 
-            upsert dataImportBatch;
+            SObjectAccessDecision decision = Security.stripInaccessible(
+                dataImportBatch.Id != null ? AccessType.UPDATABLE : AccessType.CREATABLE,
+                new List<DataImportBatch__c>{ dataImportBatch }
+            );
+            upsert decision.getRecords();
 
-            recordDetails.id = dataImportBatch.Id;
+            recordDetails.id = decision.getRecords()[0].Id;
 
             return JSON.serialize(recordDetails);
 

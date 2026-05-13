@@ -98,7 +98,7 @@ public without sharing class HH_CampaignDedupeBTN_CTRL {
             //try looking it up by name...
             Report r = new Report();
             try{
-                r = [select id from Report where DeveloperName = 'NPSP_Campaign_Household_Mailing_List_V2'];
+                r = [select id from Report where DeveloperName = 'NPSP_Campaign_Household_Mailing_List_V2' WITH USER_MODE];
             } catch(QueryException e){
                 haveReportID = false;
                 showmsg(e.getMessage(), ApexPages.Severity.ERROR);
@@ -111,13 +111,14 @@ public without sharing class HH_CampaignDedupeBTN_CTRL {
             }
         }
 
-        campaign = [select id, name, NumberOfContacts from campaign where id = :campaign.id];
+        campaign = [select id, name, NumberOfContacts from campaign where id = :campaign.id WITH USER_MODE];
     }
 
     /*******************************************************************************************************
     * @description Action Method that is run by the page's action method to run the deduplication procedure
     * @return PageReference url to the Report if successful, this page if an error.
     ********************************************************************************************************/
+    @SuppressWarnings('PMD.ApexOpenRedirect')
     public PageReference RunReport(){
         Savepoint sp = Database.setSavepoint();
         try {
@@ -158,14 +159,12 @@ public without sharing class HH_CampaignDedupeBTN_CTRL {
                 }
             }
 
-            if (redirectPage){
+            if (redirectPage && newPageURL != null && (newPageURL.startsWith('/') || newPageURL.startsWith(URL.getSalesforceBaseUrl().toExternalForm()))) {
                 PageReference pageref = new PageReference(newPageURL);
                 pageRef.setRedirect(true);
                 return pageRef;
             }
-            else{
-                return null;
-            }
+            return null;
         } catch(Exception e) {
             Database.rollback(sp);
             ERR_Handler.processError(e, ERR_Handler_API.Context.HH);
@@ -224,13 +223,13 @@ public without sharing class HH_CampaignDedupeBTN_CTRL {
 
         //check for the Household Duplicate status values we need
         Map<string, boolean> StatusLabels = new Map<string, boolean>();
-        CampaignMemberStatus[] statuses = [select label, hasResponded from CampaignMemberStatus where CampaignId=:campaignId];
+        CampaignMemberStatus[] statuses = [select label, hasResponded from CampaignMemberStatus where CampaignId=:campaignId WITH USER_MODE];
 
         list<CampaignMember> dupeMembers = new list<CampaignMember>();
 
         for (CampaignMemberStatus cms : statuses) StatusLabels.put(cms.label, cms.hasResponded);
 
-        List<CampaignMemberStatus> campMemberStatuses = [select sortorder from CampaignMemberStatus where CampaignId=:campaignId order by sortorder desc limit 1];
+        List<CampaignMemberStatus> campMemberStatuses = [select sortorder from CampaignMemberStatus where CampaignId=:campaignId WITH USER_MODE order by sortorder desc limit 1];
         //Giving it a default value because we cannot access CampaignMemberStatus object in tests without the seeAllData=true annotation
         //http://salesforce.stackexchange.com/questions/14051/campaignmemberstatus-records-only-testable-with-seealldata-flag
         Integer nextSortOrder = 0;

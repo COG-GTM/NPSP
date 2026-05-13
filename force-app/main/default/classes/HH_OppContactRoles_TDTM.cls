@@ -82,8 +82,9 @@ public class HH_OppContactRoles_TDTM extends TDTM_Runnable {
 
         	Boolean isOpenOnly = (strRefreshSetting == 'Open Opportunities');
 
+            String hhAccountType = String.escapeSingleQuotes(CAO_Constants.HH_ACCOUNT_TYPE);
             String strSoql = 'SELECT Id, AccountId, Primary_Contact__c FROM Opportunity WHERE Account.npe01__SYSTEM_AccountType__c = \'' +
-        	   CAO_Constants.HH_ACCOUNT_TYPE + '\' and ';
+        	   hhAccountType + '\' and ';
         	if (isOpenOnly) {
         	   strSoql += ' IsClosed = false and ';
             }
@@ -102,7 +103,11 @@ public class HH_OppContactRoles_TDTM extends TDTM_Runnable {
                     // delay our soql until we know we need it.
                     if (mapIdToOpp == null) {
 			            // query for the Opps of household accounts involved.
-			            mapIdToOpp = new Map<Id, Opportunity>((List<Opportunity>)Database.query(strSoql));
+			            Map<String, Object> soqlBindVars = new Map<String, Object>{
+			                'opportunities' => opportunities,
+			                'oldOpportunities' => oldOpportunities
+			            };
+			            mapIdToOpp = new Map<Id, Opportunity>((List<Opportunity>)Database.queryWithBinds(strSoql, soqlBindVars, AccessLevel.SYSTEM_MODE));
                     }
 
                     if (mapIdToOpp.get(opportunities[i].Id) != null && mapIdToOpp.get(oldOpportunities[i].Id) != null) {
@@ -145,7 +150,8 @@ public class HH_OppContactRoles_TDTM extends TDTM_Runnable {
                 account.npe01__SYSTEMIsIndividual__c, account.npe01__SYSTEM_AccountType__c 
             FROM Opportunity 
             WHERE Id IN :opportunities 
-            AND account.npe01__SYSTEMIsIndividual__c = true]);
+            AND account.npe01__SYSTEMIsIndividual__c = true
+            WITH SYSTEM_MODE]);
 
         if (oppsForContactRoles.size() > 0) {
             // set of contact Ids on Accounts for Opps in the trigger set
@@ -167,10 +173,12 @@ public class HH_OppContactRoles_TDTM extends TDTM_Runnable {
             // query for OppConRoles where primary=true and OppID in arg set
             // query changed to also include Role = default role, because Contact Merge scenarios were clearing isPrimary (not by our code)!
             Map<String, Id> contactOppToContactRole = new Map<String, Id>();
+            Set<Id> oppIds = oppsForContactRoles.keySet();
             OpportunityContactRole[] conRoles = [
                 SELECT Id, OpportunityId, ContactId, Role, isPrimary 
                 FROM OpportunityContactRole 
-                WHERE OpportunityId IN :oppsForContactRoles.values()];
+                WHERE OpportunityId IN :oppIds
+                WITH SYSTEM_MODE];
 
             String uniqueConRole = '';
             // now loop through the results and build the map
@@ -233,7 +241,8 @@ public class HH_OppContactRoles_TDTM extends TDTM_Runnable {
             individualContacts = [
                 SELECT Id, npo02__Household__c, AccountId, Account.npe01__SYSTEM_AccountType__c 
                 FROM Contact 
-                WHERE Id IN :contactIds];
+                WHERE Id IN :contactIds
+                WITH SYSTEM_MODE];
 
             // create a map of contacts and their Household Ids
             for (Contact myContact : individualContacts) {  
@@ -342,7 +351,8 @@ public class HH_OppContactRoles_TDTM extends TDTM_Runnable {
         List<Opportunity> opps = [
             SELECT Id, AccountId, DisableContactRoleAutomation__c 
             FROM Opportunity 
-            WHERE AccountId IN :hhIds];
+            WHERE AccountId IN :hhIds
+            WITH SYSTEM_MODE];
         
         if (opps.isEmpty()) {
             return;
