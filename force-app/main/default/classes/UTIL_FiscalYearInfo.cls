@@ -51,8 +51,9 @@ public with sharing class UTIL_FiscalYearInfo {
     public Boolean isCustomFiscalYearEnabled { 
         get {
             if (isCustomFiscalYearEnabled == null) {
-                List<SObject> customFiscalYearSettings = Database.query(
-                    'SELECT Id FROM FiscalYearSettings WHERE IsStandardYear = false'
+                List<SObject> customFiscalYearSettings = Database.queryWithBinds(
+                    'SELECT Id FROM FiscalYearSettings WHERE IsStandardYear = false',
+                    new Map<String, Object>(), AccessLevel.SYSTEM_MODE
                 );
 
                 isCustomFiscalYearEnabled = !customFiscalYearSettings.isEmpty();

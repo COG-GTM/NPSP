@@ -93,8 +93,10 @@ public with sharing class BDE_BatchEntry_CTRL {
 
             q = q.subString(0, q.length() - 2);
             UTIL_Debug.debug('Q IS: ' + q);
-            q += ' from ' + UTIL_Namespace.StrTokenNSPrefix('Batch__c') + ' where id = \'' + stdController.getId() + '\' limit 1';
-            batch = Database.query(q);        
+            q += ' from ' + String.escapeSingleQuotes(UTIL_Namespace.StrTokenNSPrefix('Batch__c')) + ' where id = :controllerId limit 1';
+            Id controllerId = stdController.getId();
+            Map<String, Object> bindVars = new Map<String, Object>{'controllerId' => controllerId};
+            batch = Database.queryWithBinds(q, bindVars, AccessLevel.USER_MODE);        
         }
                             
         if (batch.id != null) {
@@ -130,8 +132,10 @@ public with sharing class BDE_BatchEntry_CTRL {
     
         BDE_BatchDataEntry bde = new BDE_BatchDataEntry(objname);                          
         string q = bde.getQueryString();
-        q += ' where Id=' +  '\'' + item.sobj.id + '\'';
-        list<sobject> existingsobjs = database.query(q);
+        Id itemId = item.sobj.id;
+        q += ' where Id = :itemId';
+        Map<String, Object> bindVars = new Map<String, Object>{'itemId' => itemId};
+        list<sobject> existingsobjs = Database.queryWithBinds(q, bindVars, AccessLevel.USER_MODE);
         if (existingsobjs.size() > 0) {
             item.sobj = existingsobjs[0];
         } 

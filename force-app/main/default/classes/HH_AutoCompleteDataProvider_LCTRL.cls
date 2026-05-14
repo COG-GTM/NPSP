@@ -93,7 +93,8 @@ public with sharing class HH_AutoCompleteDataProvider_LCTRL {
 
             strSoql += ' LIMIT 100';
 
-            Map<Id, SObject> resultsById = new Map<Id, SObject>(Database.query(strSoql));
+            Map<String, Object> bindVars = new Map<String, Object>{'contactIds' => contactIds, 'preparedQueryValue' => preparedQueryValue};
+            Map<Id, SObject> resultsById = new Map<Id, SObject>(Database.queryWithBinds(strSoql, bindVars, AccessLevel.USER_MODE));
             for (Contact aContact : listCon) {
                 resultsById.remove(aContact.Id);
             }

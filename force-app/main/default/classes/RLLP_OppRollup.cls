@@ -101,8 +101,9 @@ public without sharing class RLLP_OppRollup {
 
         if (!accountRequerySet.isEmpty()){
             RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
-            map<id, Account> amap = new map<id, account>((list<Account>)Database.query(oppRollupUtil.buildAccountQuery() +
-                                                                        ' where id in :accountRequerySet'));
+            Map<String, Object> bindVars = new Map<String, Object>{'accountRequerySet' => accountRequerySet};
+            map<id, Account> amap = new map<id, account>((list<Account>)Database.queryWithBinds(oppRollupUtil.buildAccountQuery() +
+                                                                        ' where id in :accountRequerySet', bindVars, AccessLevel.SYSTEM_MODE));
             //if we only need to rollup a single Account, do sync
             if (amap.size() == 1 || system.isFuture() || system.isBatch()){
                 rollupAccounts(amap);
@@ -146,7 +147,8 @@ public without sharing class RLLP_OppRollup {
         Map<Id, npo02__Household__c> householdById = new Map<Id, npo02__Household__c>();
 
 
-        for (OpportunityContactRole role : Database.query(query)){
+        Map<String, Object> bindVars = new Map<String, Object>{'oppIds' => oppIds};
+        for (OpportunityContactRole role : Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE)){
             contactById.put(role.ContactId, role.Contact);
 
             if (role.Contact.npo02__Household__c != null) {
@@ -246,7 +248,8 @@ public without sharing class RLLP_OppRollup {
 
         String query = new RLLP_OppRollup_UTIL().buildAccountQuery() + ' WHERE Id IN :accountIds';
 
-        return new Map<Id, Account>((List<Account>)Database.query(query));
+        Map<String, Object> bindVars = new Map<String, Object>{'accountIds' => accountIds};
+        return new Map<Id, Account>((List<Account>)Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE));
     }
 
     /**
@@ -262,7 +265,8 @@ public without sharing class RLLP_OppRollup {
 
         String query = new RLLP_OppRollup_UTIL().buildContactQuery() + ' WHERE Id IN :contactIds';
 
-        return new Map<Id, Contact>((List<Contact>)Database.query(query));
+        Map<String, Object> bindVars = new Map<String, Object>{'contactIds' => contactIds};
+        return new Map<Id, Contact>((List<Contact>)Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE));
     }
 
     /*******************************************************************************************************
@@ -294,8 +298,9 @@ public without sharing class RLLP_OppRollup {
     public static void rollupHouseholdsFuture (set<id> hhIDs){
         if (hhIds != null && !hhIds.isEmpty()){
             RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
-            map<id, npo02__Household__c> hhmap = new map<id, npo02__Household__c>((list<npo02__Household__c>)Database.query(oppRollupUtil.buildHouseholdQuery() +
-                                                                            ' where id IN :hhIDs'));
+            Map<String, Object> bindVars = new Map<String, Object>{'hhIDs' => hhIDs};
+            map<id, npo02__Household__c> hhmap = new map<id, npo02__Household__c>((list<npo02__Household__c>)Database.queryWithBinds(oppRollupUtil.buildHouseholdQuery() +
+                                                                            ' where id IN :hhIDs', bindVars, AccessLevel.SYSTEM_MODE));
             RLLP_OppRollup rg = new RLLP_OppRollup();
             rg.rollupHouseholds(hhmap);
         }
@@ -366,7 +371,8 @@ public without sharing class RLLP_OppRollup {
         set<id> rectypeset = RLLP_OppRollup_UTIL.recordTypesToExcludeAccts;
 
         RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
-        list<sobject> objectList = Database.query(oppRollupUtil.buildAccountRollupQuery());
+        Map<String, Object> acctBindVars = new Map<String, Object>{'aset' => aset, 'typeset' => typeset, 'rectypeset' => rectypeset};
+        list<sobject> objectList = Database.queryWithBinds(oppRollupUtil.buildAccountRollupQuery(), acctBindVars, AccessLevel.SYSTEM_MODE);
 
         // invokes code to get the currency of npo02__CombinedRollupFieldset__c oppty
         opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
@@ -388,7 +394,7 @@ public without sharing class RLLP_OppRollup {
         }
 
         objectList.clear();
-        objectList = database.query(oppRollupUtil.buildAccountNDayQuery());
+        objectList = Database.queryWithBinds(oppRollupUtil.buildAccountNDayQuery(), acctBindVars, AccessLevel.SYSTEM_MODE);
 
         for (sobject r : objectList){
             id aid = (id)(r.get('AccountId'));
@@ -399,7 +405,8 @@ public without sharing class RLLP_OppRollup {
         if (!RLLP_OppRollup_UTIL.mbrRecordTypes.isEmpty()) {
             set<id> memberset = RLLP_OppRollup_UTIL.mbrRecordTypes;
             objectList.clear();
-            objectList = database.query(oppRollupUtil.buildAccountMembershipQuery());
+            Map<String, Object> mbrBindVars = new Map<String, Object>{'aset' => aset, 'typeset' => typeset, 'memberset' => memberset};
+            objectList = Database.queryWithBinds(oppRollupUtil.buildAccountMembershipQuery(), mbrBindVars, AccessLevel.SYSTEM_MODE);
 
             opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
 
@@ -522,7 +529,8 @@ public without sharing class RLLP_OppRollup {
         set<id> rectypeset = RLLP_OppRollup_UTIL.recordTypesToExcludeCons;
 
         RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
-        objectList = database.query(oppRollupUtil.buildContactRollupQuery());
+        Map<String, Object> conBindVars = new Map<String, Object>{'cset' => cset, 'typeset' => typeset, 'rectypeset' => rectypeset};
+        objectList = Database.queryWithBinds(oppRollupUtil.buildContactRollupQuery(), conBindVars, AccessLevel.SYSTEM_MODE);
 
         // invokes code to get the currency of npo02__CombinedRollupFieldset__c oppty
         opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
@@ -550,7 +558,7 @@ public without sharing class RLLP_OppRollup {
         }
 
         objectList.clear();
-        objectList = database.query(oppRollupUtil.buildContactNDayQuery());
+        objectList = Database.queryWithBinds(oppRollupUtil.buildContactNDayQuery(), conBindVars, AccessLevel.SYSTEM_MODE);
 
         for (sobject r : objectList){
             id cid = (id)(r.get('ContactId'));
@@ -561,7 +569,8 @@ public without sharing class RLLP_OppRollup {
         if (!RLLP_OppRollup_UTIL.mbrRecordTypes.isEmpty()){
             set<id> memberset = RLLP_OppRollup_UTIL.mbrRecordTypes;
             objectList.clear();
-            objectList = database.query(oppRollupUtil.buildContactMembershipQuery());
+            Map<String, Object> conMbrBindVars = new Map<String, Object>{'cset' => cset, 'typeset' => typeset, 'memberset' => memberset};
+            objectList = Database.queryWithBinds(oppRollupUtil.buildContactMembershipQuery(), conMbrBindVars, AccessLevel.SYSTEM_MODE);
 
             opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
 
@@ -683,7 +692,8 @@ public without sharing class RLLP_OppRollup {
         set<id> rectypeset = RLLP_OppRollup_UTIL.recordTypesToExcludeCons;
 
         RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
-        objectList = database.query(oppRollupUtil.buildHouseholdRollupQuery());
+        Map<String, Object> hhBindVars = new Map<String, Object>{'hhset' => hhset, 'typeset' => typeset, 'rectypeset' => rectypeset};
+        objectList = Database.queryWithBinds(oppRollupUtil.buildHouseholdRollupQuery(), hhBindVars, AccessLevel.SYSTEM_MODE);
 
         // invokes code to get the currency of npo02__CombinedRollupFieldset__c oppty
         opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
@@ -705,7 +715,7 @@ public without sharing class RLLP_OppRollup {
         }
 
         objectList.clear();
-        objectList = database.query(oppRollupUtil.buildHouseholdNDayQuery());
+        objectList = Database.queryWithBinds(oppRollupUtil.buildHouseholdNDayQuery(), hhBindVars, AccessLevel.SYSTEM_MODE);
 
         for (sobject r : objectList){
             id hhid = (id)(r.get('hhid'));
@@ -716,7 +726,8 @@ public without sharing class RLLP_OppRollup {
         if (!RLLP_OppRollup_UTIL.mbrRecordTypes.isEmpty()){
             set<id> memberset = RLLP_OppRollup_UTIL.mbrRecordTypes;
             objectList.clear();
-            objectList = database.query(oppRollupUtil.buildHouseholdMembershipQuery());
+            Map<String, Object> hhMbrBindVars = new Map<String, Object>{'hhset' => hhset, 'typeset' => typeset, 'memberset' => memberset};
+            objectList = Database.queryWithBinds(oppRollupUtil.buildHouseholdMembershipQuery(), hhMbrBindVars, AccessLevel.SYSTEM_MODE);
 
             opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
 
@@ -811,7 +822,8 @@ public without sharing class RLLP_OppRollup {
         set<id> rectypeset = RLLP_OppRollup_UTIL.recordTypesToExcludeCons;
 
         RLLP_OppRollup_UTIL oppRollupUtil = new RLLP_OppRollup_UTIL();
-        objectList = database.query(oppRollupUtil.buildSoftCreditQuery());
+        Map<String, Object> scBindVars = new Map<String, Object>{'cset' => cset, 'softCreditRoles' => softCreditRoles, 'typeset' => typeset, 'rectypeset' => rectypeset};
+        objectList = Database.queryWithBinds(oppRollupUtil.buildSoftCreditQuery(), scBindVars, AccessLevel.SYSTEM_MODE);
 
         // invokes code to get the currency of npo02__CombinedRollupFieldset__c oppty
         opptyCurrencies = (RLLP_OppRollup_UTIL.isMultiCurrency() ? RLLP_OppRollup_UTIL.rcfFindCurrency(objectList) : null);
@@ -824,7 +836,7 @@ public without sharing class RLLP_OppRollup {
         }
 
         objectList.clear();
-        objectList = database.query(oppRollupUtil.buildContactNDaySoftCreditQuery());
+        objectList = Database.queryWithBinds(oppRollupUtil.buildContactNDaySoftCreditQuery(), scBindVars, AccessLevel.SYSTEM_MODE);
 
         for (sobject r : objectList){
             id cid = (id)(r.get('ContactId'));

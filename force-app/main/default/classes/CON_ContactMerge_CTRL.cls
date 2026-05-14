@@ -621,7 +621,8 @@ public with sharing class CON_ContactMerge_CTRL {
 
         List<Contact> contacts;
         try {
-            contacts = Database.query(query); // Query the records
+            Map<String, Object> bindVars = new Map<String, Object>{'mergeCandidates' => mergeCandidates};
+            contacts = Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE); // Query the records
             // Ensure we got back the same number of records as expected. 
             // In case any record got deleted/moved since last search.
             if (contacts == null || contacts.size() != mergeCandidates.size()) {
@@ -1218,8 +1219,9 @@ public with sharing class CON_ContactMerge_CTRL {
     private List<DuplicateRecordSet> queryAllDuplicateRecordSets() {
         driFieldNames.add('DuplicateRecordSetId');
         driFieldNames.add('Record.Type');
+        Map<String, Object> bindVars = new Map<String, Object>{'unactionableDuplicateRecordSets' => unactionableDuplicateRecordSets};
         List<DuplicateRecordSet> duplicateRecordSets = new List<DuplicateRecordSet>(
-            (List<DuplicateRecordSet>) Database.query(constructDRSSOQL()));
+            (List<DuplicateRecordSet>) Database.queryWithBinds(constructDRSSOQL(), bindVars, AccessLevel.USER_MODE));
         driFieldNames.remove(driFieldNames.indexOf('DuplicateRecordSetId'));
         driFieldNames.remove(driFieldNames.indexOf('Record.Type'));
 
@@ -1275,7 +1277,8 @@ public with sharing class CON_ContactMerge_CTRL {
             .withWhere(whereString)
             .build();
 
-        return new Map<Id, Contact>((List<Contact>) Database.query(contactQueryStr));
+        Map<String, Object> bindVars = new Map<String, Object>{'allDRIIds' => allDRIIds};
+        return new Map<Id, Contact>((List<Contact>) Database.queryWithBinds(contactQueryStr, bindVars, AccessLevel.USER_MODE));
     }
 
     /**********************************************************************************************
@@ -1337,7 +1340,7 @@ public with sharing class CON_ContactMerge_CTRL {
             .withWhere(getMixedDuplicateRuleSetQueryWhereClause())
             .build();
 
-        return (List<DuplicateRecordSet>) Database.query(duplicateRecordSetsQuery);
+        return (List<DuplicateRecordSet>) Database.queryWithBinds(duplicateRecordSetsQuery, new Map<String, Object>(), AccessLevel.USER_MODE);
     }
 
     /**********************************************************************************************

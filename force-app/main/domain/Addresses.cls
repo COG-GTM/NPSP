@@ -977,7 +977,8 @@ public inherited sharing class Addresses extends fflib_SObjects2 {
                 .withWhere('Id IN :accountIds')
                 .build();
 
-        return new Map<Id, Account>((Account[])Database.query(accountAddressFieldsSOQL));
+        Map<String, Object> bindVars = new Map<String, Object>{'accountIds' => accountIds};
+        return new Map<Id, Account>((Account[])Database.queryWithBinds(accountAddressFieldsSOQL, bindVars, AccessLevel.SYSTEM_MODE));
     }
 
     private static List<String> accountAddressFields() {

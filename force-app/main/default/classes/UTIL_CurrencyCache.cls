@@ -143,7 +143,7 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
                 // Query it directly from the CurrencyType object and store in a static var
                 if (orgDefaultCurrencyCode == null) {
                     String soql = 'SELECT IsoCode FROM CurrencyType WHERE IsCorporate = True LIMIT 1';
-                    SObject currObj = database.query(soql);
+                    SObject currObj = Database.queryWithBinds(soql, new Map<String, Object>(), AccessLevel.SYSTEM_MODE);
                     orgDefaultCurrencyCode = (String) currObj.get('IsoCode');
                 }
             } else {
@@ -233,7 +233,8 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
                 'FROM DatedConversionRate ' +
                 'WHERE IsoCode IN :currCodes ' +
                 'ORDER By IsoCode, StartDate DESC';
-            for (SObject dcr : database.query(soql)) {
+            Map<String, Object> dcrBindVars = new Map<String, Object>{'currCodes' => currCodes};
+            for (SObject dcr : Database.queryWithBinds(soql, dcrBindVars, AccessLevel.SYSTEM_MODE)) {
 
                 String currCode = (String) dcr.get('IsoCode');
                 UTIL_CurrencyCache.CurrencyData currData = mapOfCurrencyDataByCurrencyCode.get(currCode);
@@ -261,7 +262,8 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
                 // against the legacy rollups that are based on aggragate soql.
                 soql += ' AND IsoCode IN :currCodes';
             }
-            for (SObject scr : database.query(soql)) {
+            Map<String, Object> scrBindVars = new Map<String, Object>{'currCodes' => currCodes};
+            for (SObject scr : Database.queryWithBinds(soql, scrBindVars, AccessLevel.SYSTEM_MODE)) {
                 String currCode = (String) scr.get('IsoCode');
 
                 UTIL_CurrencyCache.CurrencyData currData = mapOfCurrencyDataByCurrencyCode.get(currCode);

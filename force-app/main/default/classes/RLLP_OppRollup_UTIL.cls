@@ -227,7 +227,7 @@ public without sharing class RLLP_OppRollup_UTIL {
         if (household_settings.npo02__Use_Fiscal_Year_for_Rollups__c == true){
             String fyQuery = 'select id from FiscalYearSettings  where IsStandardYear = false';            
             List<SObject> fySettings = new List<SObject>();
-            fySettings = Database.query(fyQuery);
+            fySettings = Database.queryWithBinds(fyQuery, new Map<String, Object>(), AccessLevel.SYSTEM_MODE);
             integer hasCustomFYRecord = fySettings.size();
 
             //if org has customFY records, disable FY settings
@@ -373,7 +373,8 @@ public without sharing class RLLP_OppRollup_UTIL {
         if (!objectlist.isEmpty()){
             //query for oppty and currencycode for all Ids in set.
             string soqlStatement = 'SELECT Id,CurrencyIsoCode FROM Opportunity WHERE Id in :opptysForCurrency';
-            map<Id,Opportunity> opptyCurrencies = new map<Id,Opportunity>((list<Opportunity>)Database.query(soqlStatement));
+            Map<String, Object> bindVars = new Map<String, Object>{'opptysForCurrency' => opptysForCurrency};
+            map<Id,Opportunity> opptyCurrencies = new map<Id,Opportunity>((list<Opportunity>)Database.queryWithBinds(soqlStatement, bindVars, AccessLevel.SYSTEM_MODE));
             return opptyCurrencies;
         }
         else

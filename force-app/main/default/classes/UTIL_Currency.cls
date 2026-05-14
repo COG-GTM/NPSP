@@ -90,7 +90,7 @@ public without sharing class UTIL_Currency implements UTIL_Currency.Interface_x 
                 // Using try/catch in case platform bug gets fixed whereby
                 // DatedConverstionRate will (accurately) not exist in MultiCurrency org without ACM enabled
                 try {
-                    Integer DCRCount = Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
+                    Integer DCRCount = Database.queryWithBinds('SELECT Id FROM DatedConversionRate LIMIT 1', new Map<String, Object>(), AccessLevel.SYSTEM_MODE).size();
                     if (DCRCount == 1) {
                         isACMEnabled = true;
                     }

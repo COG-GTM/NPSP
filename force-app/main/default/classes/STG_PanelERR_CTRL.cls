@@ -101,8 +101,9 @@ public with sharing class STG_PanelERR_CTRL extends STG_Panel {
                         && Schema.SObjectType.User.isFeedEnabled()
                 ) {
                    strErrorNotifDisplayName = 'Group: ';
-                   List<SObject> chatterGroupsNotif = Database.query(
-                           'SELECT Id, Name FROM CollaborationGroup WHERE Id = :errorNotifRecipient');
+                   Map<String, Object> bindVars = new Map<String, Object>{'errorNotifRecipient' => errorNotifRecipient};
+                   List<SObject> chatterGroupsNotif = Database.queryWithBinds(
+                           'SELECT Id, Name FROM CollaborationGroup WHERE Id = :errorNotifRecipient', bindVars, AccessLevel.SYSTEM_MODE);
                    if (chatterGroupsNotif.size() > 0) {
                        strErrorNotifDisplayName += chatterGroupsNotif[0].get('Name');
                    }
@@ -192,7 +193,8 @@ public with sharing class STG_PanelERR_CTRL extends STG_Panel {
                 if (errorNotifRecipient.startsWith(ERR_Notifier.ERROR_NOTIFICATION_CHATTER_PREFIX) && Schema.SObjectType.User.isFeedEnabled()) {
 
                     // verify chatter group exists
-                    List<SObject> listCG = Database.query('SELECT Id, Name FROM CollaborationGroup WHERE Id = :errorNotifRecipient');
+                    Map<String, Object> cgBindVars = new Map<String, Object>{'errorNotifRecipient' => errorNotifRecipient};
+                    List<SObject> listCG = Database.queryWithBinds('SELECT Id, Name FROM CollaborationGroup WHERE Id = :errorNotifRecipient', cgBindVars, AccessLevel.SYSTEM_MODE);
                     if (listCG.size() == 0) {
                         ctrl.createDR(strSetting, STG_PanelHealthCheck_CTRL.statusError,
                                 String.format(System.Label.healthDetailsInvalidErrorChatterGroup, new String[]{errorNotifRecipient}),

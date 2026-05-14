@@ -80,7 +80,8 @@ public with sharing class GiftSelector {
         }
 
         String queryString = query.build();
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'dataImportBatchId' => dataImportBatchId, 'giftIds' => giftIds};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
     }
 
     public DataImport__c getGiftById(Id giftId, GiftTemplate formTemplate) {
@@ -92,7 +93,8 @@ public with sharing class GiftSelector {
             .withSecurityEnforced()
             .build();
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'giftId' => giftId};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
     }
 
     public DataImport__c getGiftById(Id giftId, List<String> fieldsToQuery) {
@@ -103,7 +105,8 @@ public with sharing class GiftSelector {
             .withSecurityEnforced()
             .build();
 
-        return Database.query(queryString);
+        Map<String, Object> bindVars = new Map<String, Object>{'giftId' => giftId};
+        return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
     }
 
     private List<String> elevateFields() {

@@ -119,7 +119,8 @@ public inherited sharing class ERR_Log_CTRL {
             .withWhere('Id = :recordId')
             .build();
 
-        List<SObject> records = Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'recordId' => recordId};
+        List<SObject> records = Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
 
         return records == null || records.isEmpty()
             ? null

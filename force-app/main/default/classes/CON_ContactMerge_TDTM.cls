@@ -341,7 +341,8 @@ public class CON_ContactMerge_TDTM extends TDTM_Runnable {
 
             query = query.replace('from Contact', '');
             query += ', AccountId, Account.npe01__SYSTEM_AccountType__c, Primary_Affiliation__c FROM Contact WHERE Id IN :contactIds';
-            return Database.query(query);
+            Map<String, Object> bindVars = new Map<String, Object>{'contactIds' => contactIds};
+            return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
         }
 
         /*******************************************************************************************************

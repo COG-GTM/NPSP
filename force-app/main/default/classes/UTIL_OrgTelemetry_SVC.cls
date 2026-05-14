@@ -348,7 +348,7 @@ public without sharing class UTIL_OrgTelemetry_SVC {
         Boolean isEnabled=false;
         if (UserInfo.isMultiCurrencyOrganization() == true) {
             try {
-                Integer count = Database.query('SELECT Id FROM DatedConversionRate WHERE StartDate = LAST_N_DAYS:180 LIMIT 1').size();
+                Integer count = Database.queryWithBinds('SELECT Id FROM DatedConversionRate WHERE StartDate = LAST_N_DAYS:180 LIMIT 1', new Map<String, Object>(), AccessLevel.SYSTEM_MODE).size();
                 if (count == 1) {
                     isEnabled = true;
                 }

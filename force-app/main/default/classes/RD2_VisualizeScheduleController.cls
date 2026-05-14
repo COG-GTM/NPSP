@@ -351,7 +351,8 @@ public with sharing class RD2_VisualizeScheduleController {
                 .withWhere('Id = :recordId')
                 .build();
 
-            cachedRd = new RD2_RecurringDonation(Database.query(soql));
+            Map<String, Object> bindVars = new Map<String, Object>{'recordId' => recordId};
+            cachedRd = new RD2_RecurringDonation(Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE));
         }
 
         return cachedRd;

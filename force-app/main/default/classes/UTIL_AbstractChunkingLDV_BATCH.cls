@@ -294,7 +294,8 @@ public abstract inherited sharing class UTIL_AbstractChunkingLDV_BATCH implement
             String query = 'SELECT ' + getSOQLFullQueryFieldList() + ' FROM ' + getSObjectName() + ' WHERE (Id in :records) ' +
                         ((String.isNotBlank(whereClause)) ? ' AND (' + whereClause + ')' : '');
 
-            return Database.query(query);
+            Map<String, Object> bindVars = new Map<String, Object>{'records' => records};
+            return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
         } else { // No need to requery if not LDV Chunking mode
             return records;
         }
@@ -323,7 +324,7 @@ public abstract inherited sharing class UTIL_AbstractChunkingLDV_BATCH implement
     public Exception validateQuery() {
         String query = getQueryForValidate();
         try {
-            Database.query(query);
+            Database.queryWithBinds(query, new Map<String, Object>(), AccessLevel.SYSTEM_MODE);
             return null;
         } catch(Exception e) {
             return e;

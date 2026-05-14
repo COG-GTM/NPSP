@@ -309,7 +309,8 @@ public with sharing class BDI_ContactService {
     private void refreshContact1HouseholdAccounts(Set<Id> setConId) {
         // get the Household Accounts for C1's
         Map<Id, Id> mapC1IdToHHId = new Map<Id, Id>();
-        for (Contact con : database.query(getSoqlSelectForContact() + ' WHERE Id IN :setConId')) {
+        Map<String, Object> bindVars = new Map<String, Object>{'setConId' => setConId};
+        for (Contact con : Database.queryWithBinds(getSoqlSelectForContact() + ' WHERE Id IN :setConId', bindVars, AccessLevel.SYSTEM_MODE)) {
             mapC1IdToHHId.put(con.Id, con.AccountId);
         }
         // store it back in C1 and the DI for later use
@@ -443,7 +444,8 @@ public with sharing class BDI_ContactService {
 
         String strSoql = getSoqlSelectForContact();
         strSoql += ' WHERE AccountId IN :setHHId';
-        List<Contact> listHHContacts = database.query(strSoql);
+        Map<String, Object> hhBindVars = new Map<String, Object>{'setHHId' => setHHId};
+        List<Contact> listHHContacts = Database.queryWithBinds(strSoql, hhBindVars, AccessLevel.SYSTEM_MODE);
         for (Contact con : listHHContacts) {
             String firstName = con.FirstName;
             if (!String.isBlank(firstName)) {
@@ -635,7 +637,12 @@ public with sharing class BDI_ContactService {
         }
 
         BDI_PerfLogger.PerfLog pl = BDI_DataImportService.perfLogger.newPerfLog('SOQL existing Contacts', BDI_PerfLogger.QUERY);
-        List<Contact> listCon = database.query(strSoql);
+        Map<String, Object> conBindVars = new Map<String, Object>{
+            'setSFId' => setSFId, 'setFName' => setFName, 'setLName' => setLName,
+            'setEmail' => setEmail, 'setPhone' => setPhone, 'setName' => setName,
+            'setCustomIDString' => setCustomIDString, 'setCustomIDNumber' => setCustomIDNumber
+        };
+        List<Contact> listCon = Database.queryWithBinds(strSoql, conBindVars, AccessLevel.SYSTEM_MODE);
         pl.stop();
 
         return listCon;

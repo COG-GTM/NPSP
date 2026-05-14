@@ -231,7 +231,8 @@ public abstract class CRLP_Batch_Base_NonSkew extends CRLP_Batch_Base {
 
             String query = queryBuilder.buildDetailsQuery();
 
-            List<SObject> detailRecords = Database.query(query);
+            Map<String, Object> bindVars = new Map<String, Object>{'summaryRecords' => summaryRecords};
+            List<SObject> detailRecords = Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
 
             if (jobType == CRLP_RollupProcessingOptions.RollupType.ContactSoftCredit ||
                     jobType == CRLP_RollupProcessingOptions.RollupType.AccountContactSoftCredit) {

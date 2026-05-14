@@ -277,7 +277,8 @@ public with sharing class PMT_PaymentWizard_CTRL {
     @TestVisible
     private void setupPaymentWizard() {
         String id = ApexPages.currentPage().getParameters().get('id');
-        Opportunity[] o = Database.query(buildOpportunityQuery() + ' WHERE Id = :id');
+        Map<String, Object> bindVars = new Map<String, Object>{'id' => id};
+        Opportunity[] o = Database.queryWithBinds(buildOpportunityQuery() + ' WHERE Id = :id', bindVars, AccessLevel.USER_MODE);
 
         isWriteoffWizard = false;
         isScheduleWizard = true;
@@ -308,7 +309,8 @@ public with sharing class PMT_PaymentWizard_CTRL {
     @TestVisible
     private void setupWriteoffWizard() {
         String id = ApexPages.currentPage().getParameters().get('id');
-        Opportunity[] o = Database.query(buildOpportunityQuery() + ' WHERE Id = :id');
+        Map<String, Object> bindVars = new Map<String, Object>{'id' => id};
+        Opportunity[] o = Database.queryWithBinds(buildOpportunityQuery() + ' WHERE Id = :id', bindVars, AccessLevel.USER_MODE);
 
         isWriteoffWizard = true;
         isScheduleWizard = false;

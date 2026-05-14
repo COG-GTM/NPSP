@@ -237,7 +237,8 @@ public inherited sharing class ALLO_AllocationsRetrievalService {
                 .withWhere('Id IN :qryOppIds')
                 .build();
 
-            return new Map<Id, Opportunity>((List<Opportunity>)Database.query(oppQueryString));
+            Map<String, Object> bindVars = new Map<String, Object>{'qryOppIds' => qryOppIds};
+            return new Map<Id, Opportunity>((List<Opportunity>)Database.queryWithBinds(oppQueryString, bindVars, AccessLevel.SYSTEM_MODE));
         }
     }
 
@@ -344,8 +345,13 @@ public inherited sharing class ALLO_AllocationsRetrievalService {
                 String whereClauseExpanded = String.join(whereClauses, ' OR ');
 
                 String allocationQueryString = allocQuery.withWhere(whereClauseExpanded).build();
-                // TODO: Determine if it is necessary to pass into a new list and return, or can directly return
-                return (List<Allocation__c>) Database.query(allocationQueryString);
+                Map<String, Object> bindVars = new Map<String, Object>{
+                    'qryOppIds' => qryOppIds,
+                    'qryPmtIds' => qryPmtIds,
+                    'qryCampaignIds' => qryCampaignIds,
+                    'qryRDIds' => qryRDIds
+                };
+                return (List<Allocation__c>) Database.queryWithBinds(allocationQueryString, bindVars, AccessLevel.SYSTEM_MODE);
             }
         }
     }

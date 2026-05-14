@@ -639,7 +639,8 @@ public inherited sharing class RD2_OpportunityEvaluationService {
             .withWhere('Id IN :rdIds')
             .build();
 
-        for (npe03__Recurring_Donation__c rd : Database.query(soql)) {
+        Map<String, Object> bindVars = new Map<String, Object>{'rdIds' => rdIds};
+        for (npe03__Recurring_Donation__c rd : Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE)) {
             oppsByRDId.put(rd.Id, rd.npe03__Donations__r);
         }
     

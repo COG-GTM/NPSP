@@ -208,7 +208,8 @@ public with sharing class RD2_PauseForm_CTRL {
             .withWhere('Id = :rdId')
             .build();
 
-        return new RD2_RecurringDonation(Database.query(soql));
+        Map<String, Object> bindVars = new Map<String, Object>{'rdId' => rdId};
+        return new RD2_RecurringDonation(Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE));
     }
 
     /**

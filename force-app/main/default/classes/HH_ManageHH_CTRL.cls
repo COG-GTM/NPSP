@@ -103,7 +103,8 @@ public with sharing class HH_ManageHH_CTRL {
 	        strSoql += ' from ' + (isHHAccount ? 'Account' : 'npo02__Household__c');
 	        strSoql += ' where Id = :hhId';
 	
-	        hh = database.query(strSoql);
+	        Map<String, Object> bindVars = new Map<String, Object>{'hhId' => hhId};
+	        hh = Database.queryWithBinds(strSoql, bindVars, AccessLevel.USER_MODE);
         }
     }
     

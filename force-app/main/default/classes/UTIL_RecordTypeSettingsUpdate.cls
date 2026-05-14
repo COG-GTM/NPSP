@@ -217,12 +217,16 @@ global virtual class UTIL_RecordTypeSettingsUpdate {
         List<RecordType> recordTypes;
 
         try {
-            recordTypes = Database.query(
-                'SELECT Name, (SELECT Value FROM Localization) FROM RecordType WHERE SobjectType = :sobjectTypeName'
+            Map<String, Object> bindVars = new Map<String, Object>{'sobjectTypeName' => sobjectTypeName};
+            recordTypes = Database.queryWithBinds(
+                'SELECT Name, (SELECT Value FROM Localization) FROM RecordType WHERE SobjectType = :sobjectTypeName',
+                bindVars, AccessLevel.SYSTEM_MODE
             );
         } catch (QueryException e) {
-            recordTypes = Database.query(
-                'SELECT Name FROM RecordType WHERE SobjectType = :sobjectTypeName'
+            Map<String, Object> bindVars = new Map<String, Object>{'sobjectTypeName' => sobjectTypeName};
+            recordTypes = Database.queryWithBinds(
+                'SELECT Name FROM RecordType WHERE SobjectType = :sobjectTypeName',
+                bindVars, AccessLevel.SYSTEM_MODE
             );
         }
 

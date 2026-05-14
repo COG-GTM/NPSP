@@ -436,7 +436,8 @@ public class AN_AutoNumberService {
                     .withFrom(sObjTypeName)
                     .withWhere('Id IN :ids')
                     .build();
-            return Database.query(queryString);
+            Map<String, Object> bindVars = new Map<String, Object>{'ids' => ids};
+            return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
         }
     }
 

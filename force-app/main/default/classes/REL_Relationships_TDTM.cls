@@ -327,7 +327,8 @@ public class REL_Relationships_TDTM extends TDTM_Runnable {
             
             query_string += ' from Contact where Id IN :rIDs';                         
             
-            map<id, Contact> cMap = new map<id,Contact>((List<Contact>)database.query(query_string));
+            Map<String, Object> bindVars = new Map<String, Object>{'rIDs' => rIDs};
+            map<id, Contact> cMap = new map<id,Contact>((List<Contact>)Database.queryWithBinds(query_string, bindVars, AccessLevel.SYSTEM_MODE));
             
             for(npe4__Relationship__c r : rList){
 

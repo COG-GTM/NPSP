@@ -54,7 +54,8 @@ public inherited sharing class RD2_ApiService {
         }
 
         String soql = getRecurringDonationQuery();
-        for (npe03__Recurring_Donation__c rd : Database.query(soql)) {
+        Map<String, Object> bindVars = new Map<String, Object>{'rdIds' => rdIds};
+        for (npe03__Recurring_Donation__c rd : Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE)) {
 
             List<Schedule> schedules = new List<Schedule>();
             for (RecurringDonationSchedule__c s : rd.RecurringDonationSchedules__r) {
@@ -206,7 +207,8 @@ public inherited sharing class RD2_ApiService {
 
         RD2_ScheduleService service = new RD2_ScheduleService();
         String soql = getRecurringDonationQuery();
-        for (npe03__Recurring_Donation__c rd : Database.query(soql)) {
+        Map<String, Object> bindVars = new Map<String, Object>{'rdIds' => rdIds};
+        for (npe03__Recurring_Donation__c rd : Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE)) {
 
             List<Installment> installments = new List<Installment>();
             for (RD2_ScheduleService.Installment installment : service.getVisualizedInstallments(
@@ -375,7 +377,8 @@ public inherited sharing class RD2_ApiService {
 
     private List<npe03__Recurring_Donation__c> getRecurringDonationsById(Set<Id> rdIds) {
         String soql = getRecurringDonationQuery();
-        return Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'rdIds' => rdIds};
+        return Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     private RecurringDonationSchedule__c createPauseSchedule(PauseObject pause, Id rdId) {

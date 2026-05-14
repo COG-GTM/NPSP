@@ -531,7 +531,8 @@ public class PMT_PaymentCreator {
     * @return List<Opportunity> 
     */
     private List<Opportunity> getPaymentOpportunities(List<Opportunity> newOpps) {
-        return Database.query(buildOppsQuery() + 'WHERE Id IN :newOpps');
+        Map<String, Object> bindVars = new Map<String, Object>{'newOpps' => newOpps};
+        return Database.queryWithBinds(buildOppsQuery() + 'WHERE Id IN :newOpps', bindVars, AccessLevel.SYSTEM_MODE);
     }
 
     /**

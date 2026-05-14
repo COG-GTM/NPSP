@@ -55,9 +55,10 @@ public with sharing class OPP_MatchingDonationsBTN_CTRL {
             SObjectField OppCurrencyField = Schema.sObjectType.Opportunity.fields.getMap().get('CurrencyIsoCode');
 
             //query for the current donation to create the matching one
-            Opportunity oppty = Database.query('select id, name,RecordTypeId,accountId,Account.Name,Amount,closedate' + 
+            Map<String, Object> bindVars = new Map<String, Object>{'opptyId' => opptyId};
+            Opportunity oppty = Database.queryWithBinds('select id, name,RecordTypeId,accountId,Account.Name,Amount,closedate' + 
             (OppCurrencyField != null ? ',CurrencyIsoCode' : '') + 
-            ' from Opportunity where id = :opptyId');
+            ' from Opportunity where id = :opptyId', bindVars, AccessLevel.USER_MODE);
 
             //start preparing our oppty new record url to redirect to
             PageReference pageRef = new PageReference('/006/e');

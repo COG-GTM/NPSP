@@ -273,7 +273,8 @@ public class RD2_RecurringDonationsOpp_TDTM extends TDTM_Runnable {
                 .withWhere('Id IN :rdIds')
                 .build();
 
-            List<npe03__Recurring_Donation__c> rds = (List<npe03__Recurring_Donation__c>) Database.query(soql);
+            Map<String, Object> bindVars = new Map<String, Object>{'rdIds' => rdIds};
+            List<npe03__Recurring_Donation__c> rds = (List<npe03__Recurring_Donation__c>) Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
 
             return new Map<Id, npe03__Recurring_Donation__c>(rds);            
         }

@@ -91,7 +91,7 @@ global with sharing class BDI_DataImportService {
     */
     public static String strSoqlForDataImportProcess(List<Id> dataImportIds) {
         List<String> whereClauses = new List<String>{
-            'Status__c != \'' + BDI_DataImport_API.bdiImported + '\'',
+            'Status__c != \'' + String.escapeSingleQuotes(BDI_DataImport_API.bdiImported) + '\'',
             'Id =: dataImportIds'
         };
 		List<String> selectClause = new List<String>{
@@ -122,12 +122,12 @@ global with sharing class BDI_DataImportService {
         String batchIdClause;
 
         if (batchId != null) {
-            batchIdClause = 'NPSP_Data_Import_Batch__c = \'' + batchId + '\'';
+            batchIdClause = 'NPSP_Data_Import_Batch__c = :batchId';
         } else {
             batchIdClause = 'NPSP_Data_Import_Batch__c = NULL';
         }
         List<String> whereClauses = new List<String>{
-            'Status__c != \'' + BDI_DataImport_API.bdiImported + '\'',
+            'Status__c != \'' + String.escapeSingleQuotes(BDI_DataImport_API.bdiImported) + '\'',
             batchIdClause
         };
 
@@ -1674,13 +1674,19 @@ global with sharing class BDI_DataImportService {
         }
 
         if (isCustomIDInAccountMatchRules && isCustomIdInAccountDatatypeString) {
-            strSoql += ' OR ' + diSettings.Account_Custom_Unique_ID__c + ' IN :setCustomIDString';
+            strSoql += ' OR ' + String.escapeSingleQuotes(diSettings.Account_Custom_Unique_ID__c) + ' IN :setCustomIDString';
         } else if (isCustomIDInAccountMatchRules && !isCustomIdInAccountDatatypeString) {
-            strSoql += ' OR ' + diSettings.Account_Custom_Unique_ID__c + ' IN :setCustomIDNumber';
+            strSoql += ' OR ' + String.escapeSingleQuotes(diSettings.Account_Custom_Unique_ID__c) + ' IN :setCustomIDNumber';
         }
 
         BDI_PerfLogger.PerfLog pl = perfLogger.newPerfLog('SOQL existing Accounts', BDI_PerfLogger.QUERY);
-        List<Account> listAcc = Database.query(strSoql);
+        Map<String, Object> bindVars = new Map<String, Object>{
+            'setSFId' => setSFId,
+            'setName' => setName,
+            'setCustomIDString' => setCustomIDString,
+            'setCustomIDNumber' => setCustomIDNumber
+        };
+        List<Account> listAcc = Database.queryWithBinds(strSoql, bindVars, AccessLevel.SYSTEM_MODE);
         pl.stop();
 
         // put all Accounts into our map

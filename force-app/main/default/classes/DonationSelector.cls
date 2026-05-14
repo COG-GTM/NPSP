@@ -38,7 +38,8 @@ public with sharing class DonationSelector {
     public DonationSelector() {}
 
     public List<Opportunity> getOpenDonations(String relationshipField, Id donorId) {
-        return Database.query(openDonationsQueryString(relationshipField, donorId));
+        Map<String, Object> bindVars = new Map<String, Object>{'donorId' => donorId};
+        return Database.queryWithBinds(openDonationsQueryString(relationshipField, donorId), bindVars, AccessLevel.USER_MODE);
     }
 
     public List<Opportunity> getDonation(Id opportunityId) {
@@ -58,7 +59,8 @@ public with sharing class DonationSelector {
             .withSecurityEnforced()
             .build();
 
-        return Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'opportunityIds' => opportunityIds};
+        return Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
     }
 
     @TestVisible

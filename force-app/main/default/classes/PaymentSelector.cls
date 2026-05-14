@@ -63,7 +63,8 @@ public with sharing class PaymentSelector {
             .withWhere('Id IN: paymentIds')
             .build();
 
-        return Database.query(soql);
+        Map<String, Object> bindVars = new Map<String, Object>{'paymentIds' => paymentIds};
+        return Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
     }
 
     private Set<String> getRefundFields() {

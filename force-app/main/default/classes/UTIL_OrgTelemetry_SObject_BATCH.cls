@@ -404,6 +404,6 @@ public class UTIL_OrgTelemetry_SObject_BATCH implements Database.Batchable<SObje
         }
 
         String hasMoreQuery = buildQuery(lastProcessedId, 1);
-        return !Database.query(hasMoreQuery).isEmpty();
+        return !Database.queryWithBinds(hasMoreQuery, new Map<String, Object>(), AccessLevel.SYSTEM_MODE).isEmpty();
     }
 }

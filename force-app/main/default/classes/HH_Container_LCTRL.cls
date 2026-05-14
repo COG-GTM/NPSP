@@ -109,7 +109,8 @@ public with sharing class HH_Container_LCTRL {
                 .withSelectFields(getHouseholdSelectFields(isHousehold, soqlFromObject))
                 .withFrom(soqlFromObject)
                 .withWhere('Id = :householdId');
-            SObject hh = Database.query(query.build());
+            Map<String, Object> bindVars = new Map<String, Object>{'householdId' => householdId};
+            SObject hh = Database.queryWithBinds(query.build(), bindVars, AccessLevel.USER_MODE);
             if (isHousehold) {
                 originalHouseholdCustomNameSetting = (String) hh.get('npo02__SYSTEM_CUSTOM_NAMING__c');
             }
@@ -196,7 +197,8 @@ public with sharing class HH_Container_LCTRL {
             strSoql += ' order by npo02__Household_Naming_Order__c ASC NULLS LAST, ' +
                 'Primary_Contact__c DESC, CreatedDate ';
 
-            List<Contact> listCon = Database.query(strSoql);
+            Map<String, Object> bindVars = new Map<String, Object>{'householdId' => householdId};
+            List<Contact> listCon = Database.queryWithBinds(strSoql, bindVars, AccessLevel.USER_MODE);
             // let's update household naming order so the client doesn't have to worry about nulls.
             for (Integer i = 0; i < listCon.size(); i++) {
                 listCon[i].npo02__Household_Naming_Order__c = i;
@@ -831,7 +833,8 @@ public with sharing class HH_Container_LCTRL {
                     strComma = ',';
                 }
                 strSoql += ' from Address__c where Household_Account__c = :householdId';
-                List<Address__c> listAddrHH = Database.query(strSoql);
+                Map<String, Object> addrBindVars = new Map<String, Object>{'householdId' => householdId};
+                List<Address__c> listAddrHH = Database.queryWithBinds(strSoql, addrBindVars, AccessLevel.USER_MODE);
                 for (Address__c addrT : listAddrHH) {
                     // init other values we don't want to query for that the key might use.
                     addrT.Seasonal_Start_Day__c = null;

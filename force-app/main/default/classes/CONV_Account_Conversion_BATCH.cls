@@ -271,7 +271,8 @@ global class CONV_Account_Conversion_BATCH implements Database.Batchable<SObject
             /******************************************************************************/
 
             List<Task> tasksForUpdate = new List<Task>();
-            tasksForUpdate = database.query('select WhatId from Task where WhatId IN :hhscope');
+            Map<String, Object> bindVars = new Map<String, Object>{'hhscope' => hhscope};
+            tasksForUpdate = Database.queryWithBinds('select WhatId from Task where WhatId IN :hhscope', bindVars, AccessLevel.SYSTEM_MODE);
 
             for (Task t : tasksForUpdate)
                 t.WhatId = hh2Account.get(t.WhatId).Id;

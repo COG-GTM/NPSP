@@ -73,7 +73,8 @@ public class CON_DoNotContact_TDTM extends TDTM_Runnable {
             string queryAccountsContacts = 'SELECT Id, npe01__One2OneContact__c, ';
             queryAccountsContacts += '(SELECT Id FROM Contacts WHERE Deceased__c=false AND Id NOT IN :newlist ORDER BY npo02__TotalOppAmount__c DESC, CreatedDate ASC)';
             queryAccountsContacts += 'FROM Account WHERE Id IN :setAccountIds AND npe01__SYSTEM_AccountType__c = :HH_ACCOUNT_TYPE';
-            mapAccountIdAccounts = new map<id,Account>((list<Account>)database.query(queryAccountsContacts));
+            Map<String, Object> bindVars = new Map<String, Object>{'newlist' => newlist, 'setAccountIds' => setAccountIds, 'HH_ACCOUNT_TYPE' => HH_ACCOUNT_TYPE};
+            mapAccountIdAccounts = new map<id,Account>((list<Account>)Database.queryWithBinds(queryAccountsContacts, bindVars, AccessLevel.SYSTEM_MODE));
         }
 
         for (integer i=0; i<newlist.size();i++) {

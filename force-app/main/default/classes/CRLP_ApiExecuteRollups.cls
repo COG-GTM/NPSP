@@ -114,7 +114,8 @@ public without sharing class CRLP_ApiExecuteRollups {
     public List<CRLP_Rollup> executeRollups() {
 
         String parentQuery = CRLP_Query_SEL.buildObjectQueryForRollup(summaryObjectType) + ' WHERE Id = :parentId LIMIT 1';
-        summaryRecord = Database.query(parentQuery);
+        Map<String, Object> bindVars = new Map<String, Object>{'parentId' => parentId};
+        summaryRecord = Database.queryWithBinds(parentQuery, bindVars, AccessLevel.SYSTEM_MODE);
 
         // Converts the single Map of rollup data into detail and related objects
         convertRollupDataIntoDetailAndRelatedData(rollupData);
