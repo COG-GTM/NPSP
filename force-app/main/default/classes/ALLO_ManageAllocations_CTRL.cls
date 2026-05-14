@@ -178,6 +178,9 @@ public with sharing class ALLO_ManageAllocations_CTRL {
     public string pageTitle {get;set;}
 
     public Boolean isSupportedObject() {
+        if (parentId == null) {
+            return false;
+        }
         Set<sObjectType> allowedParentSObjectType = new Set<sObjectType> {
             Opportunity.sObjectType,
             Campaign.sObjectType,
@@ -223,7 +226,15 @@ public with sharing class ALLO_ManageAllocations_CTRL {
     private ALLO_ManageAllocations_CTRL() {}
 
     public ALLO_ManageAllocations_CTRL(ApexPages.StandardSetController ssc) {
-        parentId = ApexPages.currentPage().getParameters().get('id');
+        try {
+            parentId = (Id) ApexPages.currentPage().getParameters().get('id');
+        } catch (Exception e) {
+            parentId = null;
+        }
+        if (parentId == null) {
+            isLoading = false;
+            return;
+        }
         hasAccess = canUserRead(parentId.getSobjectType());
 
         if (hasAccess && isSupportedObject()) {
@@ -372,7 +383,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
                     UTIL_AuraEnabledCommon.throwAuraHandledException(System.Label.commonAccessErrorMessage);
                 }
                 TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
-                delete allocationsToBeDeleted;
+                Database.delete(allocationsToBeDeleted, AccessLevel.USER_MODE);
 
                 //allow user to delete all GAUs and save with one empty GAU
                 if (allocations.size() == 1
@@ -389,7 +400,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
                     UTIL_AuraEnabledCommon.throwAuraHandledException(System.Label.commonAccessErrorMessage);
                 }
                 TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
-                update listAlloForUpdate;
+                Database.update(listAlloForUpdate, AccessLevel.USER_MODE);
             }
 
             if (!listAlloForInsert.isEmpty()) {
@@ -397,7 +408,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
                     UTIL_AuraEnabledCommon.throwAuraHandledException(System.Label.commonAccessErrorMessage);
                 }
                 TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
-                insert listAlloForInsert;
+                Database.insert(listAlloForInsert, AccessLevel.USER_MODE);
             }
             redirect = true;
 

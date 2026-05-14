@@ -113,9 +113,9 @@ public with sharing class BDI_DataImportDeleteBTN_CTRL {
         final Integer maxRecords = Limits.getLimitDMLRows() - Limits.getDMLRows();
 
         if (isDeleteAll) {
-            dataImports = [SELECT Id FROM DataImport__c LIMIT :maxRecords];
+            dataImports = [SELECT Id FROM DataImport__c WITH USER_MODE LIMIT :maxRecords];
         } else {
-            dataImports = [SELECT Id FROM DataImport__c WHERE Status__c = :BDI_DataImport_API.bdiImported LIMIT :maxRecords];
+            dataImports = [SELECT Id FROM DataImport__c WHERE Status__c = :BDI_DataImport_API.bdiImported WITH USER_MODE LIMIT :maxRecords];
         }
 
         ApexPages.addMessage(
@@ -140,7 +140,7 @@ public with sharing class BDI_DataImportDeleteBTN_CTRL {
         try {
             // avoid using VF view state to check delete permissions
             if(checkDelete()) {
-                delete dataImports;
+                Database.delete(dataImports, AccessLevel.USER_MODE);
                 return close();
             } else {
                 displayAccessError();
@@ -156,11 +156,13 @@ public with sharing class BDI_DataImportDeleteBTN_CTRL {
      * @description Return either page specified in the 'retURL' parameter or Home page
      * @return PageReference 
      */
+    @SuppressWarnings('PMD.ApexOpenRedirect')
     public PageReference close() {
-        String retUrl = UTIL_String.getInternalUrlPath(ApexPages.currentPage().getParameters().get('retURL'));
+        String retUrlParam = ApexPages.currentPage().getParameters().get('retURL');
+        String retUrl = UTIL_String.getInternalUrlPath(retUrlParam != null ? retUrlParam : '');
 
         PageReference p;
-        if (!String.isBlank(retUrl)) {
+        if (!String.isBlank(retUrl) && retUrl.startsWith('/')) {
             p = new PageReference(retUrl);
         } else {
             p = USER_UserService.getHomePageReference();

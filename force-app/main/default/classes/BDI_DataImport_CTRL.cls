@@ -74,8 +74,8 @@ public with sharing class BDI_DataImport_CTRL {
         get {
             if (!isGiftBatch) {
                 return isTrueBatch ?
-                        DataImportBatch__c.SobjectType.getDescribe().isUpdateable() :
-                        Data_Import_Settings__c.SobjectType.getDescribe().isUpdateable();
+                        Schema.SObjectType.DataImportBatch__c.isUpdateable() :
+                        Schema.SObjectType.Data_Import_Settings__c.isUpdateable();
             } else {
                 return false;
             }
@@ -93,9 +93,17 @@ public with sharing class BDI_DataImport_CTRL {
         isEditMode = false;
 
         // load up default settings or a specified batch
-        loadBatchAndSettings(ApexPages.currentPage().getParameters().get('batchId'));
+        String batchIdParam = ApexPages.currentPage().getParameters().get('batchId');
+        String batchId;
+        try {
+            batchId = (String) ((Id) batchIdParam);
+        } catch (Exception e) {
+            batchId = null;
+        }
+        loadBatchAndSettings(batchId);
         String diIds = ApexPages.currentPage().getParameters().get('diIds');
-        retUrl = UTIL_String.getInternalUrlPath(ApexPages.currentPage().getParameters().get('retURL'));
+        String retUrlParam = ApexPages.currentPage().getParameters().get('retURL');
+        retUrl = UTIL_String.getInternalUrlPath(retUrlParam != null ? retUrlParam : '');
 
         if (diIds != null) {
             dataImportIds = new List<Id>();
@@ -242,10 +250,11 @@ public with sharing class BDI_DataImport_CTRL {
     * @description closes the page and returns to the original calling page
     * @return PageReference
     */
+    @SuppressWarnings('PMD.ApexOpenRedirect')
     public PageReference close() {
 
         PageReference p;
-        if (!String.isBlank(retUrl)) {
+        if (!String.isBlank(retUrl) && retUrl.startsWith('/')) {
             p = new PageReference(retUrl);
         } else {
             p = USER_UserService.getHomePageReference();
