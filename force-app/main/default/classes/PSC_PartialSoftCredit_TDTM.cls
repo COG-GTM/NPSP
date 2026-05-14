@@ -99,8 +99,9 @@ public class PSC_PartialSoftCredit_TDTM extends TDTM_Runnable {
         // create a map of all OCR's for the Opps in question
         // our map will use conId-oppId as its key
         map<String, list<OpportunityContactRole>> mapConIdOppIdToOCRs = new map<String, list<OpportunityContactRole>>();
-        for (OpportunityContactRole ocr : [select Id, ContactId, OpportunityId, Role, IsPrimary from OpportunityContactRole 
-                where ContactId in :setConId and OpportunityId in :setOppId]) {
+        List<OpportunityContactRole> ocrList = [select Id, ContactId, OpportunityId, Role, IsPrimary from OpportunityContactRole 
+                where ContactId in :setConId and OpportunityId in :setOppId];
+        for (OpportunityContactRole ocr : ocrList) {
             
             list<OpportunityContactRole> listOCR = mapConIdOppIdToOCRs.get(ocr.ContactId + '-' + ocr.OpportunityId);
             if (listOCR == null) {
@@ -111,9 +112,10 @@ public class PSC_PartialSoftCredit_TDTM extends TDTM_Runnable {
         }
         
         // now remove any OCR's that are already matched to existing PSC's
-        for (Partial_Soft_Credit__c psc : [select Id, Contact__c, Opportunity__c, Contact_Role_ID__c 
+        List<Partial_Soft_Credit__c> existingPscList = [select Id, Contact__c, Opportunity__c, Contact_Role_ID__c 
             from Partial_Soft_Credit__c
-            where Contact__c in :setConId and Opportunity__c in :setOppId]) {
+            where Contact__c in :setConId and Opportunity__c in :setOppId];
+        for (Partial_Soft_Credit__c psc : existingPscList) {
                 
             list<OpportunityContactRole> listOCR = mapConIdOppIdToOCRs.get(psc.Contact__c + '-' + psc.Opportunity__c);
             if (listOCR != null) {

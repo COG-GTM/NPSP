@@ -115,9 +115,10 @@ public with sharing class BDI_ProcessSelectedDIs_CTRL {
             // Query the Data import records to see if any of them are imported.  The try/catch is to handle
             // and display any field / object level security error.
             try {
-                for (DataImport__c di: [SELECT Id, Status__c, NPSP_Data_Import_Batch__c 
+                List<DataImport__c> diList = [SELECT Id, Status__c, NPSP_Data_Import_Batch__c 
                                         FROM DataImport__c WHERE Id IN: diMap.keySet()                        
-                                        WITH SECURITY_ENFORCED]) {
+                                        WITH SECURITY_ENFORCED];
+                for (DataImport__c di: diList) {
                     diIds += di.Id + ',';
 
                     // If an already imported record is found then throw an error and prevent redirect.

@@ -233,7 +233,8 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
                 'FROM DatedConversionRate ' +
                 'WHERE IsoCode IN :currCodes ' +
                 'ORDER By IsoCode, StartDate DESC';
-            for (SObject dcr : database.query(soql)) {
+            List<SObject> dcrResults = database.query(soql);
+            for (SObject dcr : dcrResults) {
 
                 String currCode = (String) dcr.get('IsoCode');
                 UTIL_CurrencyCache.CurrencyData currData = mapOfCurrencyDataByCurrencyCode.get(currCode);
@@ -261,7 +262,8 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
                 // against the legacy rollups that are based on aggragate soql.
                 soql += ' AND IsoCode IN :currCodes';
             }
-            for (SObject scr : database.query(soql)) {
+            List<SObject> scrResults = database.query(soql);
+            for (SObject scr : scrResults) {
                 String currCode = (String) scr.get('IsoCode');
 
                 UTIL_CurrencyCache.CurrencyData currData = mapOfCurrencyDataByCurrencyCode.get(currCode);

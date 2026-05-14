@@ -387,7 +387,8 @@ public abstract class UTIL_AbstractRollup_BATCH implements database.batchable<SO
                 system.debug(logginglevel.warn, 'SOQL for rollup: ' + soql);
 
                 // query and process the rows
-                for (sobject rollupRow : database.query(soql)) {
+                List<sobject> rollupRows = database.query(soql);
+                for (sobject rollupRow : rollupRows) {
 
                     //system.debug(logginglevel.warn,'row: ' + rollupRow);
 

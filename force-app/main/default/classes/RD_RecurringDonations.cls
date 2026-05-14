@@ -212,7 +212,8 @@ public class RD_RecurringDonations {
 
         //get all possible rd records that may need updating, exclude ones that are closed.
         Map<Id, npe03__Recurring_Donation__c> rdMap = new Map<Id, npe03__Recurring_Donation__c>();
-        for (npe03__Recurring_Donation__c rd : Database.query(rdQuery)) {
+        List<npe03__Recurring_Donation__c> rdResults = Database.query(rdQuery);
+        for (npe03__Recurring_Donation__c rd : rdResults) {
             if (rd.npe03__Open_Ended_Status__c <> closedLabel) {
                 rdMap.put(rd.Id, rd);
             }

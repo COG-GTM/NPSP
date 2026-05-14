@@ -183,8 +183,9 @@ global class CONV_Account_Conversion_BATCH implements Database.Batchable<SObject
             Map<Id, Integer> hhMemberCount = new Map<Id, Integer>();
             Map<string, npe5__Affiliation__c> mapKeyAff = new Map<string, npe5__Affiliation__c>();
             
-            for (npe5__Affiliation__c aff : [select Id, npe5__Status__c, npe5__Primary__c, npe5__Organization__c, npe5__Contact__c
-                    from npe5__Affiliation__c where npe5__Contact__c in :consForUpdate]) {
+            List<npe5__Affiliation__c> existingAffs = [select Id, npe5__Status__c, npe5__Primary__c, npe5__Organization__c, npe5__Contact__c
+                    from npe5__Affiliation__c where npe5__Contact__c in :consForUpdate];
+            for (npe5__Affiliation__c aff : existingAffs) {
                 string strKey = aff.npe5__Contact__c + ':' + aff.npe5__Organization__c;
                 mapKeyAff.put(strKey, aff);
             }

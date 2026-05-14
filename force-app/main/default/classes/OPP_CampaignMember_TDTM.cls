@@ -130,7 +130,8 @@ public class OPP_CampaignMember_TDTM extends TDTM_Runnable {
             mapResults.put(opp.id, opp.clone(true,true,false,true));
         }
 
-        for (OpportunityContactRole oppConRole : [SELECT OpportunityId, ContactId FROM OpportunityContactRole WHERE IsPrimary=TRUE AND OpportunityId IN :listOpps]) {
+        List<OpportunityContactRole> oppConRoles = [SELECT OpportunityId, ContactId FROM OpportunityContactRole WHERE IsPrimary=TRUE AND OpportunityId IN :listOpps];
+        for (OpportunityContactRole oppConRole : oppConRoles) {
             mapResults.get(oppConRole.OpportunityId).Primary_Contact__c = oppConRole.ContactId;
         }
         return mapResults.values();

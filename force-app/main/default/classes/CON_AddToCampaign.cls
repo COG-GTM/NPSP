@@ -58,7 +58,8 @@ public class CON_AddToCampaign {
         MAPcampaignMemberStatuses = new map<id, list<CampaignMemberStatus>>();
 
         //iterate the list of CampaignMembers, placing into map using the combo key of contactid:campaignid
-        for(CampaignMember cm : [SELECT Id, ContactId, CampaignId, Status FROM CampaignMember WHERE ContactId IN :Contacts and CampaignId in :Campaigns]) {
+        List<CampaignMember> existingMembers = [SELECT Id, ContactId, CampaignId, Status FROM CampaignMember WHERE ContactId IN :Contacts and CampaignId in :Campaigns];
+        for(CampaignMember cm : existingMembers) {
             MAPCampaignMembers.put(cm.contactid + ':' + cm.campaignid, cm);
         }
 
@@ -84,7 +85,8 @@ public class CON_AddToCampaign {
         list<CampaignMemberStatus> listStatusForInsert = new list<CampaignMemberStatus>();
         
         //iterate the list of campaign member statuses while building a map of campaign id and list of statuses
-        for(CampaignMemberStatus cms : [SELECT Id, CampaignId, Label, SortOrder, HasResponded, IsDefault FROM CampaignMemberStatus WHERE CampaignId IN :Campaigns ORDER BY SortOrder]) {
+        List<CampaignMemberStatus> existingStatuses = [SELECT Id, CampaignId, Label, SortOrder, HasResponded, IsDefault FROM CampaignMemberStatus WHERE CampaignId IN :Campaigns ORDER BY SortOrder];
+        for(CampaignMemberStatus cms : existingStatuses) {
             
             if (MAPcampaignMemberStatuses.containsKey(cms.CampaignId)) {
                 MAPcampaignMemberStatuses.get(cms.CampaignId).add(cms);

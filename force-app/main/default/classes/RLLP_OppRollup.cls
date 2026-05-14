@@ -146,7 +146,8 @@ public without sharing class RLLP_OppRollup {
         Map<Id, npo02__Household__c> householdById = new Map<Id, npo02__Household__c>();
 
 
-        for (OpportunityContactRole role : Database.query(query)){
+        List<OpportunityContactRole> roleResults = Database.query(query);
+        for (OpportunityContactRole role : roleResults){
             contactById.put(role.ContactId, role.Contact);
 
             if (role.Contact.npo02__Household__c != null) {

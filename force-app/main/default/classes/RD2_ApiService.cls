@@ -54,7 +54,8 @@ public inherited sharing class RD2_ApiService {
         }
 
         String soql = getRecurringDonationQuery();
-        for (npe03__Recurring_Donation__c rd : Database.query(soql)) {
+        List<npe03__Recurring_Donation__c> rdScheduleResults = Database.query(soql);
+        for (npe03__Recurring_Donation__c rd : rdScheduleResults) {
 
             List<Schedule> schedules = new List<Schedule>();
             for (RecurringDonationSchedule__c s : rd.RecurringDonationSchedules__r) {
@@ -206,7 +207,8 @@ public inherited sharing class RD2_ApiService {
 
         RD2_ScheduleService service = new RD2_ScheduleService();
         String soql = getRecurringDonationQuery();
-        for (npe03__Recurring_Donation__c rd : Database.query(soql)) {
+        List<npe03__Recurring_Donation__c> rdInstallmentResults = Database.query(soql);
+        for (npe03__Recurring_Donation__c rd : rdInstallmentResults) {
 
             List<Installment> installments = new List<Installment>();
             for (RD2_ScheduleService.Installment installment : service.getVisualizedInstallments(

@@ -84,7 +84,8 @@ public with sharing class PSC_Opportunity_TDTM extends TDTM_Runnable {
 
         if (objType == Partial_Soft_Credit__c.SObjectType) {
             //query all PSCs associated with these opps, update their ISO code
-            for (Partial_Soft_Credit__c psc : Database.query('SELECT Id, Amount__c, Opportunity__c, CurrencyIsoCode FROM Partial_Soft_Credit__c WHERE Opportunity__c IN :oppIds')) {
+            List<Partial_Soft_Credit__c> pscResults = Database.query('SELECT Id, Amount__c, Opportunity__c, CurrencyIsoCode FROM Partial_Soft_Credit__c WHERE Opportunity__c IN :oppIds');
+            for (Partial_Soft_Credit__c psc : pscResults) {
                 String oppCurrency = mapOppIdToISO.get(psc.Opportunity__c);
 
                 psc.put('CurrencyIsoCode', oppCurrency);
@@ -93,7 +94,8 @@ public with sharing class PSC_Opportunity_TDTM extends TDTM_Runnable {
             }
         } else if (objType == Account_Soft_Credit__c.SObjectType) {
             //query all AccSCs associated with these opps, update their ISO code
-            for (Account_Soft_Credit__c accountSC : Database.query('SELECT Id, Amount__c, Opportunity__c, CurrencyIsoCode FROM Account_Soft_Credit__c WHERE Opportunity__c IN :oppIds')) {
+            List<Account_Soft_Credit__c> accountSCResults = Database.query('SELECT Id, Amount__c, Opportunity__c, CurrencyIsoCode FROM Account_Soft_Credit__c WHERE Opportunity__c IN :oppIds');
+            for (Account_Soft_Credit__c accountSC : accountSCResults) {
                 String oppCurrency = mapOppIdToISO.get(accountSC.Opportunity__c);
 
                 accountSC.put('CurrencyIsoCode', oppCurrency);

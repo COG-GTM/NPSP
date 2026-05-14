@@ -94,7 +94,8 @@ public class ACCT_AccountMerge_TDTM extends TDTM_Runnable {
         List<Id> listOrgId = new List<Id>();
         List<Id> listTemp = new List<Id>();
         
-        for (Account acc : [SELECT Id, npe01__SYSTEM_AccountType__c FROM Account WHERE Id IN :listAccountId]) {
+        List<Account> mergedAccounts = [SELECT Id, npe01__SYSTEM_AccountType__c FROM Account WHERE Id IN :listAccountId];
+        for (Account acc : mergedAccounts) {
             if (acc.npe01__SYSTEM_AccountType__c == CAO_Constants.HH_ACCOUNT_TYPE) {
                 listHHId.add(acc.Id);
             }

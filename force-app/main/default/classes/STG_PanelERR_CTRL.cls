@@ -79,7 +79,8 @@ public with sharing class STG_PanelERR_CTRL extends STG_Panel {
                         ERR_Notifier.ERROR_NOTIFICATION_RECIPIENT_ALL_SYS_ADMINS)
                 );
 
-                for (User u : [SELECT Name, Id FROM User WHERE User.Profile.Name = :UTIL_Profile.SYSTEM_ADMINISTRATOR]) {
+                List<User> adminUsers = [SELECT Name, Id FROM User WHERE User.Profile.Name = :UTIL_Profile.SYSTEM_ADMINISTRATOR];
+                for (User u : adminUsers) {
                     listSOERRNotifOptions.add(new SelectOption(u.Id, 'User: ' + u.Name));
                 }
             }

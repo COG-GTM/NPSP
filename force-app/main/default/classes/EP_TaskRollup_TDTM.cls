@@ -113,8 +113,9 @@ public class EP_TaskRollup_TDTM extends TDTM_Runnable {
         // map of engagement plan records to be updated
         Map<Id, Engagement_Plan__c> mapIdsToEP = new Map<Id, Engagement_Plan__c>();
 
-        for (AggregateResult aggRes : [SELECT Engagement_Plan__c, IsClosed, COUNT(Id) cnt
-                FROM Task WHERE Engagement_Plan__c IN :epIdsToUpdate GROUP BY ROLLUP(Engagement_Plan__c, IsClosed)]) {
+        List<AggregateResult> aggResults = [SELECT Engagement_Plan__c, IsClosed, COUNT(Id) cnt
+                FROM Task WHERE Engagement_Plan__c IN :epIdsToUpdate GROUP BY ROLLUP(Engagement_Plan__c, IsClosed)];
+        for (AggregateResult aggRes : aggResults) {
             Id epId = (Id)aggRes.get(UTIL_Namespace.StrTokenNSPrefix('Engagement_Plan__c'));
             Boolean taskComp = (Boolean)aggRes.get('IsClosed');
             Decimal taskCount = (Decimal)aggRes.get('cnt');

@@ -131,9 +131,10 @@ public class EP_TaskDependency_TDTM extends TDTM_Runnable {
         //since multiple Tasks can point toward a single EP Task, 
         //we need to deal with lists of Tasks for each EP Task id.
         Map<Id, List<Task>> mapEpTaskIdTasks = new Map<Id, List<Task>>();
-        for (Task taskForUpdate :  [SELECT Id, ActivityDate, Engagement_Plan_Task__c, Engagement_Plan__c
+        List<Task> dependentTasks = [SELECT Id, ActivityDate, Engagement_Plan_Task__c, Engagement_Plan__c
                                     FROM Task WHERE Engagement_Plan__c IN :engagementPlanIds AND
-                                    Engagement_Plan_Task__c IN :allDependentEPTasksForQuery]) {
+                                    Engagement_Plan_Task__c IN :allDependentEPTasksForQuery];
+        for (Task taskForUpdate : dependentTasks) {
             if (!mapEpTaskIdTasks.containsKey(taskForUpdate.Engagement_Plan_Task__c)) {
                 mapEpTaskIdTasks.put(taskForUpdate.Engagement_Plan_Task__c, new List<Task>{taskForUpdate});
             } else {

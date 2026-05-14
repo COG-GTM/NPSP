@@ -184,10 +184,11 @@ public inherited sharing class RD2_ElevateIntegrationService {
         }
 
         List<Opportunity> oppsToUpdate = new List<Opportunity>();
-        for (Opportunity opp : [SELECT Id, npe03__Recurring_Donation__c, CommitmentId__c
+        List<Opportunity> oppsWithCommitments = [SELECT Id, npe03__Recurring_Donation__c, CommitmentId__c
             FROM Opportunity
             WHERE CommitmentId__c IN :rdIdByCommitmentId.keySet()
-        ]) {
+        ];
+        for (Opportunity opp : oppsWithCommitments) {
             if (opp.CommitmentId__c == null || opp.npe03__Recurring_Donation__c != null) {
                 continue;
             }

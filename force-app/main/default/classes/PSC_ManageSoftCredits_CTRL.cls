@@ -176,8 +176,9 @@ public with sharing class PSC_ManageSoftCredits_CTRL {
             IsPrimary, Opportunity.Amount FROM OpportunityContactRole WHERE OpportunityId = :opp.Id]);
             
         // get all PSC's for the Opp
-        for (Partial_Soft_Credit__c psc : [SELECT Id, Opportunity__c, Contact__c, Amount__c, Role_Name__c, Contact_Role_ID__c
-                FROM Partial_Soft_Credit__c WHERE Opportunity__c = :opp.Id]) {
+        List<Partial_Soft_Credit__c> pscList = [SELECT Id, Opportunity__c, Contact__c, Amount__c, Role_Name__c, Contact_Role_ID__c
+                FROM Partial_Soft_Credit__c WHERE Opportunity__c = :opp.Id];
+        for (Partial_Soft_Credit__c psc : pscList) {
                     
             // find its related OCR
             OpportunityContactRole ocr = mapIdToOCR.get(psc.Contact_Role_ID__c);
@@ -289,7 +290,8 @@ public with sharing class PSC_ManageSoftCredits_CTRL {
         }
 
         Map<Id, String> donors = new Map<Id, String>(); // Contact Id, Contact Name
-        for (OpportunityContactRole ocr : [SELECT Id, ContactId, Contact.Name FROM OpportunityContactRole WHERE OpportunityId = :opp.Id AND IsPrimary = true]) {
+        List<OpportunityContactRole> primaryOcrs = [SELECT Id, ContactId, Contact.Name FROM OpportunityContactRole WHERE OpportunityId = :opp.Id AND IsPrimary = true];
+        for (OpportunityContactRole ocr : primaryOcrs) {
             donors.put(ocr.ContactId, ocr.Contact.Name);
         }
 
