@@ -178,6 +178,9 @@ public with sharing class ALLO_ManageAllocations_CTRL {
     public string pageTitle {get;set;}
 
     public Boolean isSupportedObject() {
+        if (parentId == null) {
+            return false;
+        }
         Set<sObjectType> allowedParentSObjectType = new Set<sObjectType> {
             Opportunity.sObjectType,
             Campaign.sObjectType,
