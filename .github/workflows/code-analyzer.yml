@@ -50,7 +50,7 @@ jobs:
           exit 1
 
       - name: Report High Violations (warning only)
-        if: steps.run-code-analyzer.outputs.num-sev2-violations-in-changed-files > 0
+        if: always() && steps.run-code-analyzer.outputs.num-sev2-violations-in-changed-files > 0
         run: |
           echo "::warning::High severity violations found in changed files: ${{ steps.run-code-analyzer.outputs.num-sev2-violations-in-changed-files }}"
           echo "These are typically pre-existing violations (ApexCRUDViolation, AvoidOldSalesforceApiVersions) and do not block the PR."
