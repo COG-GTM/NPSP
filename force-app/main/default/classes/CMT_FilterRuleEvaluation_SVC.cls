@@ -33,7 +33,7 @@
 * @group CMT Filter Rules
 * @description Service class to handle evaluating CMT Filter Rules (i.e., all Rules within a specified Filter Group)
 */
-public class CMT_FilterRuleEvaluation_SVC {
+public with sharing class CMT_FilterRuleEvaluation_SVC {
 
     /**
      * @description Create an instance of the FiscalYear service class with UseFiscalYear set to true

@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/BatchDataImport.htm
 * @description Visualforce page Controller for the Manage Advanced Mappings VF page
 */
-public class BDI_ManageAdvancedMappingCtrl {
+public with sharing class BDI_ManageAdvancedMappingCtrl {
     
     /*******************************************************************************************************
     * @description Returns a wrapper class containing the current namespace and the npsp namespace defined 
@@ -553,7 +553,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     * @description BDI_FieldMapping wrapper class used in the Field Mapping UI and for
     * building corresponding custom metadata type records.
     */
-    public class DataImportFieldMappingWrapper extends BDI_FieldMapping {
+    public with sharing class DataImportFieldMappingWrapper extends BDI_FieldMapping {
         @AuraEnabled public String Label;
         @AuraEnabled public String Maps_To_Icon;
 
@@ -584,7 +584,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     /*******************************************************************************************************
     * @description Wrapper class for Field Describe Results used in the Field Mapping UI
     */
-    public class FieldInfo {
+    public with sharing class FieldInfo {
         @AuraEnabled public String label;
         @AuraEnabled public String value;
         @AuraEnabled public String displayType;
@@ -654,7 +654,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     * asynchronous process. This callback class is used to handle the async response from the call to
     * Metadata.Operations.enqueueDeployment().
     */
-    public class DeploymentCallback implements Metadata.DeployCallback {
+    public with sharing class DeploymentCallback implements Metadata.DeployCallback {
 
         public void handleResult(
                 Metadata.DeployResult deployResult,
@@ -682,7 +682,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     /*******************************************************************************************************
     * @description Wrapper class for the Data Import Object Mapping object.
     */
-    public class DataImportObjectMappingWrapper {
+    public with sharing class DataImportObjectMappingWrapper {
         @AuraEnabled public Id Id;
         @AuraEnabled public String DeveloperName;
         @AuraEnabled public String MasterLabel;
@@ -756,7 +756,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     /*******************************************************************************************************
     * @description Simple class for combobox options.
     */
-    public class ComboboxOption implements Comparable{
+    public with sharing class ComboboxOption implements Comparable{
         @AuraEnabled
         public String label {get;set;}
         @AuraEnabled
@@ -842,7 +842,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     * use in constructing/modifying urls and schema names in lightning web components. Wrapped in a class
     * to reduce calls.
     */
-    public class NamespaceWrapper {
+    public with sharing class NamespaceWrapper {
         @AuraEnabled
         public String currentNamespace {get;set;}
         @AuraEnabled
@@ -858,7 +858,7 @@ public class BDI_ManageAdvancedMappingCtrl {
      * @description Inner class representation of the data needed to render Advanced Mapping Object Mapping
      * component
      */
-    public class AdvancedMappingObjectData {
+    public with sharing class AdvancedMappingObjectData {
         @AuraEnabled
         public BDI_ObjectMapping[] objectMappings;
         @AuraEnabled
@@ -875,7 +875,7 @@ public class BDI_ManageAdvancedMappingCtrl {
     * @description Inner class representation of the data needed to render Advanced Mapping Fields Mapping
     * component
     */
-    public class AdvancedMappingFieldData {
+    public with sharing class AdvancedMappingFieldData {
         @AuraEnabled public String fieldMappingSetName;
         @AuraEnabled public FieldInfo[] sourceObjectFieldDescribes;
         @AuraEnabled public FieldInfo[] targetObjectFieldDescribes;

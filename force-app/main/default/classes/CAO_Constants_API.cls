@@ -35,7 +35,7 @@
 * @group-content ../../ApexDocContent/API.htm
 * @description API class that exposes CAO (Contacts and Organizations) Constants and helper methods.
 */
-global class CAO_Constants_API {
+global with sharing class CAO_Constants_API {
 
     /*******************************************************************************************************
     * @description One-to-One value for system processor field

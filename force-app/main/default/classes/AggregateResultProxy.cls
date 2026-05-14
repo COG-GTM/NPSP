@@ -32,7 +32,7 @@
 * @date 2021
 * @description Wrapper for AggregateResult to support mocking
 */
-public class AggregateResultProxy {
+public with sharing class AggregateResultProxy {
     private Map<String,Object> valuesByAlias = new Map<String,Object> ();
 
     public AggregateResultProxy withAggregateResult(AggregateResult groupedResult) {

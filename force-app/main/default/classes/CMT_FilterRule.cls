@@ -34,7 +34,7 @@
 * @description Instance class for a single Filter Rule. Handles actions for that specific Filter Rule, such as
 * evaluating the rule against a specified SObject record.
 */
-public class CMT_FilterRule {
+public with sharing class CMT_FilterRule {
 
     /**
      * @description Enum of valid filter operations. Matches Filter_Rule__mdt.Operation__c
@@ -201,7 +201,7 @@ public class CMT_FilterRule {
     /**
      * @description Compare implementation for a Boolean data type
      */
-    public class CompareBooleans implements ICompare {
+    public with sharing class CompareBooleans implements ICompare {
         public Boolean isIncluded(SObject record, CMT_FilterRule rule) {
             Boolean fieldValue = (record.get(rule.field) != null ? (Boolean)record.get(rule.field) : false);
             // Note: Boolean.valueOf() will convert anything into a false, even a string that is not true or false
@@ -219,7 +219,7 @@ public class CMT_FilterRule {
     /**
      * @description Compare implementation for a Double data type
      */
-    public class CompareDoubles implements ICompare {
+    public with sharing class CompareDoubles implements ICompare {
         public Boolean isIncluded(SObject record, CMT_FilterRule rule) {
             Double fieldValue = (record.get(rule.field) != null ? (Double)record.get(rule.field) : null);
             Double compareValue = (String.isNotEmpty(rule.constant) ? Double.valueOf(rule.constant) : null);
@@ -261,7 +261,7 @@ public class CMT_FilterRule {
     /**
      * @description Compare implementation for a Date data type
      */
-    public class CompareDates implements ICompare {
+    public with sharing class CompareDates implements ICompare {
         public Boolean isIncluded(SObject record, CMT_FilterRule rule) {
             Date fieldValue = (record.get(rule.field) != null ? Date.valueOf(record.get(rule.field)) : null);
             String dateConstant = (rule.constant != null && CMT_FilterRule.validDateConstants.contains(rule.constant) ?
@@ -313,7 +313,7 @@ public class CMT_FilterRule {
      * '2018-11-02T22:00:00.000Z' (i.e., GMT), however DateTime.valueOfGMT() requires that the string not include the
      * "T" and "Z" letters.
      */
-    public class CompareDateTimes implements ICompare {
+    public with sharing class CompareDateTimes implements ICompare {
         public Boolean isIncluded(SObject record, CMT_FilterRule rule) {
             DateTime fieldValue = (record.get(rule.field) != null ? (DateTime)record.get(rule.field) : null);
             String dateConstant = (String.isNotEmpty(rule.constant) && CMT_FilterRule.validDateConstants.contains(rule.constant) ?
@@ -355,7 +355,7 @@ public class CMT_FilterRule {
     /**
      * @description Compare implementation for an Id data type
      */
-    public class CompareIds implements ICompare {
+    public with sharing class CompareIds implements ICompare {
         public Boolean isIncluded(SObject record, CMT_FilterRule rule) {
             Id fieldValue = (record.get(rule.field) != null ? (Id)record.get(rule.field) : null);
 
@@ -395,7 +395,7 @@ public class CMT_FilterRule {
     /**
      * @description Compare implementation for a String data type
      */
-    public class CompareStrings implements ICompare {
+    public with sharing class CompareStrings implements ICompare {
         public Boolean isIncluded(SObject record, CMT_FilterRule rule) {
             String fieldValue = (record.get(rule.field) != null ? (String)record.get(rule.field) : null);
             String compareValue = (String.isNotEmpty(rule.constant) ? String.valueOf(rule.constant) : null);

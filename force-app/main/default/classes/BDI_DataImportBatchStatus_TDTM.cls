@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/BatchDataImport.htm
 * @description Trigger Handler for the DataImport SObject to set the batch status
 */
-public class BDI_DataImportBatchStatus_TDTM extends TDTM_Runnable {
+public inherited sharing class BDI_DataImportBatchStatus_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************************
      * @description Trigger Handler on DataImport
@@ -203,7 +203,7 @@ public class BDI_DataImportBatchStatus_TDTM extends TDTM_Runnable {
     /**
      * Aggregator class for determining the status of many Data Import batches at the same time.
      */
-    private class BatchDataImportStatusAggregator {
+    private inherited sharing class BatchDataImportStatusAggregator {
         Map<Id, BatchDataImportStatus> statusesById;
 
         BatchDataImportStatusAggregator() {
@@ -234,7 +234,7 @@ public class BDI_DataImportBatchStatus_TDTM extends TDTM_Runnable {
     /**
      * A class for determining the status of a single Data Import Batch
      */
-    private class BatchDataImportStatus {
+    private inherited sharing class BatchDataImportStatus {
         Boolean hasOpenRow = false;
         Boolean hasImportedRow = false;
         Boolean hasFailedRow = false;

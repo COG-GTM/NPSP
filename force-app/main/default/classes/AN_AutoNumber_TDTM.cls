@@ -32,7 +32,7 @@
 * @date 2020
 * @description Trigger Handler for SObjects that have active AutoNumbers.
 */
-public class AN_AutoNumber_TDTM extends TDTM_Runnable {
+public inherited sharing class AN_AutoNumber_TDTM extends TDTM_Runnable {
 
     public override DmlWrapper run(
             List<SObject> newList, List<SObject> oldList,

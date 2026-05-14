@@ -33,7 +33,7 @@
 * @group CMT Filter Rules
 * @description Service Class for Filter Rules as it pertains the custom User Interface where Filter Rules are maintained
 */
-public class CMT_FilterRuleUI_SVC {
+public with sharing class CMT_FilterRuleUI_SVC {
 
     /**
      * @description Converts the enum strings into api name for picklist values. The Enum value

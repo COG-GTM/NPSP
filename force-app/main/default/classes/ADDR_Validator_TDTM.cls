@@ -36,7 +36,7 @@
 * @async_support this trigger handler DOES NOT SUPPORT ASYNC!  the validation call is a future,
 * and if we are already in a future to deal with the trigger handler, we can't call the future verification api!
 */
-public class ADDR_Validator_TDTM extends TDTM_Runnable {
+public inherited sharing class ADDR_Validator_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description To support DML operations with more than 200 records, use a static Set of Id's that
@@ -48,7 +48,7 @@ public class ADDR_Validator_TDTM extends TDTM_Runnable {
     /*******************************************************************************************************
     * @description Exception raised during the address validation process.
     */
-    public class ADDR_Validator_Exception extends Exception { }
+    public inherited sharing class ADDR_Validator_Exception extends Exception { }
 
     /*******************************************************************************************************
     * @description Verifies new or modified address records, if verification enabled in the settings.

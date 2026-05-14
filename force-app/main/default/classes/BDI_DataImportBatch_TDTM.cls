@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/BatchDataImport.htm
 * @description Trigger Handler for the DataImportBatch SObject
 */
-public class BDI_DataImportBatch_TDTM extends TDTM_Runnable {
+public inherited sharing class BDI_DataImportBatch_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************************
      * @description Trigger Handler on BatchDataImport

@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Abstract base class for all Customizable Rollup batch jobs
 */
-public abstract class CRLP_Batch_Base {
+public abstract inherited sharing class CRLP_Batch_Base {
 
     /** @description The job type for this batch job -- AccountHardCredit, AccountSoftCredit, etc. */
     protected CRLP_RollupProcessingOptions.RollupType jobType;
@@ -290,7 +290,7 @@ public abstract class CRLP_Batch_Base {
     /** TODO Merge this with the new CRLP_QueryBuilder class
      * @description Inner Class used to build the start method query.
      */
-    public class BatchQueryBuilder {
+    public inherited sharing class BatchQueryBuilder {
         /**
          * @description the CRLP_Batch_Base instance that created this class instance.  Enables this
          * instance to access the member variables in the initializing class.
@@ -655,7 +655,7 @@ public abstract class CRLP_Batch_Base {
     /*******************************************************************************************************
      * @description CRLP Batch Job custom exception
      */
-    public class CRLPBatchException extends Exception {}
+    public inherited sharing class CRLPBatchException extends Exception {}
 
     /*******************************************************************************************************
      * @description Shared method to log an Error record when a CRLP Batch is skipped because

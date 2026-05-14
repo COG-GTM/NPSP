@@ -46,7 +46,7 @@
  */
 //TBD making this class global so managed package users can add lookup cascade deletions
 
-public abstract class CDL_CascadeDeleteLookups_TDTM extends TDTM_Runnable {
+public abstract inherited sharing class CDL_CascadeDeleteLookups_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Performs cascade delete for lookup fields. retrieve, validate and delete/undelete

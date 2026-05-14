@@ -35,7 +35,7 @@
 * @description Helper class that supports BDI_MigrationMappingUtility and
 * enables mocking of test data.
 */
-public class BDI_MigrationMappingHelper {
+public inherited sharing class BDI_MigrationMappingHelper {
 
     /*******************************************************************************************************
     * @description Get a list of by Data Import Object Mapping Set by Developer Name

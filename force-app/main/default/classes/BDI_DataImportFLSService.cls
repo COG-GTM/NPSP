@@ -35,7 +35,7 @@
 * @description Service class used to validate
 * Field Level Security of the target fields mapped in the data import process.
 */
-public class BDI_DataImportFLSService {
+public with sharing class BDI_DataImportFLSService {
     Set<AccessLevel> accessLevels;
     Map<SObjectField, BDI_TargetFields> targetFieldsBySObjectFields;
     List<DataImport__c> dataImportsValidated;
@@ -176,7 +176,7 @@ public class BDI_DataImportFLSService {
         return false;
     }
 
-    private class SObjectFieldWrapper {
+    private with sharing class SObjectFieldWrapper {
 
         SObjectType sObjType;
         SObjectField field;

@@ -38,7 +38,7 @@
 * our special accounts (Household, One-to-One), and also detects changes on Household Account that requires
 * name updating.
 */
-public class ACCT_Accounts_TDTM extends TDTM_Runnable {
+public inherited sharing class ACCT_Accounts_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Trigger Handler on Accounts that handles ensuring the correct system flags are set on

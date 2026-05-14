@@ -35,7 +35,7 @@
 * @description Helper class for the Batch Data Importer, dealing with Donations, ie, Opps and Payments
 *
 */
-public class BDI_Donations {
+public with sharing class BDI_Donations {
 
     public static final String[] campaignImportedFields = new String[]{'npsp__DonationCampaignImported__c',
                                                                         'DonationCampaignImported__c'};

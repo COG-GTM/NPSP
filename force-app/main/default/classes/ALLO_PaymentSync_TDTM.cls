@@ -35,7 +35,7 @@
 * @description Trigger handler on Allocation object, syncs changes between
 *              Opportunity and Payment Allocations.
 */
-public class ALLO_PaymentSync_TDTM extends TDTM_Runnable {
+public inherited sharing class ALLO_PaymentSync_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Trigger Handler on Allocation, dispatches to the correct method based on
