@@ -523,7 +523,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     public static List<DataImport__c> getAllDataImportRecordsByBatchId(Id batchId) {
         String query = getDataImportQuery(batchId, null, null, null);
         Map<String, Object> bindVars = new Map<String, Object>{'batchId' => batchId};
-        return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -535,7 +535,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     private static List<DataImport__c> getNumOfDataImportRecordsByBatchId(Id batchId, Integer numberOfRowsToReturn) {
         String query = getDataImportQuery(batchId, null, numberOfRowsToReturn, null);
         Map<String, Object> bindVars = new Map<String, Object>{'batchId' => batchId};
-        return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -547,7 +547,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     private static List<DataImport__c> getDataImportRecordsByBatchId(Id batchId, Integer offset) {
         String query = getDataImportQuery(batchId, null, loadSize, offset);
         Map<String, Object> bindVars = new Map<String, Object>{'batchId' => batchId};
-        return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -559,7 +559,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     private static List<DataImport__c> getDataImportRecordsByIds(Id batchId, List<Id> dataImportIds) {
         String query = getDataImportQuery(batchId, dataImportIds, null, null);
         Map<String, Object> bindVars = new Map<String, Object>{'batchId' => batchId, 'dataImportIds' => dataImportIds};
-        return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -570,7 +570,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     private static List<DataImport__c> getDataImportRecordsForDryRunByIds(List<Id> dataImportIds) {
         String query =  BDI_DataImportService.strSoqlForDataImportProcess(dataImportIds);
         Map<String, Object> bindVars = new Map<String, Object>{'dataImportIds' => dataImportIds};
-        return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -581,7 +581,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     public static List<DataImport__c> getAllDataImportRecordsForDryRunByBatchId(Id batchId) {
         String query = BDI_DataImportService.strSoqlForBatchProcess(batchId);
         Map<String, Object> bindVars = new Map<String, Object>{'batchId' => batchId};
-        return Database.queryWithBinds(query, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(query, bindVars, AccessLevel.USER_MODE);
     }    
 
     /*******************************************************************************************************

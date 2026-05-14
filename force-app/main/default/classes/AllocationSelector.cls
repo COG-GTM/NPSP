@@ -42,7 +42,7 @@ public with sharing class AllocationSelector {
             .build();
 
         Map<String, Object> bindVars = new Map<String, Object>{'oppIds' => oppIds};
-        return Database.queryWithBinds(soql, bindVars, AccessLevel.SYSTEM_MODE);
+        return Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
     }
 
     private Set<String> getStandardAllocationFields() {
