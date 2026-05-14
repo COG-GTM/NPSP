@@ -48,7 +48,11 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     */
     @AuraEnabled
     public static void checkFieldPermissions() {
-        BGE_BatchGiftEntry_UTIL.checkFieldPermissionsNeededForBatch();
+        try {
+            BGE_BatchGiftEntry_UTIL.checkFieldPermissionsNeededForBatch();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -82,23 +86,29 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     */
     @AuraEnabled
     public static String getDataImportModel(Id batchId) {
+        try {
 
-        if (batchId == null) {
-            throw new AuraHandledException('Data Import Model must receive a Batch ID.');
+            if (batchId == null) {
+                throw new AuraHandledException('Data Import Model must receive a Batch ID.');
+            }
+
+            DataImportModel dataImportModel = new DataImportModel();
+            dataImportModel.id = batchId;
+            dataImportModel.dataImportRows = getDataImportRows(batchId, 0);
+            dataImportModel.setColumns();
+            dataImportModel.labels = getBatchDataImportLabels();
+            dataImportModel.isNamespaced = String.isNotBlank(UTIL_Namespace.getNamespace());
+            dataImportModel.totalCountOfRows = getDataImportBatchTotalCount(batchId);
+            AggregateResult[] aggResult = getDataImportBatchTotalAmount(batchId);
+            dataImportModel.totalRowAmount = (Decimal)aggResult[0].get('amount');
+            dataImportModel.batchTotalRowAmount = getBatchTotalRowAmount(dataImportModel.dataImportRows);
+            checkBatchGiftEntryFieldPermissions (batchId);
+            return JSON.serialize(dataImportModel);
+        } catch (AuraHandledException ahe) {
+            throw ahe;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        DataImportModel dataImportModel = new DataImportModel();
-        dataImportModel.id = batchId;
-        dataImportModel.dataImportRows = getDataImportRows(batchId, 0);
-        dataImportModel.setColumns();
-        dataImportModel.labels = getBatchDataImportLabels();
-        dataImportModel.isNamespaced = String.isNotBlank(UTIL_Namespace.getNamespace());
-        dataImportModel.totalCountOfRows = getDataImportBatchTotalCount(batchId);
-        AggregateResult[] aggResult = getDataImportBatchTotalAmount(batchId);
-        dataImportModel.totalRowAmount = (Decimal)aggResult[0].get('amount');
-        dataImportModel.batchTotalRowAmount = getBatchTotalRowAmount(dataImportModel.dataImportRows);
-        checkBatchGiftEntryFieldPermissions (batchId);
-        return JSON.serialize(dataImportModel);
     }
 
     private static Decimal getBatchTotalRowAmount(List<DataImportRow> dataImportRows) {

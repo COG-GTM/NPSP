@@ -235,9 +235,13 @@ public with sharing class BDI_MappingServiceAdvanced implements BDI_MappingServi
     @AuraEnabled
     public static BDI_FieldMappingSet getFieldMappingSet(String fieldMappingSetName,
         Boolean includeUtilityFields) {
+            try {
 
-        getInstance(fieldMappingSetName, includeUtilityFields);
-        return fieldMappingInstance.fieldMappingSet;
+            getInstance(fieldMappingSetName, includeUtilityFields);
+            return fieldMappingInstance.fieldMappingSet;
+            } catch (Exception ex) {
+                throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+            }
     }
 
     /******************************************************************************************************************

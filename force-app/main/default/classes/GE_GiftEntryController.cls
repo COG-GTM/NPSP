@@ -178,7 +178,11 @@ public with sharing class GE_GiftEntryController {
 
     @AuraEnabled
     public static Map<String, Integer> getGiftBatchTotalsBy(String batchId) {
-        return giftBatchService.getGiftBatchTotalsMapFor((Id) batchId);
+        try {
+            return giftBatchService.getGiftBatchTotalsMapFor((Id) batchId);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled
@@ -253,9 +257,13 @@ public with sharing class GE_GiftEntryController {
     */
     @AuraEnabled
     public static String sendPurchaseRequest(String requestBodyParameters, String dataImportRecordId) {
-        UTIL_Http.Response response = processPurchaseRequest(requestBodyParameters, dataImportRecordId);
+        try {
+            UTIL_Http.Response response = processPurchaseRequest(requestBodyParameters, dataImportRecordId);
 
-        return response.body;
+            return response.body;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /***
@@ -361,15 +369,25 @@ public with sharing class GE_GiftEntryController {
 
     @AuraEnabled
     public static ElevateBatch createElevateBatch() {
-        ElevateBatch elevateBatch = elevateBatchService.createElevateBatch();
-        return elevateBatch;
+        try {
+            ElevateBatch elevateBatch = elevateBatchService.createElevateBatch();
+            return elevateBatch;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled
     public static void validateAuthorizedGiftEdit(DataImport__c dataImport){
-        Gift editedGift = new Gift(dataImport);
-        if (editedGift.requiresReauthorizationBeforeChange()) { 
-            throw new AuraHandledException(Label.geErrorBatchGiftEntryReauthRequired);
+        try {
+            Gift editedGift = new Gift(dataImport);
+            if (editedGift.requiresReauthorizationBeforeChange()) { 
+                throw new AuraHandledException(Label.geErrorBatchGiftEntryReauthRequired);
+            }
+        } catch (AuraHandledException ahe) {
+            throw ahe;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
     }
 
@@ -690,7 +708,11 @@ public with sharing class GE_GiftEntryController {
      */
     @AuraEnabled
     public static Allocations_Settings__c getAllocationsSettings() {
-        return UTIL_CustomSettingsFacade.getAllocationsSettings();
+        try {
+            return UTIL_CustomSettingsFacade.getAllocationsSettings();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -830,7 +852,11 @@ public with sharing class GE_GiftEntryController {
      */
     @AuraEnabled
     public static RenderWrapper retrieveDefaultSGERenderWrapper() {
-        return getDefaultSGERenderWrapper();
+        try {
+            return getDefaultSGERenderWrapper();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**
@@ -839,7 +865,11 @@ public with sharing class GE_GiftEntryController {
      */
     @AuraEnabled
     public static BDI_FieldMappingSet getFieldMappings() {
-        return BDI_MappingServiceAdvanced.getInstance().fieldMappingSet;
+        try {
+            return BDI_MappingServiceAdvanced.getInstance().fieldMappingSet;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     public class RenderWrapper {
@@ -862,15 +892,19 @@ public with sharing class GE_GiftEntryController {
     */
     @AuraEnabled
     public static Map<String, String> getDonationMatchingValues() {
-        Map<String, String> matchingValues = new Map<String, String> {
-                'DoNotMatch' => BDI_DataImport_API.DoNotMatch,
-                'RequireNoMatch' => BDI_DataImport_API.RequireNoMatch,
-                'RequireExactMatch' => BDI_DataImport_API.RequireExactMatch,
-                'ExactMatchOrCreate' => BDI_DataImport_API.ExactMatchOrCreate,
-                'RequireBestMatch' => BDI_DataImport_API.RequireBestMatch,
-                'BestMatchOrCreate' => BDI_DataImport_API.BestMatchOrCreate
-        };
-        return matchingValues;
+        try {
+            Map<String, String> matchingValues = new Map<String, String> {
+                    'DoNotMatch' => BDI_DataImport_API.DoNotMatch,
+                    'RequireNoMatch' => BDI_DataImport_API.RequireNoMatch,
+                    'RequireExactMatch' => BDI_DataImport_API.RequireExactMatch,
+                    'ExactMatchOrCreate' => BDI_DataImport_API.ExactMatchOrCreate,
+                    'RequireBestMatch' => BDI_DataImport_API.RequireBestMatch,
+                    'BestMatchOrCreate' => BDI_DataImport_API.BestMatchOrCreate
+            };
+            return matchingValues;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -879,16 +913,20 @@ public with sharing class GE_GiftEntryController {
     @AuraEnabled
     public static SObject[] retrieveRecords(String[] selectFields,
             String sObjectApiName, String[] whereClauses, String orderByClause, Integer limitClause) {
+                try {
 
-        String queryString = new UTIL_Query()
-                .withSelectFields(selectFields)
-                .withFrom(sObjectApiName)
-                .withWhere(whereClauses)
-                .withSecurityEnforced()
-                .withOrderBy(orderByClause)
-                .withLimit(limitClause)
-                .build();
-        return Database.query(queryString);
+            String queryString = new UTIL_Query()
+                    .withSelectFields(selectFields)
+                    .withFrom(sObjectApiName)
+                    .withWhere(whereClauses)
+                    .withSecurityEnforced()
+                    .withOrderBy(orderByClause)
+                    .withLimit(limitClause)
+                    .build();
+            return Database.query(queryString);
+                } catch (Exception ex) {
+                    throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+                }
     }
 
     /*******************************************************************************************************
@@ -900,26 +938,30 @@ public with sharing class GE_GiftEntryController {
     */
     @AuraEnabled
     public static ColumnHeaderData retrieveCustomColumnHeaders(String listName) {
-        String[] selectFields = new String[] {
-                SObjectType.Custom_Column_Header__c.fields.Id.name,
-                SObjectType.Custom_Column_Header__c.fields.Name.name,
-                SObjectType.Custom_Column_Header__c.fields.Field_Api_Name__c.name,
-                SObjectType.Custom_Column_Header__c.fields.Index__c.name,
-                SObjectType.Custom_Column_Header__c.fields.List_Name__c.name
-        };
-        String sObjectApiName = SObjectType.Custom_Column_Header__c.name;
-        String whereVal = '\'' + String.escapeSingleQuotes(listName) + '\'';
-        String whereClauses = SObjectType.Custom_Column_Header__c.fields.List_Name__c.name + ' = ' + whereVal;
-        String orderByClause = SObjectType.Custom_Column_Header__c.fields.Index__c.name + ' ASC';
+        try {
+            String[] selectFields = new String[] {
+                    SObjectType.Custom_Column_Header__c.fields.Id.name,
+                    SObjectType.Custom_Column_Header__c.fields.Name.name,
+                    SObjectType.Custom_Column_Header__c.fields.Field_Api_Name__c.name,
+                    SObjectType.Custom_Column_Header__c.fields.Index__c.name,
+                    SObjectType.Custom_Column_Header__c.fields.List_Name__c.name
+            };
+            String sObjectApiName = SObjectType.Custom_Column_Header__c.name;
+            String whereVal = '\'' + String.escapeSingleQuotes(listName) + '\'';
+            String whereClauses = SObjectType.Custom_Column_Header__c.fields.List_Name__c.name + ' = ' + whereVal;
+            String orderByClause = SObjectType.Custom_Column_Header__c.fields.Index__c.name + ' ASC';
 
-        String queryString = new UTIL_Query()
-                .withSelectFields(selectFields)
-                .withFrom(sObjectApiName)
-                .withWhere(whereClauses)
-                .withSecurityEnforced()
-                .withOrderBy(orderByClause)
-                .build();
-        return getColumnHeaderDataWithPermissions(Database.query(queryString), listName);
+            String queryString = new UTIL_Query()
+                    .withSelectFields(selectFields)
+                    .withFrom(sObjectApiName)
+                    .withWhere(whereClauses)
+                    .withSecurityEnforced()
+                    .withOrderBy(orderByClause)
+                    .build();
+            return getColumnHeaderDataWithPermissions(Database.query(queryString), listName);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -928,26 +970,30 @@ public with sharing class GE_GiftEntryController {
     @AuraEnabled
     public static ColumnHeaderData upsertCustomColumnHeaders(String columnHeadersString,
             String listName) {
+                try {
 
-        Custom_Column_Header__c[] columnHeaders =
-                (Custom_Column_Header__c[])JSON.deserialize(columnHeadersString, Custom_Column_Header__c[].class);
-        upsert columnHeaders;
+            Custom_Column_Header__c[] columnHeaders =
+                    (Custom_Column_Header__c[])JSON.deserialize(columnHeadersString, Custom_Column_Header__c[].class);
+            upsert columnHeaders;
 
-        Id[] headerIdsToKeep = new Id[]{};
-        for (Custom_Column_Header__c columnHeader : columnHeaders) {
-            headerIdsToKeep.add(columnHeader.Id);
-        }
+            Id[] headerIdsToKeep = new Id[]{};
+            for (Custom_Column_Header__c columnHeader : columnHeaders) {
+                headerIdsToKeep.add(columnHeader.Id);
+            }
 
-        Custom_Column_Header__c[] headersToDelete = [
-                SELECT Id
-                FROM Custom_Column_Header__c
-                WHERE Id NOT IN :headerIdsToKeep
-                AND List_Name__c = :listName
-                WITH SECURITY_ENFORCED
-        ];
-        delete headersToDelete;
+            Custom_Column_Header__c[] headersToDelete = [
+                    SELECT Id
+                    FROM Custom_Column_Header__c
+                    WHERE Id NOT IN :headerIdsToKeep
+                    AND List_Name__c = :listName
+                    WITH SECURITY_ENFORCED
+            ];
+            delete headersToDelete;
 
-        return getColumnHeaderDataWithPermissions(columnHeaders, listName);
+            return getColumnHeaderDataWithPermissions(columnHeaders, listName);
+                } catch (Exception ex) {
+                    throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+                }
     }
 
     /*******************************************************************************************************
@@ -955,33 +1001,37 @@ public with sharing class GE_GiftEntryController {
     */
     @AuraEnabled
     public static GE_Template.Template[] getAllFormTemplates() {
-        GE_Template.Template[] formTemplates = new GE_Template.Template[]{};
-        Form_Template__c[] allTemplates = [
-                SELECT Id,
-                        Name,
-                        Template_JSON__c,
-                        Description__c,
-                        Format_Version__c
-                FROM Form_Template__c
-                WITH SECURITY_ENFORCED
-                ORDER BY Name ASC
-        ];
+        try {
+            GE_Template.Template[] formTemplates = new GE_Template.Template[]{};
+            Form_Template__c[] allTemplates = [
+                    SELECT Id,
+                            Name,
+                            Template_JSON__c,
+                            Description__c,
+                            Format_Version__c
+                    FROM Form_Template__c
+                    WITH SECURITY_ENFORCED
+                    ORDER BY Name ASC
+            ];
 
-        for (Form_Template__c formTemplate : allTemplates) {
-            GE_Template.Template deserializedFormTemplate = deserializeFormTemplateFromObj
-                    (formTemplate);
-            if (formTemplate.id != null) {
-                deserializedFormTemplate.id = formTemplate.id;
+            for (Form_Template__c formTemplate : allTemplates) {
+                GE_Template.Template deserializedFormTemplate = deserializeFormTemplateFromObj
+                        (formTemplate);
+                if (formTemplate.id != null) {
+                    deserializedFormTemplate.id = formTemplate.id;
+                }
+
+                formTemplates.add(deserializedFormTemplate);
             }
 
-            formTemplates.add(deserializedFormTemplate);
-        }
+            if (!getGiftEntrySettings().Enable_Gateway_Assignment__c) {
+                return formTemplates;
+            }
 
-        if (!getGiftEntrySettings().Enable_Gateway_Assignment__c) {
-            return formTemplates;
+            return getMappedGateways(formTemplates);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        return getMappedGateways(formTemplates);
     }
 
     private static GE_Template.Template[] getMappedGateways(GE_Template.Template[] formTemplates) {
@@ -1043,16 +1093,20 @@ public with sharing class GE_GiftEntryController {
 
     @AuraEnabled
     public static String getGatewayAssignmentSettingsWithDefaultGatewayName() {
-        GatewayAssignmentSettings gaSettings = new GatewayAssignmentSettings();
-        gaSettings.gatewayAssignmentEnabled = getGiftEntrySettings().Enable_Gateway_Assignment__c;
+        try {
+            GatewayAssignmentSettings gaSettings = new GatewayAssignmentSettings();
+            gaSettings.gatewayAssignmentEnabled = getGiftEntrySettings().Enable_Gateway_Assignment__c;
 
-        if (gaSettings.gatewayAssignmentEnabled) {
-            List<PS_GatewayService.GatewayTemplateSetting> gatewayTemplateSettings = getGatewayTemplateSettings();
-            Map<String, String> gatewayNameById = getGatewayNameById(gatewayTemplateSettings);
-            gaSettings.defaultGatewayName = gatewayNameById.get(new PS_IntegrationServiceConfig.Service().getGatewayIds());
+            if (gaSettings.gatewayAssignmentEnabled) {
+                List<PS_GatewayService.GatewayTemplateSetting> gatewayTemplateSettings = getGatewayTemplateSettings();
+                Map<String, String> gatewayNameById = getGatewayNameById(gatewayTemplateSettings);
+                gaSettings.defaultGatewayName = gatewayNameById.get(new PS_IntegrationServiceConfig.Service().getGatewayIds());
+            }
+
+            return JSON.serialize(gaSettings);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        return JSON.serialize(gaSettings);
     }
 
     /*******************************************************************************************************
@@ -1088,25 +1142,29 @@ public with sharing class GE_GiftEntryController {
     */
     @AuraEnabled
     public static GE_Template.Template retrieveFormTemplateById(Id templateId) {
-        GE_Template.Template template;
+        try {
+            GE_Template.Template template;
 
-        Form_Template__c templateObj = [
-                SELECT Id, Name, Format_Version__c, Template_JSON__c
-                FROM Form_Template__c
-                WHERE Id =: templateId
-                WITH SECURITY_ENFORCED
-                LIMIT 1
-        ];
+            Form_Template__c templateObj = [
+                    SELECT Id, Name, Format_Version__c, Template_JSON__c
+                    FROM Form_Template__c
+                    WHERE Id =: templateId
+                    WITH SECURITY_ENFORCED
+                    LIMIT 1
+            ];
 
-        template = deserializeFormTemplateFromObj(templateObj);
+            template = deserializeFormTemplateFromObj(templateObj);
 
-        template = checkPermissions(template,
-                new Set<GE_Template.AccessLevel>{
-                        GE_Template.AccessLevel.VALIDATE_READ,
-                        GE_Template.AccessLevel.VALIDATE_CREATE,
-                        GE_Template.AccessLevel.VALIDATE_UPDATE});
+            template = checkPermissions(template,
+                    new Set<GE_Template.AccessLevel>{
+                            GE_Template.AccessLevel.VALIDATE_READ,
+                            GE_Template.AccessLevel.VALIDATE_CREATE,
+                            GE_Template.AccessLevel.VALIDATE_UPDATE});
 
-        return template;
+            return template;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -1162,28 +1220,32 @@ public with sharing class GE_GiftEntryController {
             String description,
             String formatVersion,
             String templateJSON) {
+                try {
 
-        Set<String> fieldsToCheck = new Set<String>{
-                'Name',
-                'Description__c',
-                'Template_JSON__c',
-                'Format_Version__c'
-        };
-        if (!canUpsertFormTemplate(fieldsToCheck)) {
-            throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
-        }
+            Set<String> fieldsToCheck = new Set<String>{
+                    'Name',
+                    'Description__c',
+                    'Template_JSON__c',
+                    'Format_Version__c'
+            };
+            if (!canUpsertFormTemplate(fieldsToCheck)) {
+                throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+            }
 
-        if (templateJSON != null) {
-            Form_Template__c templateObj = new Form_Template__c(Id = id,
-                    Name = name,
-                    Description__c = description,
-                    Template_JSON__c = templateJSON,
-                    Format_Version__c = formatVersion);
-            upsert templateObj;
-            return templateObj.Id;
-        }
+            if (templateJSON != null) {
+                Form_Template__c templateObj = new Form_Template__c(Id = id,
+                        Name = name,
+                        Description__c = description,
+                        Template_JSON__c = templateJSON,
+                        Format_Version__c = formatVersion);
+                upsert templateObj;
+                return templateObj.Id;
+            }
 
-        return null;
+            return null;
+                } catch (Exception ex) {
+                    throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+                }
     }
 
 
@@ -1210,24 +1272,28 @@ public with sharing class GE_GiftEntryController {
     */
     @AuraEnabled
     public static Boolean checkNameUniqueness(String name, String id) {
-        Form_Template__c[] formTemplates = [
-                SELECT Id
-                FROM Form_Template__c
-                WHERE Name = :name
-                WITH SECURITY_ENFORCED
-        ];
-        Boolean isNameValid = formTemplates.size() > 0 ? false : true;
+        try {
+            Form_Template__c[] formTemplates = [
+                    SELECT Id
+                    FROM Form_Template__c
+                    WHERE Name = :name
+                    WITH SECURITY_ENFORCED
+            ];
+            Boolean isNameValid = formTemplates.size() > 0 ? false : true;
 
-        if (id != null) {
-            for (Form_Template__c formTemplate : formTemplates) {
-                if (formTemplate.Id == id) {
-                    isNameValid = true;
-                    break;
+            if (id != null) {
+                for (Form_Template__c formTemplate : formTemplates) {
+                    if (formTemplate.Id == id) {
+                        isNameValid = true;
+                        break;
+                    }
                 }
             }
-        }
 
-        return isNameValid;
+            return isNameValid;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************
@@ -1364,11 +1430,15 @@ public with sharing class GE_GiftEntryController {
 
     @AuraEnabled
     public static Data_Import_Settings__c getDataImportSettings() {
-        if (!UTIL_Permissions.canRead(UTIL_Namespace.StrTokenNSPrefix('Data_Import_Settings__c'), false)) {
-            return null;
-        }
+        try {
+            if (!UTIL_Permissions.canRead(UTIL_Namespace.StrTokenNSPrefix('Data_Import_Settings__c'), false)) {
+                return null;
+            }
 
-        return UTIL_CustomSettingsFacade.getDataImportSettings();
+            return UTIL_CustomSettingsFacade.getDataImportSettings();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     private static String retrieveBatchCurrencyIsoCode (Id batchId) {
@@ -1391,7 +1461,11 @@ public with sharing class GE_GiftEntryController {
 
     @AuraEnabled
     public static String getGatewaysFromElevate() {
-        return gatewayService.getGatewaysByMerchant();
+        try {
+            return gatewayService.getGatewaysByMerchant();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @AuraEnabled

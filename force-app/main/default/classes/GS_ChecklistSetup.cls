@@ -44,13 +44,17 @@ public with sharing class GS_ChecklistSetup {
      */
     @AuraEnabled
     public static List<ChecklistSection> getChecklists(String pageType) {
-        storedItemsId = getMarkedAsCompletedCheckListItemByUser();
-        List<GetStartedChecklistSection__mdt> checklistSections = getSectionsAndSubsections(pageType);
-        List<ChecklistSection> checklistWrapers = new List<ChecklistSection>();
-        for (GetStartedChecklistSection__mdt checklistSection : checklistSections) {
-            checklistWrapers.add(wrapChecklistSection(checklistSection));
+        try {
+            storedItemsId = getMarkedAsCompletedCheckListItemByUser();
+            List<GetStartedChecklistSection__mdt> checklistSections = getSectionsAndSubsections(pageType);
+            List<ChecklistSection> checklistWrapers = new List<ChecklistSection>();
+            for (GetStartedChecklistSection__mdt checklistSection : checklistSections) {
+                checklistWrapers.add(wrapChecklistSection(checklistSection));
+            }
+            return checklistWrapers;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-        return checklistWrapers;
     }
 
     /**
@@ -64,20 +68,24 @@ public with sharing class GS_ChecklistSetup {
      */
     @AuraEnabled
     public static void updateCheckItem(String itemId, Boolean isChecked){
+        try {
 
-        if (doesChecklistItemExists(itemId)) {
-            List<GetStartedCompletionChecklistState__c> alreadyStoredCompletedItems = [
-                SELECT Id
-                FROM   GetStartedCompletionChecklistState__c
-                WHERE  Item_Id__c = :itemId
-                AND    User__c = :UserInfo.getUserId()
-                WITH SECURITY_ENFORCED
-            ];
-            if (isChecked) {
-                markItemAsCompleted(alreadyStoredCompletedItems, itemId);
-            } else {
-                unmarkItemAsCompleted(alreadyStoredCompletedItems);
+            if (doesChecklistItemExists(itemId)) {
+                List<GetStartedCompletionChecklistState__c> alreadyStoredCompletedItems = [
+                    SELECT Id
+                    FROM   GetStartedCompletionChecklistState__c
+                    WHERE  Item_Id__c = :itemId
+                    AND    User__c = :UserInfo.getUserId()
+                    WITH SECURITY_ENFORCED
+                ];
+                if (isChecked) {
+                    markItemAsCompleted(alreadyStoredCompletedItems, itemId);
+                } else {
+                    unmarkItemAsCompleted(alreadyStoredCompletedItems);
+                }
             }
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
     }
 
@@ -211,7 +219,11 @@ public with sharing class GS_ChecklistSetup {
     */
     @AuraEnabled(Cacheable=true)
     public static String getNamespace() {
-        return UTIL_Namespace.getNamespace();
+        try {
+            return UTIL_Namespace.getNamespace();
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**

@@ -118,22 +118,26 @@ public with sharing class RD2_ElevateInformation_CTRL {
     */
     @AuraEnabled(cacheable=false)
     public static String getLatestErrorMessage(Id recordId) {
-        Error__c error = new ERR_LogService().getLatestError(recordId);
+        try {
+            Error__c error = new ERR_LogService().getLatestError(recordId);
 
-        if (error == null) {
-            return null;
+            if (error == null) {
+                return null;
+            }
+
+            //Do not return error if the error is outdated,
+            //ie created before the latest successful payment
+            Opportunity paidOpp = finder.getLatestPaidOpportunity(recordId);
+
+            Boolean isLatestError = paidOpp == null
+                || paidOpp.CreatedDate <= error.CreatedDate;
+
+            return isLatestError
+                ? String.format(System.Label.commonErrorPrefix, new String[]{ error.Full_Message__c })
+                : null;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
         }
-
-        //Do not return error if the error is outdated,
-        //ie created before the latest successful payment
-        Opportunity paidOpp = finder.getLatestPaidOpportunity(recordId);
-
-        Boolean isLatestError = paidOpp == null
-            || paidOpp.CreatedDate <= error.CreatedDate;
-
-        return isLatestError
-            ? String.format(System.Label.commonErrorPrefix, new String[]{ error.Full_Message__c })
-            : null;
     }
 
     /**

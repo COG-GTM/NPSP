@@ -32,23 +32,31 @@ public with sharing class PS_GatewayManagement {
 
     @AuraEnabled
     public static void setGatewayId(String gatewayId) {
-        Map<String, List<Map<String, String>>> gatewayConfig = new Map<String, List<Map<String, String>>> {
-                PS_IntegrationServiceConfig.PAYMENTS_SERVICE_NAME =>
-                        new List<Map<String, String>>{
-                                new Map<String, String>{
-                                        'key' => PS_IntegrationServiceConfig.SFDO_GATEWAYIDS,
-                                        'value' => gatewayId
-                                }
-                        }
-        };
-        PS_IntegrationService.setConfiguration(gatewayConfig);
+        try {
+            Map<String, List<Map<String, String>>> gatewayConfig = new Map<String, List<Map<String, String>>> {
+                    PS_IntegrationServiceConfig.PAYMENTS_SERVICE_NAME =>
+                            new List<Map<String, String>>{
+                                    new Map<String, String>{
+                                            'key' => PS_IntegrationServiceConfig.SFDO_GATEWAYIDS,
+                                            'value' => gatewayId
+                                    }
+                            }
+            };
+            PS_IntegrationService.setConfiguration(gatewayConfig);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
     @AuraEnabled
     public static void setGatewayAssignmentEnabled(Boolean gatewayAssignmentEnabled) {
-        Gift_Entry_Settings__c giftEntrySettings = UTIL_CustomSettingsFacade.getGiftEntrySettings();
-        giftEntrySettings.Enable_Gateway_Assignment__c = gatewayAssignmentEnabled;
+        try {
+            Gift_Entry_Settings__c giftEntrySettings = UTIL_CustomSettingsFacade.getGiftEntrySettings();
+            giftEntrySettings.Enable_Gateway_Assignment__c = gatewayAssignmentEnabled;
 
-        upsert giftEntrySettings;       
+            upsert giftEntrySettings;       
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     @TestVisible

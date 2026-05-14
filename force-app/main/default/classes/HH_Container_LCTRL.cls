@@ -652,12 +652,16 @@ public with sharing class HH_Container_LCTRL {
 
     @AuraEnabled
     public static Map<String, String> getFieldLabels() {
-        Map<String, String> fieldLabelsBySObject = new Map<String, String> {
-            undeliverableAddressField => UTIL_Describe.getFieldLabel(contactObject, undeliverableAddressField),
-            undeliverableField => UTIL_Describe.getFieldLabel(addressObject, undeliverableField)
-        };
+        try {
+            Map<String, String> fieldLabelsBySObject = new Map<String, String> {
+                undeliverableAddressField => UTIL_Describe.getFieldLabel(contactObject, undeliverableAddressField),
+                undeliverableField => UTIL_Describe.getFieldLabel(addressObject, undeliverableField)
+            };
 
-        return fieldLabelsBySObject;
+            return fieldLabelsBySObject;
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /*******************************************************************************************************

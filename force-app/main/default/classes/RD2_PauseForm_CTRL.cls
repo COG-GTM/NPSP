@@ -269,7 +269,11 @@ public with sharing class RD2_PauseForm_CTRL {
      */
     @AuraEnabled
     public static Map<String, Object> getInstallments(Id recordId, Integer numberOfInstallments) {
-        return RD2_VisualizeScheduleController.getInstallments(recordId, numberOfInstallments);
+        try {
+            return RD2_VisualizeScheduleController.getInstallments(recordId, numberOfInstallments);
+        } catch (Exception ex) {
+            throw UTIL_AuraEnabledCommon.buildAuraException(ex.getMessage());
+        }
     }
 
     /**
