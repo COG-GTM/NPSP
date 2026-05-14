@@ -19,6 +19,10 @@ on:
 
 jobs:
   Instrumentation_Service_Compliance_Verification:
+    permissions:
+      pull-requests: write
+      issues: write
+      contents: read
 
     # Constant vars
     # These should be adjusted per repository
