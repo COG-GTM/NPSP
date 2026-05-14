@@ -868,9 +868,11 @@ public with sharing class LD_LeadConvertOverride_CTRL {
             String.valueOf(Contact.Email)
         };
         private String queryString;
+        private Id contactId;
 
         @TestVisible
         private ContactQueryWithoutSharing(Id contactId) {
+            this.contactId = contactId;
             if (Schema.SObjectType.Contact.fields.getMap().get('RecordTypeId') != null) {
                 selectFields.add('RecordTypeId');
             }
