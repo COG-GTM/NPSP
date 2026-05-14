@@ -893,7 +893,7 @@ public with sharing class LD_LeadConvertOverride_CTRL {
         @TestVisible
         private Contact query() {
             Map<String, Object> bindVars = new Map<String, Object>{'contactId' => contactId};
-            return Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
+            return Database.queryWithBinds(queryString, bindVars, AccessLevel.SYSTEM_MODE);
         }
     }
 
