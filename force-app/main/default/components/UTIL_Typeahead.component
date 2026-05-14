@@ -196,7 +196,7 @@
                 }
             });
 
-            if ({!JSENCODE(TEXT(stealFocus))}) j$('#{!JSENCODE(searchBoxId)}').focus();
+            if ({!IF(stealFocus, 'true', 'false')}) j$('#{!JSENCODE(searchBoxId)}').focus();
         });
 
         if ('{!JSENCODE(secondaryField)}'.length) 
