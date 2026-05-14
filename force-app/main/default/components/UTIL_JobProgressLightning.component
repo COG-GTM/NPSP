@@ -121,7 +121,7 @@
 
     (function () {
         var jobProgressContainer = document.getElementById('{!$Component.jobProgressContainer}');
-        var pollingDelay = {!pollingDelay};
+        var pollingDelay = {!JSENCODE(pollingDelay)};
         var refreshInterval;
 
         var eventTarget;
@@ -202,7 +202,7 @@
          */
         function refreshJobsList() {
             Visualforce.remoting.Manager.invokeAction(
-                "{!$RemoteAction.UTIL_JobProgress_CTRL.getBatchJobsStatus}", {!numberOfJobs}, "{!batchJobStartTimeString}",
+                "{!$RemoteAction.UTIL_JobProgress_CTRL.getBatchJobsStatus}", {!JSENCODE(TEXT(numberOfJobs))}, "{!JSENCODE(batchJobStartTimeString)}",
                 function (result, event) {
                     sendProgressEvents(result);
                     var jobsListContainer = jobProgressContainer.querySelector('[data-job-progress="list-container"]');
@@ -262,7 +262,7 @@
         }
 
         function init() {
-            eventTarget = document.getElementById('{!eventTargetId}');
+            eventTarget = document.getElementById('{!JSENCODE(eventTargetId)}');
 
             if (eventTarget) {
                 eventTarget.addEventListener('start', function () {

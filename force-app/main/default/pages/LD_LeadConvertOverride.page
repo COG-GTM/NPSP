@@ -69,7 +69,7 @@
                                     <a href="javascript:viewLink()" data-target="contact_modal" id="view">View</a>
                                         <script type="text/javascript">
                                             function viewLink() {
-                                                var contactId = '{!HTMLENCODE(convertedContactId)}';
+                                                var contactId = '{!JSENCODE(convertedContactId)}';
                                                 if (contactId  == null || contactId  == "" ||  contactId  == 'NEW_CONTACT') {
                                                     alert("{!JSENCODE($Label.leadConvertViewContactError)}");
                                                 } else {
@@ -207,7 +207,7 @@
         // In order to respect the conversion status per record type, using the standard apex:input field for Status
         // and filtering out any options that are not part of the converted status options
         function filterStatus() {
-            var lcStatus = '{!lcStatuses}'; // Lead conversion statuses
+            var lcStatus = '{!JSENCODE(lcStatuses)}'; // Lead conversion statuses
             var ldStatus = document.getElementById('{!$Component.pbEdit.leadstatus.util_formfield.inputx.util_inputfield.inputx}'); // All lead statuses
             var selected = ldStatus.value;
             for (var i=0; i<ldStatus.length; i++){

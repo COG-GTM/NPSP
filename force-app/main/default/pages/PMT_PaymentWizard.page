@@ -28,8 +28,8 @@
         // For some reason, VF will not render the page messages without this onLoad function in place, even if it doesn't actually do anything.
         window.onload = function () { };
         if ({!NOT(hasFeatureAccess)}) {
-            $Lightning.use("{!namespace}" + ":RD2_EnablementApp", function() {
-                $Lightning.createComponent("{!namespace}" + ":utilIllustration",
+            $Lightning.use("{!JSENCODE(namespace)}" + ":RD2_EnablementApp", function() {
+                $Lightning.createComponent("{!JSENCODE(namespace)}" + ":utilIllustration",
                     {
                         title : "{!JSENCODE($Label.commonAdminPermissionErrorTitle)}",
                         message : "{!JSENCODE($Label.commonPermissionErrorMessage)}",

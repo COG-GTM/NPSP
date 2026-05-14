@@ -27,8 +27,8 @@
     </apex:outputPanel>
 
     <script>
-        if ({!isRunningUserIsAdmin}) {
-            var namespace = '{!namespace}';
+        if ({!JSENCODE(isRunningUserIsAdmin)}) {
+            var namespace = '{!JSENCODE(namespace)}';
             if (!namespace || namespace === '') {
                 namespace = 'c';
             }

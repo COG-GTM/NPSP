@@ -19,9 +19,9 @@
     (function($) {
         var sumAmount;
 
-        var parentAmount = {!parent.amount};
-        var decimalSeparator = "{!decimalSeparator}";
-        var thousandsSeparator = "{!thousandsSeparator}";
+        var parentAmount = {!JSENCODE(parent.amount)};
+        var decimalSeparator = "{!JSENCODE(decimalSeparator)}";
+        var thousandsSeparator = "{!JSENCODE(thousandsSeparator)}";
 
         function isLightningExperienceOrSalesforce1() {
             return((typeof sforce != 'undefined') && sforce && (!!sforce.one));
@@ -29,9 +29,9 @@
 
         function urlHome() {
             if (isLightningExperienceOrSalesforce1()) {
-                sforce.one.navigateToURL('one.app#/sObject/{!parent.objectApiName}/home');
+                sforce.one.navigateToURL('one.app#/sObject/{!JSENCODE(parent.objectApiName)}/home');
             } else {
-                window.location.assign('/{!parent.keyPrefix}/o');
+                window.location.assign('/{!JSENCODE(parent.keyPrefix)}/o');
             }
         }
 
@@ -160,8 +160,8 @@
 
     <script>
         if ({!NOT(hasAccess)}) {
-            $Lightning.use("{!namespace}" + ":RD2_EnablementApp", function() {
-                $Lightning.createComponent("{!namespace}" + ":utilIllustration",
+            $Lightning.use("{!JSENCODE(namespace)}" + ":RD2_EnablementApp", function() {
+                $Lightning.createComponent("{!JSENCODE(namespace)}" + ":utilIllustration",
                     {
                         title : "{!JSENCODE($Label.commonAdminPermissionErrorTitle)}",
                         message : "{!JSENCODE($Label.commonPermissionErrorMessage)}",
@@ -242,7 +242,7 @@
                                             <td>
                                                 <div class="slds-form-element">
                                                     <div class="slds-form-element__control slds-input-has-fixed-addon">
-                                                        <apex:inputField id="alloInputPercent" styleClass="slds-input slds-size_2-of-3 alloPercent percent{!cnt}" onkeyup="window.changePercent({!cnt})" value="{!Allo.Percent__c}"/>
+                                                        <apex:inputField id="alloInputPercent" styleClass="slds-input slds-size_2-of-3 alloPercent percent{!cnt}" onkeyup="window.changePercent({!JSENCODE(cnt)})" value="{!Allo.Percent__c}"/>
                                                         <label for="{!$Component.alloInputPercent}" class="slds-form-element__label slds-form-element__addon">%</label>
                                                     </div>
                                                 </div>

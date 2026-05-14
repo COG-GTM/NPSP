@@ -80,7 +80,7 @@
                                 <apex:commandLink action="{!SortItem}" rerender="panelData" status="statusLoad" value="{!$ObjectType.Error__c.Fields[pageController.strNameField].Label}" >
                                     <apex:param assignTo="{!SortItemField}" name="SortItemField" value="{!pageController.strNameField}" />
                                     <apex:outputText style="font-size:1.0em;font-weight:bold;font-family:symbol" 
-                                        value="{!IF(SortItemField=pageController.strNameField, IF(SortItemAsc, ' ↑' , ' ↓'), '')}" escape="false" />
+                                        value="{!IF(SortItemField=pageController.strNameField, IF(SortItemAsc, ' ↑' , ' ↓'), '')}" escape="true" />
                                 </apex:commandLink>
                             </label>
                             <span class="slds-assistive-text">Sort</span>
@@ -92,7 +92,7 @@
                                     <apex:commandLink action="{!SortItem}" rerender="panelData" status="statusLoad" value="{!$ObjectType.Error__c.Fields[f].Label}" rendered="{!$ObjectType.Error__c.Fields[f].filterable}" >
                                         <apex:param assignTo="{!SortItemField}" name="SortItemField" value="{!f}" />
                                         <apex:outputText style="font-size:1.0em;font-weight:bold;font-family:symbol" 
-                                            value="{!IF(SortItemField=f, IF(SortItemAsc, ' ↑' , ' ↓'), '')}" escape="false" />
+                                            value="{!IF(SortItemField=f, IF(SortItemAsc, ' ↑' , ' ↓'), '')}" escape="true" />
                                     </apex:commandLink>
                                 </th>
                             </apex:outputText> 
