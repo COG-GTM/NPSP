@@ -159,7 +159,7 @@ public with sharing class BDI_DataImportDeleteBTN_CTRL {
     @SuppressWarnings('PMD.ApexOpenRedirect')
     public PageReference close() {
         String retUrlParam = ApexPages.currentPage().getParameters().get('retURL');
-        String retUrl = UTIL_String.getInternalUrlPath(String.escapeSingleQuotes(retUrlParam != null ? retUrlParam : ''));
+        String retUrl = UTIL_String.getInternalUrlPath(retUrlParam != null ? retUrlParam : '');
 
         PageReference p;
         if (!String.isBlank(retUrl) && retUrl.startsWith('/')) {

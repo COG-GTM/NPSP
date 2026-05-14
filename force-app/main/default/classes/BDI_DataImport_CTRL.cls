@@ -94,10 +94,16 @@ public with sharing class BDI_DataImport_CTRL {
 
         // load up default settings or a specified batch
         String batchIdParam = ApexPages.currentPage().getParameters().get('batchId');
-        loadBatchAndSettings(batchIdParam != null ? String.escapeSingleQuotes(batchIdParam) : null);
+        String batchId;
+        try {
+            batchId = (String) ((Id) batchIdParam);
+        } catch (Exception e) {
+            batchId = null;
+        }
+        loadBatchAndSettings(batchId);
         String diIds = ApexPages.currentPage().getParameters().get('diIds');
         String retUrlParam = ApexPages.currentPage().getParameters().get('retURL');
-        retUrl = UTIL_String.getInternalUrlPath(retUrlParam != null ? String.escapeSingleQuotes(retUrlParam) : '');
+        retUrl = UTIL_String.getInternalUrlPath(retUrlParam != null ? retUrlParam : '');
 
         if (diIds != null) {
             dataImportIds = new List<Id>();
