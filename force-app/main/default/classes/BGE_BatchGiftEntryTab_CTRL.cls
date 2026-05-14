@@ -135,14 +135,16 @@ public with sharing class BGE_BatchGiftEntryTab_CTRL {
         Set<String> deduplicatedFields = new Set<String>(fields);
         List<String> finalFields = new List<String>(deduplicatedFields);
 
+        String safeSortBy = String.escapeSingleQuotes(sortBy);
+        String safeSortDirection = String.escapeSingleQuotes(sortDirection);
         String query = 'SELECT ' +
                 String.join(finalFields, ', ') +
                 ' FROM ' + UTIL_Namespace.StrTokenNSPrefix('DataImportBatch__c') +
                 ' WHERE GiftBatch__c = TRUE' +
-                ' ORDER BY ' + sortBy + ' ' + sortDirection +
+                ' ORDER BY ' + safeSortBy + ' ' + safeSortDirection +
                 ' LIMIT ' + loadSize +
                 ' OFFSET ' + offset;
-        return Database.query(query);
+        return Database.queryWithBinds(query, new Map<String, Object>(), AccessLevel.USER_MODE);
     }
 
     /*******************************************************************************************************
@@ -150,7 +152,7 @@ public with sharing class BGE_BatchGiftEntryTab_CTRL {
     * @return Integer count of batch records
     */
     private static Integer getTotalNumberOfRows() {
-        return [SELECT Count() FROM DataImportBatch__c WHERE GiftBatch__c = TRUE];
+        return [SELECT Count() FROM DataImportBatch__c WHERE GiftBatch__c = TRUE WITH USER_MODE];
     }
 
     /*******************************************************************************************************

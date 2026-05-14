@@ -77,7 +77,7 @@ public inherited sharing class RD2_ERecurringDonationsSelector {
                                 + 'npe03__Total_Paid_Installments__c, '
                                 + 'Lastmodifieddate '
                                 + 'FROM npe03__Recurring_Donation__c '
-                                + 'WHERE npe03__Contact__c = \'' + currentContactId + '\' ';
+                                + 'WHERE npe03__Contact__c = :currentContactId ';
 
             if(elevateFilter == ELEVATE_RD) {
                 queryString += 'AND CommitmentId__c != NULL ';
@@ -85,10 +85,10 @@ public inherited sharing class RD2_ERecurringDonationsSelector {
                 queryString += 'AND CommitmentId__c = NULL ';
             }
 
-            queryString += 'WITH SECURITY_ENFORCED ';
             queryString += 'ORDER BY npe03__Next_Payment_Date__c DESC NULLS LAST';
 
-            recurringDonations = Database.query(queryString);
+            Map<String, Object> bindVars = new Map<String, Object>{ 'currentContactId' => currentContactId };
+            recurringDonations = Database.queryWithBinds(queryString, bindVars, AccessLevel.USER_MODE);
         }
         return recurringDonations;
     }

@@ -77,8 +77,11 @@ public inherited sharing class OPP_OpportunityNaming implements OPP_INaming {
         }
 
         //query for opportunities and associated contacts
+        String oppQuery = getOppQuery(allFields) + ' WHERE Id IN :oppIds';
+        Set<Id> oppIds = new Map<Id, Opportunity>(oppList).keySet();
+        Map<String, Object> bindVars = new Map<String, Object>{ 'oppIds' => oppIds };
         Map<Id,Opportunity> mapOppsQuery = new Map<Id,Opportunity>(
-            (List<Opportunity>)Database.query(getOppQuery(allFields)+' WHERE Id IN :oppList')
+            (List<Opportunity>)Database.queryWithBinds(oppQuery, bindVars, AccessLevel.SYSTEM_MODE)
         );
 
         //fill opportunity id to contact map
@@ -124,8 +127,11 @@ public inherited sharing class OPP_OpportunityNaming implements OPP_INaming {
         }
 
         //query for opportunities and associated contacts
+        String oppQueryAfterInsert = getOppQuery(allFields) + ' WHERE Id IN :oppIds';
+        Set<Id> oppIds = new Map<Id, Opportunity>(oppList).keySet();
+        Map<String, Object> bindVarsAfterInsert = new Map<String, Object>{ 'oppIds' => oppIds };
         Map<Id,Opportunity> mapOppsQuery = new Map<Id,Opportunity>(
-            (List<Opportunity>) database.query(getOppQuery(allFields)+' WHERE Id IN :oppList')
+            (List<Opportunity>) Database.queryWithBinds(oppQueryAfterInsert, bindVarsAfterInsert, AccessLevel.SYSTEM_MODE)
         );
 
         //fill opportunity id to contact map
@@ -202,7 +208,9 @@ public inherited sharing class OPP_OpportunityNaming implements OPP_INaming {
                 if (!String.isBlank(recTypeString)) {
                     try {
                         oppRecTypeIds.add((id)recTypeString);
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                        UTIL_Debug.debug('Invalid RecordType Id: ' + recTypeString);
+                    }
                 }
             }
 
