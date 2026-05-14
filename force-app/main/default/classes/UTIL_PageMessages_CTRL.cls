@@ -32,7 +32,7 @@
 * @group Utilities
 * @description Controller for SLDS styled page messages component
 */
-public class UTIL_PageMessages_CTRL {
+public with sharing class UTIL_PageMessages_CTRL {
     /**
      * @description Get the current context's page messages in the form of a
      * container class that can be used within Visualforce
@@ -56,7 +56,7 @@ public class UTIL_PageMessages_CTRL {
      * @description A container class that maps fields from ApexPages.Message.
      * This allows this data to be accessed within a Visualforce page.
      */
-    public class Message {
+    public with sharing class Message {
         public MessageSeverity severity {get; set;}
         public String summary {get; set;}
         public String detail {get; set;}

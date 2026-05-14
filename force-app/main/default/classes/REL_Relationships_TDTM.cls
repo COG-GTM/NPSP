@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Relationships.htm
 * @description Trigger Handler on Relationships that implements reciprocal relationships behavior.
 */
-public class REL_Relationships_TDTM extends TDTM_Runnable {
+public inherited sharing class REL_Relationships_TDTM extends TDTM_Runnable {
 
     /*********************************************************************
     * @description Set of field names ineligible for syncing across reciprocal pairs  

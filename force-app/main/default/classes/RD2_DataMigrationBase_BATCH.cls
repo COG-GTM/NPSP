@@ -35,7 +35,7 @@
 * Legacy to Enhanced Recurring Donation format
 *
 */
-public abstract class RD2_DataMigrationBase_BATCH implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
+public abstract without sharing class RD2_DataMigrationBase_BATCH implements Database.Batchable<SObject>, Schedulable, Database.Stateful {
 
     public static final String LOG_CONTEXT_MIGRATION = 'RDDataMigration:';
     public static final String LOG_CONTEXT_DRY_RUN = 'RDValidateMigration:';
@@ -433,7 +433,7 @@ public abstract class RD2_DataMigrationBase_BATCH implements Database.Batchable<
     * @description Builds and creates logs for errors and exceptions.
     * The current logger version is the ERR_Handler wrapper.
     */
-    public class Logger {
+    public inherited sharing class Logger {
         /* @description Contains error results */
         @TestVisible
         private ERR_Handler.Errors errorResult = new ERR_Handler.Errors();
@@ -543,5 +543,5 @@ public abstract class RD2_DataMigrationBase_BATCH implements Database.Batchable<
     /**
     * @description Custom data migration exception
     */
-    private class MigrationException extends Exception { }
+    private inherited sharing class MigrationException extends Exception { }
 }

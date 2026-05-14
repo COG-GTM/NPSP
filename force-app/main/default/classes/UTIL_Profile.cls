@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utility for Profiles
 */
-public class UTIL_Profile {
+public with sharing class UTIL_Profile {
 
     /** @description System Administrator Profile Name */
     public static final String SYSTEM_ADMINISTRATOR {

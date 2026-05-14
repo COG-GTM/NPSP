@@ -34,7 +34,7 @@
 * @description Methods used to manipulate string objects
 *
 */
-public class UTIL_String {
+public with sharing class UTIL_String {
 
     /**
      * @description Removes from a string all values that are not an english language alpha character

@@ -33,7 +33,7 @@
 * @group Relationships
 * @description Trigger Handler on Contact that implements automatic relationship creation.
 */
-public class REL_Relationships_Con_TDTM extends TDTM_Runnable {
+public without sharing class REL_Relationships_Con_TDTM extends TDTM_Runnable {
     
 
     /*******************************************************************************************************

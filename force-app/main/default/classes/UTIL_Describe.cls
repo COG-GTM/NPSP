@@ -38,10 +38,10 @@
 * that are made, making the total transaction more efficient.
 */
 
-public class UTIL_Describe {
+public with sharing class UTIL_Describe {
 
     // throw custom exceptions when a bogus object or field is provided.
-    public class SchemaDescribeException extends Exception {}
+    public with sharing class SchemaDescribeException extends Exception {}
 
     // maps to hold the describe info
     private static Map<String, Schema.SObjectType> gd;
@@ -831,7 +831,7 @@ public class UTIL_Describe {
     }
 
     /** @description our exception object for Field Level & Object Security errors. */
-    private class PermsException extends Exception {}
+    private with sharing class PermsException extends Exception {}
 
     /** @description Returns a friendlier label name for a given display type
     * @param displayType The all caps version of the display type provided from a field describe

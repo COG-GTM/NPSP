@@ -82,7 +82,7 @@
 *       updateRecurringDonationOnOppChange
 *
 */
-public class RD_RecurringDonations {
+public without sharing class RD_RecurringDonations {
 
     /*******************************************************************************************************
     * @description Enum to specify behavior of what happens to open opportunities when their RD is closed.

@@ -33,7 +33,7 @@
 * @group Recurring Donations
 * @description Elevate Commitment Wrapper 
 */
-public class RD2_Commitment {
+public with sharing class RD2_Commitment {
     @TestVisible
     String id;
     @TestVisible

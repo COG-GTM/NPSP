@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utilities for working with the currency exchange rate organization cahce
 */
-public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
+public inherited sharing class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
 
     // ====================================================================
     // STATIC VARS USED TO HOLD VALUES THROUGH THE EXECUTION CONTEXT
@@ -183,7 +183,7 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
      * available on the next call.
      * However, if the cache isn't available at all, the cachebuilder interface cannot be used.
      */
-    public class CurrencyCache implements Cache.CacheBuilder {
+    public with sharing class CurrencyCache implements Cache.CacheBuilder {
         public UTIL_CurrencyCache.CurrencyData doLoad(String currCode) {
             return getInstance().getRateMapForCurrencies(new List<String>{currCode}).get(currCode);
         }
@@ -308,7 +308,7 @@ public class UTIL_CurrencyCache implements UTIL_CurrencyCache.Interface_x {
      * to use when dated exchange rates are no enabled AND when the getEffectiveRate() method is called with the
      * flag to retrieve only the default (non-dated) rate.
      */
-    public class CurrencyData {
+    public with sharing class CurrencyData {
         public String IsoCode { get; set; }
         public List<Date> effectiveDates {get; set; }
         public List<Decimal> rates {get; set; }

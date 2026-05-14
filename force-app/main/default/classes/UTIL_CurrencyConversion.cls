@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utilities for converting amounts using the organizations currency exchange rates
 */
-public class UTIL_CurrencyConversion {
+public with sharing class UTIL_CurrencyConversion {
 
     /**
      * @description Static flag to force the conversion logic to always use the standard currency rates

@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utility used to build the ORDER BY clause
 */
-public class UTIL_OrderBy {
+public with sharing class UTIL_OrderBy {
 
     /** @description Sorting Order options */
     public enum SortingOrder { ASCENDING, DESCENDING }
@@ -166,7 +166,7 @@ public class UTIL_OrderBy {
     /*********************************************************************************************************
     * @description The sObject wrapper used to sort records in the list
     */
-    public class SortableRecord implements Comparable {
+    public with sharing class SortableRecord implements Comparable {
         /** @description The sObject */
         private sObject record;
         /** @description An ORDER BY field expression */
@@ -224,7 +224,7 @@ public class UTIL_OrderBy {
     /*********************************************************************************************************
     * @description A field expression used in the ORDER BY clause
     */
-    public class FieldExpression {
+    public with sharing class FieldExpression {
         /** @description The sObject field to ORDER BY */
         Schema.sObjectField sObjField;
         /** @description The sObject reference field */

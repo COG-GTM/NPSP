@@ -33,7 +33,7 @@
 * @group Settings
 * @description Uninstall Script for the NPSP package. 
 */
-global class STG_UninstallScript implements UninstallHandler {
+global with sharing class STG_UninstallScript implements UninstallHandler {
     
     /*******************************************************************************************************
     * @description Runs on package uninstall.

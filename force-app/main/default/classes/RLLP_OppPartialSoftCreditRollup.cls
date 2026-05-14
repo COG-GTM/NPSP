@@ -35,7 +35,7 @@
  *
  * This code has been contributed by KELL Partners, and further modified and enhanced by Salesforce.org.
  */
-public class RLLP_OppPartialSoftCreditRollup {
+public inherited sharing class RLLP_OppPartialSoftCreditRollup {
     
     /*******************************************************************************************************
     * @description calculates the Soft Credit statistics for the specified contacts.  Takes into account 

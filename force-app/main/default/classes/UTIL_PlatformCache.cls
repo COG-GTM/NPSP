@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utilities for working with the Platform Organization Cache
 */
-public class UTIL_PlatformCache {
+public with sharing class UTIL_PlatformCache {
 
     /**
      * @description The expected name for the platform cache partition created by the customer org

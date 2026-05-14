@@ -34,7 +34,7 @@
 * @description Mapper used to convert legacy Recurring Donations to enhanced Recurring Donations.
 *
 */
-public class RD2_DataMigrationMapper {
+public with sharing class RD2_DataMigrationMapper {
 
     /**
     * @description Defines mock "Day of Month" last day value for dry run data migration
@@ -393,5 +393,5 @@ public class RD2_DataMigrationMapper {
     /**
      * @description Exception thrown when Recurring Donation cannot be converted to the enhanced format
      */
-    public class MigrationException extends Exception { }
+    public with sharing class MigrationException extends Exception { }
 }

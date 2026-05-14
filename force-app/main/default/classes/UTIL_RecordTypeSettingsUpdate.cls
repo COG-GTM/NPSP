@@ -35,7 +35,7 @@
  * types are stored by id).
  *
  */
-global virtual class UTIL_RecordTypeSettingsUpdate {
+global virtual inherited sharing class UTIL_RecordTypeSettingsUpdate {
     @TestVisible
     /** @description Private constructor for singleton pattern */
     private UTIL_RecordTypeSettingsUpdate() {}
@@ -322,7 +322,7 @@ global virtual class UTIL_RecordTypeSettingsUpdate {
      * @description A storage class for wrapping multiple related custom
      * setting objects
      */
-    private class RecordTypeSettings {
+    private with sharing class RecordTypeSettings {
         public List<Allocations_Settings__c> allocationsSettings;
         public List<npe01__Contacts_And_Orgs_Settings__c> contactsAndOrgsSettings;
         public List<npo02__Households_Settings__c> householdSettings;

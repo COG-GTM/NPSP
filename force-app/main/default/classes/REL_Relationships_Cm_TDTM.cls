@@ -33,7 +33,7 @@
 * @group Relationships
 * @description Trigger Handler on CampaignMember that implements automatic relationship creation.
 */
-public class REL_Relationships_Cm_TDTM extends TDTM_Runnable {
+public inherited sharing class REL_Relationships_Cm_TDTM extends TDTM_Runnable {
 
 
     public override DmlWrapper run(List<SObject> newList, List<SObject> oldList, 
