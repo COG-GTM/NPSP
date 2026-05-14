@@ -49,20 +49,13 @@ class Rd2Service {
             const action = { type: ACTIONS.INITIAL_VIEW_LOAD, payload: initialView };
             return this.dispatch(state, action);
         } catch (ex) {
-            console.log("Error: ", ex);
             return state;
         }
     }
 
     async save(rd2State) {
-        let result;
-        try {
-            const saveRequest = this.getSaveRequest(rd2State);
-            result = await saveRecurringDonation({ saveRequest });
-        } catch (ex) {
-            console.error(ex);
-        }
-        return result;
+        const saveRequest = this.getSaveRequest(rd2State);
+        return saveRecurringDonation({ saveRequest });
     }
 
     /***

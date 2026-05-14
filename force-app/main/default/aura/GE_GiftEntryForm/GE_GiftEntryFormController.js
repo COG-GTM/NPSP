@@ -18,8 +18,6 @@
                             closeModal: closeModal,
                         });
                     component.set('v.modal', modalReference);
-                } else {
-                    console.error(errorMessage);
                 }
             }
         );
@@ -51,8 +49,6 @@
                     });
 
                     component.set('v.modal', modalReference);
-                } else {
-                    console.error(errorMessage);
                 }
             }
         );

@@ -238,7 +238,7 @@ export default class utilInput extends LightningElement {
             this.picklistValues = [this.PICKLIST_OPTION_NONE, ...data.values];
         }
         if (error) {
-            console.error(error);
+            // Wired picklist error handled silently
         }
     }
 

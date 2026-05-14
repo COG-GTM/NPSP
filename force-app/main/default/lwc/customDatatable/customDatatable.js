@@ -24,8 +24,7 @@ export default class customDatatable extends LightningDatatable {
             loadStyle(this, CUMULUS_STATIC_RESOURCES + '/customDatatable/style.css')
         ]).then(() => {
 
-        }).catch(error => {
-            console.error('Error loading static resource: ' + JSON.stringify(error));
+        }).catch(() => {
         });
     }
 }

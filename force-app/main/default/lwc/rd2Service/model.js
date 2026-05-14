@@ -390,8 +390,8 @@ const setDateEstablished = (state, dateEstablished) => {
     };
 };
 
-const setError = (state, error) => {
-    console.log(JSON.stringify(error));
+const setError = (state, _error) => {
+    return state;
 };
 
 const setPaymentMethod = (state, paymentMethod) => {

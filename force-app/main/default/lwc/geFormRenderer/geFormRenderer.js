@@ -352,7 +352,7 @@ export default class GeFormRenderer extends LightningElement{
             this.donorRecord = data;
             this.initializeForm(this.formTemplate, this.fieldMappings);
         } else if (error) {
-            console.error(JSON.stringify(error));
+            // Wired getRecord error handled silently
         }
     }
 

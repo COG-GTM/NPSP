@@ -27,8 +27,7 @@ export default class DonationHistoryFilter extends LightningElement {
         .then(
             result => {
                 this.options = this.generateOptionsFromYearsList(this.generateYearList(result));
-            }).catch(error => {
-                console.info(error);
+            }).catch(() => {
             });
     }
 
