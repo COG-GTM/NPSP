@@ -37,7 +37,7 @@
 * in a batch process.
 *
 */
-public class CRLP_Rollup {
+public with sharing class CRLP_Rollup {
 
     private static CRLP_FiscalYears fiscalYrs;
 
@@ -470,7 +470,7 @@ public class CRLP_Rollup {
      * @description Wrapper class for the Rollup__mdt CMT records to use in the collection of MDT's within this
      * outer class and for stateful storage. Uses significantly less heap size than storing a list of Rollup__mdt records.
      */
-    public class Rollupmdt {
+    public with sharing class Rollupmdt {
         public String operation;
         public String timeBoundOperationType;
         public String summaryObject;

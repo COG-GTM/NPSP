@@ -35,7 +35,7 @@
 * @description Wrapper classes for the Customizable Rollups CustomMetadataType objects used to create the
 * default CMT data as well as for updates through the Customizable Rollups UI.
 */
-public class CRLP_RollupCMT {
+public inherited sharing class CRLP_RollupCMT {
 
     /**
      * @description Enum of the supported MetadataType objects (without the __mdt suffix)
@@ -52,7 +52,7 @@ public class CRLP_RollupCMT {
     /** ***************************************************************************************************
      * @description Wrapper Class for the Filter_Group__mdt custom metadata type object
      */
-    public class FilterGroup {
+    public with sharing class FilterGroup {
         public String recordName;
         public String recordId;
         public String label;
@@ -170,7 +170,7 @@ public class CRLP_RollupCMT {
      * @description Wrapper Class for the Filter_Rule__mdt custom metadata type object. Includes a property
      * with a list of all attached Filter_Rule instances
      */
-    public class FilterRule {
+    public with sharing class FilterRule {
         public String recordName;
         public String recordId;
         public String label;
@@ -342,7 +342,7 @@ public class CRLP_RollupCMT {
     /** ***************************************************************************************************
      * @description Wrapper Class for the Rollup__mdt custom metadata type object
      */
-    public class Rollup {
+    public with sharing class Rollup {
         public String recordName;
         public String label;
         public String filterGroupRecordName;

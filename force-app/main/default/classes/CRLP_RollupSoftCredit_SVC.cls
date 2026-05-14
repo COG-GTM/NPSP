@@ -37,7 +37,7 @@
 * which isn't supported as a selectable Entity in the Rollup__mdt object.
 * A Single Instance of this class will be for EITHER the Account or the Contact, but NOT BOTH AT THE SAME TIME!
 */
-public class CRLP_RollupSoftCredit_SVC extends CRLP_VRollupHandler {
+public with sharing class CRLP_RollupSoftCredit_SVC extends CRLP_VRollupHandler {
 
     public CRLP_RollupSoftCredit_SVC() {
     }    // default constructor

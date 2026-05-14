@@ -33,7 +33,7 @@
 * @group Engagement Plans
 * @description Trigger Handler on Tasks 
 */
-public class EP_TaskRollup_TDTM extends TDTM_Runnable {
+public inherited sharing class EP_TaskRollup_TDTM extends TDTM_Runnable {
     // newOldTaskMap - track changes after workflow rules run
     private static Map<Id, Task> mapNewOldTask = new Map<Id, Task>();
     

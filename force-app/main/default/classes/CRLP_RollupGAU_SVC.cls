@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Rollup Services unique to the GUA rollups from Allocations
 */
-public class CRLP_RollupGAU_SVC extends CRLP_VRollupHandler {
+public with sharing class CRLP_RollupGAU_SVC extends CRLP_VRollupHandler {
 
     public CRLP_RollupGAU_SVC() { }    // default constructor
 

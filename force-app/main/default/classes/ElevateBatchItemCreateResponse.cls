@@ -27,13 +27,13 @@
  *     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *     POSSIBILITY OF SUCH DAMAGE.
  */
-public class ElevateBatchItemCreateResponse {
+public with sharing class ElevateBatchItemCreateResponse {
     private List<Errors> errors;
     public ElevateBatchItemType batchItemType;
     public CommitmentResponse commitmentResponse;
     public PurchaseResponse purchaseResponse;
 
-    public class Schedules {
+    public with sharing class Schedules {
         public Integer amount;
         public String canceledAt;
         public String createdAt;
@@ -52,7 +52,7 @@ public class ElevateBatchItemCreateResponse {
         public String status;
     }
 
-    public class CommitmentResponse {
+    public with sharing class CommitmentResponse {
         public String accountName;
         public AchData achData;
         public String addressLine1;
@@ -91,10 +91,10 @@ public class ElevateBatchItemCreateResponse {
     }
 
 
-    public class Metadata {
+    public with sharing class Metadata {
     }
 
-    public class PurchaseResponse {
+    public with sharing class PurchaseResponse {
         public String accountName;
         public AchData achData;
         public String addressLine1;
@@ -143,7 +143,7 @@ public class ElevateBatchItemCreateResponse {
         public Integer version;
     }
 
-    public class AchData {
+    public with sharing class AchData {
         public String accountHolderBankType;
         public String accountHolderType;
         public String achCode;
@@ -152,7 +152,7 @@ public class ElevateBatchItemCreateResponse {
         public String last4;
     }
 
-    public class CardData {
+    public with sharing class CardData {
         public String brand;
         public String expirationMonth;
         public String expirationYear;
@@ -166,7 +166,7 @@ public class ElevateBatchItemCreateResponse {
         return (ElevateBatchItemCreateResponse) System.JSON.deserialize(json, ElevateBatchItemCreateResponse.class);
     }
 
-    public class Errors {
+    public with sharing class Errors {
         public String message;
         public String failure_reason;
     }

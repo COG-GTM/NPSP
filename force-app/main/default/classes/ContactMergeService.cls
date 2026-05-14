@@ -35,7 +35,7 @@
 * @group ContactMerge
 * @group-content ../../ApexDocContent/ContactMerge.htm
 */
-public class ContactMergeService {
+public with sharing class ContactMergeService {
 
     @TestVisible
     private ContactMergeSelector contactMergeSelector {
@@ -82,7 +82,7 @@ public class ContactMergeService {
     /*******************************************************************************************************
     * @description Exception raised by the contact merge process.
     */
-    public class ConMergeException extends Exception {} 
+    public with sharing class ConMergeException extends Exception {} 
         
     /*******************************************************************************************************
     * @description Merges the winner and losers.

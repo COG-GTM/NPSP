@@ -33,7 +33,7 @@
 * @group Opportunity
 * @description Trigger Handler on Partial Soft Credit for PSC management 
 */
-public class PSC_PartialSoftCredit_TDTM extends TDTM_Runnable {
+public inherited sharing class PSC_PartialSoftCredit_TDTM extends TDTM_Runnable {
 
     /** @Description Allows PSC_Opportunity_TDTM to modify PSC currency while blocking user requests to change currency.*/
     public static boolean blockCurrencyChange = true;

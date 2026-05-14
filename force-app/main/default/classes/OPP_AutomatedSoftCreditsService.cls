@@ -35,7 +35,7 @@
 * @description Handles Automated Soft Credits for Individual and Organizational gifts.
 */
 
-public class OPP_AutomatedSoftCreditsService {
+public inherited sharing class OPP_AutomatedSoftCreditsService {
 
     private static final String RELATED_OPPORTUNITY_CONTACT_ROLE_NONE = '--None--';
     private static final sObjectField FIELD_NAME_RELATIONSHIP_RELATED_CONTACT = npe4__Relationship__c.npe4__RelatedContact__c;

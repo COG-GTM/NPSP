@@ -40,7 +40,7 @@
 * instance until ready to be written to the Sobject.
 *
 */
-public class CRLP_Operation_SVC {
+public with sharing class CRLP_Operation_SVC {
 
     /* @description 'Name' of the object referenced in the rollup. Visible to classes that extend this virtual class. */
     private static final String oppObjectName = UTIL_Describe.getObjectDescribe('Opportunity').getName();

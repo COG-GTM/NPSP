@@ -33,7 +33,7 @@
 * @group Payments
 * @description Controls the creation of payment objects from Opportunity trigger
 */
-public class PMT_PaymentCreator {
+public inherited sharing class PMT_PaymentCreator {
 
     /* @description Retrieve info about specific fields that may or may not exist on the objects */
     public static final SObjectField OppCurrencyField = Schema.sObjectType.Opportunity.fields.getMap().get('CurrencyIsoCode');

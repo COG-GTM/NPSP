@@ -32,7 +32,7 @@
 * @date 2018
 * @group Customizable Rollups
 * @description Visualforce page Controller for the Customizable Rollups Setup VF page
-*/public class CRLP_RollupSetup_CTRL {
+*/public with sharing class CRLP_RollupSetup_CTRL {
 
     /** @description what is the namespace (an empty string if unmanaged, or 'npsp' if managed) */
     public string getNamespacePrefix() {

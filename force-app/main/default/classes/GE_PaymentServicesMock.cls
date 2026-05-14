@@ -27,7 +27,7 @@
  *     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *     POSSIBILITY OF SUCH DAMAGE.
  */
-public class GE_PaymentServicesMock implements StubProvider {
+public with sharing class GE_PaymentServicesMock implements StubProvider {
     private Boolean isElevateCustomer;
 
     public GE_PaymentServicesMock withIsElevateCustomer(Boolean isElevateCustomer) {

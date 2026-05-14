@@ -35,7 +35,7 @@
 * @description Parses and Casts Callable_API Parameter values into the requested data type. Throws an Exception
 * if the parameter cannot be retrieved and cast into the appropriate data type.
 */
-public class CallableApiParameters {
+public with sharing class CallableApiParameters {
 
     public static final String PARAM_ROLLUP_PARENTID = 'ParentId';
     public static final String PARAM_ROLLUP_TYPE = 'RollupType';
@@ -402,6 +402,6 @@ public class CallableApiParameters {
     /**
     * @description Exception class for Parameter Parsing
     */
-    private class ParameterException extends Exception {}
+    private with sharing class ParameterException extends Exception {}
 
 }

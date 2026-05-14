@@ -36,13 +36,13 @@
 * @group ErrorHandling
 * @group-content ../../ApexDocContent/ErrorHandling.htm
 */
-public class ERR_Handler {
+public without sharing class ERR_Handler {
 
     /*******************************************************************************************************
     * @description Inner class that groups the result of processing the result of multiple DML operations performed
     *              using the Database class.
     */
-    public class Errors {
+    public with sharing class Errors {
         /*
         * @description True if errors occurred in one of the DML operations. False otherwise.
         */

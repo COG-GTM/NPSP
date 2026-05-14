@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Rollup Services unique to the Recurring Donation roll-ups from Opportunity object
 */
-public class CRLP_RollupRD_SVC extends CRLP_VRollupHandler {
+public with sharing class CRLP_RollupRD_SVC extends CRLP_VRollupHandler {
 
     public CRLP_RollupRD_SVC() { }    // default constructor
 

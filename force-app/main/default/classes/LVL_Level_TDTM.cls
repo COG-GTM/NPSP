@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Levels.htm
 * @description Trigger handler on Level object, ensures Levels within the same ladder do not overlap.
 */
-public class LVL_Level_TDTM extends TDTM_Runnable {
+public inherited sharing class LVL_Level_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Trigger Handler on Level, which validates Levels within the same ladder do not overlap.

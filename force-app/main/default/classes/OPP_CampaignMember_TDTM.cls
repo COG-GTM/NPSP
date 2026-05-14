@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Opportunity.htm
 * @description Handles adding and updating campaign members based on campaign donations.
 */
-public class OPP_CampaignMember_TDTM extends TDTM_Runnable {
+public inherited sharing class OPP_CampaignMember_TDTM extends TDTM_Runnable {
     
     /**@description lists to pass to CON_AddToCampaign*/
     private List<Id> listContactId = new List<Id>();

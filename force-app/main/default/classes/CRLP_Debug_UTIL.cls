@@ -36,7 +36,7 @@
 * returns a concatenated version of that list as a single string. Note that calling setCurrentRollupState() in nested
 * for loops (which is effectively what happens in rollups) will have an impact on performance when debugging is enabled.
 */
-public class CRLP_Debug_UTIL {
+public with sharing class CRLP_Debug_UTIL {
 
     public static final Integer LEVEL_MIN = 1;
     public static final Integer LEVEL_MAX = 2;

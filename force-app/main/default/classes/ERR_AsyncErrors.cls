@@ -33,7 +33,7 @@
 * @description A recurring job that will detect errors from asynchronous jobs
 * and log and send notifications for those errors
 */
-public virtual class ERR_AsyncErrors implements Queueable {
+public virtual without sharing class ERR_AsyncErrors implements Queueable {
     /**
      * @description Query for un-processed AsyncApexJob records that represent
      * failed jobs, creates Error__c log records for those jobs, and then sends
@@ -199,7 +199,7 @@ public virtual class ERR_AsyncErrors implements Queueable {
      * @description A simple wrapper class around the AsyncApexJob object.
      */
     @TestVisible
-    private class AsyncApexJobWrapper {
+    private inherited sharing class AsyncApexJobWrapper {
         public String JobType;
         public String ApexClassName;
         public String ApexClassNamespacePrefix;

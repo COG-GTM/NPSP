@@ -33,7 +33,7 @@
 * @group Opportunity
 * @description TDTM Trigger Handler on Opportunity for supporting Matched Gifts
 */
-public class MTCH_Opportunity_TDTM extends TDTM_Runnable {
+public inherited sharing class MTCH_Opportunity_TDTM extends TDTM_Runnable {
 
     /*******************************************************************************************************
     * @description Trigger Handler on Opportunity after update, that updates any Matched Gift opps that

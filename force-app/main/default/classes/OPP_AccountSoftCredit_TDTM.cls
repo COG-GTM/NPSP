@@ -33,7 +33,7 @@
 * @group Opportunity
 * @description Trigger Handler on Account Soft Credit for AccSC management
 */
-public class OPP_AccountSoftCredit_TDTM extends TDTM_Runnable {
+public inherited sharing class OPP_AccountSoftCredit_TDTM extends TDTM_Runnable {
 
     /** @Description Allows PSC_Opportunity_TDTM (shared with AccSC) to modify AccSC currency while blocking user requests to change currency.*/
     public static boolean blockCurrencyChange = true;

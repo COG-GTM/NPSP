@@ -35,7 +35,7 @@
 * @description Methods needed to handle Fiscal or Calendar Year operations
 *
 */
-public class CRLP_FiscalYears {
+public inherited sharing class CRLP_FiscalYears {
 
     /*********************************************************************************************************
      * @description Should getYear() use the defined Fiscal Year or the Calendar Year
@@ -77,7 +77,7 @@ public class CRLP_FiscalYears {
      * @description Wrapper class for the Organization Fiscal year information. This allows the values
      * to be overrriden by unit tests
      */
-    public class OrgFiscalYearInfo {
+    public with sharing class OrgFiscalYearInfo {
         public Integer fiscalYearStartMonth { get; set; }
         public Boolean usesStartDateAsFiscalYearName { get; set; }
 

@@ -37,7 +37,7 @@
 *
 * This class is not marked with sharing as it needs access to dependent Tasks that are potentially owned by other users.
 */
-public class EP_Task_UTIL {
+public without sharing class EP_Task_UTIL {
 
     /** @description Default status for active tasks. */
     public static String defaultTaskStatus {

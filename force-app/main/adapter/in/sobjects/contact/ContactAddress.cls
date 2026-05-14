@@ -34,7 +34,7 @@
 * has been extracted for additional use as an adapter when Contacts and Addresses are
 * inserted.
 */
-public class ContactAddress {
+public with sharing class ContactAddress {
 
     public ContactAddress(Contact c) {
         this.contact = c;
